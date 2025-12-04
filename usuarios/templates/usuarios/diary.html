@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Diary</title>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- CSS Header -->
+    <link rel="stylesheet" href="../css/header.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gantari:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #191919;
+            --panel: #262626;
+            --accent: #e9dff0;
+            --muted: #bdbdbd;
+            --accent: #eadbff;
+            --accent-dark: #7b3eb5;
+            --white: #f6f6f6;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Gantari';
+            background: var(--bg);
+            color: var(--white);
+            font-family: 'Gantari';
+            color: white;
+
+        }
+
+        .diary {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-family: 'Exo 2';
+            font-weight: 800;
+            font-size: 40px;
+            letter-spacing: 1px;
+            color: var(--white);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background-color: #383838;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
+            padding: 40px 60px;
+            box-sizing: border-box;
+        }
+
+
+
+        .movie-entry {
+            display: flex;
+            align-items: center;
+            background-color: #1e1e1e;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .poster {
+            width: 80px;
+            height: 120px;
+            background-color: transparent;
+            border: 0.5px solid white;
+            border-radius: 20px;
+            margin-left: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-right: 40px;
+            border-radius: 4px;
+        }
+
+        .movie-details {
+            flex-grow: 1;
+        }
+
+        .movie-name {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .movie-name:focus {
+            outline: 2px solid #6E32D5;
+        }
+
+        .stars {
+            margin-bottom: 10px;
+        }
+
+        .star {
+            font-size: 1.5em;
+            color: #555;
+        }
+
+        .star.filled {
+            color: #6E32D5;
+        }
+
+        .date {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="logo-container">
+            <a href="../home.html">
+                <img src="../img/logo_filmbox.png" alt="Logo" class="logo-img">
+            </a>
+        </div>
+
+        <div class="right-section">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search" style="font-family: Arial;">
+                <button id="search-button">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+            <div class="profile-container">
+                <a href="perfil_user.html">
+                    <img src="../img/foto-perfil-usuario.jpg" alt="Perfil" class="profile-img">
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+
+    <main class="diary">
+        <h1>MY DIARY</h1>
+        <div class="container">
+            <div id="movie-list"></div>
+        </div>
+
+    </main>
+
+    <script>
+
+        const movieNames = [
+            "La Sombra del Viento", "Horizonte Perdido", "Ecos del Silencio",
+            "Luz de Medianoche", "El Último Viaje", "Códigos Secretos",
+            "Sueños de Marte", "El Laberinto Azul", "Tiempo Robado", "Voces Ocultas"
+        ];
+
+        function getRandomMovieName() {
+            return movieNames[Math.floor(Math.random() * movieNames.length)];
+        }
+
+        function getRandomStars() {
+            return Math.floor(Math.random() * 5) + 1;
+        }
+
+        function generateDescendingDates(count, year = 2025, month = 10) {
+            const dates = [];
+            for (let i = 0; i < count; i++) {
+                const day = Math.floor(Math.random() * 28) + 1;
+                dates.push(new Date(year, month - 1, day));
+            }
+            dates.sort((a, b) => b - a); // Orden descendente
+            return dates.map(date => {
+                const d = String(date.getDate()).padStart(2, '0');
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const y = date.getFullYear();
+                return `${d}/${m}/${y}`;
+            });
+        }
+
+        function createMovieEntry(movieName, starsCount, dateStr) {
+            const entry = document.createElement('div');
+            entry.className = 'movie-entry';
+
+            const poster = document.createElement('div');
+            poster.className = 'poster';
+
+            const details = document.createElement('div');
+            details.className = 'movie-details';
+
+            const nameInput = document.createElement('input');
+            nameInput.className = 'movie-name';
+            nameInput.value = movieName;
+
+            const starsContainer = document.createElement('div');
+            starsContainer.className = 'stars';
+            for (let i = 0; i < 5; i++) {
+                const star = document.createElement('span');
+                star.className = 'star' + (i < starsCount ? ' filled' : '');
+                star.textContent = '★';
+                starsContainer.appendChild(star);
+            }
+
+            const date = document.createElement('div');
+            date.className = 'date';
+            date.textContent = dateStr;
+
+            details.appendChild(nameInput);
+            details.appendChild(starsContainer);
+            details.appendChild(date);
+
+            entry.appendChild(poster);
+            entry.appendChild(details);
+
+            return entry;
+        }
+
+        const movieList = document.getElementById('movie-list');
+        const dates = generateDescendingDates(4);
+        for (let i = 0; i < 4; i++) {
+            const name = getRandomMovieName();
+            const stars = getRandomStars();
+            const date = dates[i];
+            movieList.appendChild(createMovieEntry(name, stars, date));
+        }
+
+
+    </script>
+</body>
+
+</html>

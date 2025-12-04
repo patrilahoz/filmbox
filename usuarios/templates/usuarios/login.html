@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <!-- Color morado: 6E32D5 -->
+    <!-- Color lila: D9BDFE -->
+    <!-- Color morado + oscuro: 6C00FA -->
+
+
+    <!-- FilmBox-->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- CSS Header -->
+    <link rel="stylesheet" href="css/header.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gantari:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito Sans';
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .logo {
+            border: 3px solid #00a8ff;
+            padding: 30px 60px;
+            margin-bottom: 80px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            letter-spacing: 2px;
+            background-color: transparent;
+        }
+
+        .login-card {
+            background-color: #f5f5f5;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 350px;
+            height: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 8px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #666666;
+            background-color: #ffffff;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder {
+            color: #999999;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 5px rgba(124, 58, 237, 0.3);
+        }
+
+        .sign-in-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #6E32D5 0%, #6d28d9 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+
+
+
+
+
+
+        .sign-in-btn:hover {
+            background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+            transform: translateY(-2px);
+        }
+
+
+
+
+
+
+        .sign-in-btn:active {
+            transform: translateY(0);
+        }
+
+        .forgot-password {
+            text-align: center;
+        }
+
+        .forgot-password a {
+            color: #333333;
+            text-decoration: underline;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #7c3aed;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .logo {
+                padding: 20px 40px;
+                margin-bottom: 60px;
+                font-size: 28px;
+            }
+
+            .login-card {
+                padding: 30px 20px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">LOGO</div>
+
+        <form class="login-card" id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Value" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Value" required>
+            </div>
+
+            <button type="submit" class="sign-in-btn">Sign In</button>
+
+            <div class="forgot-password">
+                <a href="#forgot">Forgot password?</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Validación básica
+            if (!email || !password) {
+                alert('Por favor, rellena todos los campos');
+                return;
+            }
+
+            // Validación de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor, introduce un email válido');
+                return;
+            }
+
+            // Aquí irá la lógica de login
+            console.log('Email:', email);
+            console.log('Password:', password);
+
+            // Ejemplo: mostrar un mensaje de éxito
+            alert('Login exitoso: ' + email);
+
+            // Aquí puedes agregar la llamada a tu backend
+            // fetch('/api/login', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({ email, password })
+            // })
+        });
+
+        // Enlace "Forgot password?"
+        document.querySelector('.forgot-password a').addEventListener('click', function (e) {
+            e.preventDefault();
+            alert('Redireccionando a la página de recuperación de contraseña');
+            // window.location.href = '/forgot-password';
+        });
+    </script>
+</body>
+
+</html>
