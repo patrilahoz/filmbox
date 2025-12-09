@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'usuarios',
     'peliculas',
+    'listas'
 ]
 
 
@@ -83,12 +84,17 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'filmbox',
-        'USER': 'root',
+        'USER': 'filmbox_user',
         'PASSWORD': 'Root123!Filmbox',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
+
 
 # Custom user model
 AUTH_USER_MODEL = 'usuarios.Usuario'
