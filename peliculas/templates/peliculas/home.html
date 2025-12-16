@@ -1,724 +1,676 @@
-<!doctype html>
-<html lang="es">
+{% extends "base/base.html" %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Home</title>
+{% block title %}Home{% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% block extra_css %}
+<style>
+    :root {
+        --bg: #191919;
+        --panel: #262626;
+        --accent: #e9dff0;
+        --muted: #bdbdbd;
+    }
 
-    <!-- CSS Header -->
-    <link rel="stylesheet" href="css/header.css">
+    * {
+        box-sizing: border-box
+    }
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Gantari:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    html,
+    body {
+        height: 100%;
+    }
 
-    <style>
-        :root {
-            --bg: #191919;
-            --panel: #262626;
-            --accent: #e9dff0;
-            --muted: #bdbdbd;
-        }
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--accent);
+    }
 
-        * {
-            box-sizing: border-box
-        }
-
-        html,
-        body {
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: var(--bg);
-            color: var(--accent);
-        }
-
-
-
+    h2 {
+        color: #6E32D5;
+        padding: 12px 18px;
+        margin: 18px auto;
+        border-radius: 8px;
+        border: 0;
+        font-family: 'Exo 2';
+        font-weight: 900;
+        font-size: 70px;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        justify-content: center;
+    }
 
 
+    h3 {
+        color: #6E32D5;
+        padding: 12px 18px;
+        margin: 18px auto;
+        border-radius: 8px;
+        border: 0;
+        font-family: 'Exo 2';
+        font-weight: 900;
+        font-size: 50px;
+        line-height: 1;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        justify-content: center;
+    }
 
-        h2 {
-            color: #6E32D5;
-            padding: 12px 18px;
-            margin: 18px auto;
-            border-radius: 8px;
-            border: 0;
-            font-family: 'Exo 2';
-            font-weight: 900;
-            font-size: 70px;
-            line-height: 1;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-align: center;
-            justify-content: center;
-        }
+    main {
+        padding: 28px 20px 60px
+    }
 
+    .recent {
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center
+    }
 
-        h3 {
-            color: #6E32D5;
-            padding: 12px 18px;
-            margin: 18px auto;
-            border-radius: 8px;
-            border: 0;
-            font-family: 'Exo 2';
-            font-weight: 900;
-            font-size: 50px;
-            line-height: 1;
-            align-items: center;
-            gap: 10px;
-            text-align: center;
-            justify-content: center;
-        }
+    .carousel-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 30px auto;
+    }
 
-        main {
-            padding: 28px 20px 60px
-        }
+    .carousel {
+        width: 920px;
+        height: 480px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: visible
+    }
 
-        .recent {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center
-        }
+    .carousel .slide {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateZ(0);
+        width: 230px;
+        height: 350px;
+        border: 2px solid #444;
+        background: #1f1f1f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        transition: transform .8s cubic-bezier(.16, .84, .24, 1), opacity .5s ease, box-shadow .45s;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, .55);
+        box-sizing: border-box;
+        padding: 14px;
+        will-change: transform, opacity;
+        transform-style: preserve-3d;
+        backface-visibility: hidden
+    }
 
-        /* Title sizing moved to the global h2 rule */
+    .carousel .slide .title {
+        font-weight: 700;
+        padding: 12px 10px;
+        text-align: center
+    }
 
-        .carousel-wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 30px auto;
-        }
+    .carousel .slide.center {
+        width: 370px;
+        height: 490px;
+        border-color: #444;
+        z-index: 30;
+        transform: translate(-50%, -50%) translateZ(40px) scale(1.02);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, .7)
+    }
 
-        .carousel {
-            width: 920px;
-            height: 480px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: visible
-        }
+    .carousel .slide.left {
+        transform: translate(-200%, -50%) translateZ(0) scale(.92);
+        opacity: 1;
+        z-index: 10
+    }
 
-        .carousel .slide {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateZ(0);
-            width: 230px;
-            height: 350px;
-            border: 2px solid #444;
-            background: #1f1f1f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            transition: transform .8s cubic-bezier(.16, .84, .24, 1), opacity .5s ease, box-shadow .45s;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, .55);
-            box-sizing: border-box;
-            padding: 14px;
-            will-change: transform, opacity;
-            transform-style: preserve-3d;
-            backface-visibility: hidden
-        }
+    .carousel .slide.right {
+        transform: translate(120%, -50%) translateZ(0) scale(.92);
+        opacity: 1;
+        z-index: 10
+    }
 
-        .carousel .slide .title {
-            font-weight: 700;
-            padding: 12px 10px;
-            text-align: center
-        }
+    .carousel .slide.left-2,
+    .carousel .slide.right-2,
+    .carousel .slide.hidden {
+        display: none;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 0
+    }
 
-        .carousel .slide.center {
-            width: 370px;
-            height: 490px;
-            border-color: #444;
-            z-index: 30;
-            transform: translate(-50%, -50%) translateZ(40px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, .7)
-        }
+    .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 70;
+        border: none;
+        background: rgba(0, 0, 0, 0.35);
+        color: var(--muted);
+        font-size: 28px;
+        cursor: pointer;
+        padding: 10px 12px;
+        border-radius: 999px;
+        color: #D9BDFE;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
 
-        .carousel .slide.left {
-            transform: translate(-200%, -50%) translateZ(0) scale(.92);
-            opacity: 1;
-            z-index: 10
-        }
+    .carousel-arrow:hover {
+        color: #6E32D5;
+        ;
+        background: rgba(0, 0, 0, 0.5);
+    }
 
-        .carousel .slide.right {
-            transform: translate(120%, -50%) translateZ(0) scale(.92);
-            opacity: 1;
-            z-index: 10
-        }
+    .carousel-arrow.prev {
+        left: 8px
+    }
 
-        /* hide distant slides entirely */
-        .carousel .slide.left-2,
-        .carousel .slide.right-2,
-        .carousel .slide.hidden {
-            display: none;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 0
-        }
+    .carousel-arrow.next {
+        right: 8px
+    }
 
-        .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 70;
-            border: none;
-            background: rgba(0, 0, 0, 0.35);
-            color: var(--muted);
-            font-size: 28px;
-            cursor: pointer;
-            padding: 10px 12px;
-            border-radius: 999px;
-            color: #D9BDFE;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
+    .carousel-dots {
+        margin-top: 36px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center
+    }
 
-        .carousel-arrow:hover {
-            color: #6E32D5;
-            ;
-            background: rgba(0, 0, 0, 0.5);
-        }
+    .carousel-dots button {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: none;
+        background: #D9BDFE;
+        cursor: pointer
+    }
 
-        .carousel-arrow.prev {
-            left: 8px
-        }
+    .carousel-dots button.active {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #6E32D5;
+    }
 
-        .carousel-arrow.next {
-            right: 8px
-        }
+    .popular .carousel-wrap,
+    .favorites .carousel-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 20px 10;
+        overflow: hidden;
+        padding: 10px;
+    }
 
-        .carousel-dots {
-            margin-top: 36px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: center
-        }
+    .popular .carousel,
+    .favorites .carousel {
+        position: relative;
+        width: 100%;
+        height: auto;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 16px;
+        overflow: visible;
+        padding: 0;
+        margin: 0;
+        flex: 1
+    }
 
-        .carousel-dots button {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            border: none;
-            background: #D9BDFE;
-            cursor: pointer
-        }
+    .popular .carousel .slide,
+    .favorites .carousel .slide {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        aspect-ratio: 9/14;
+        height: auto;
+        border: 2px solid #444;
+        background: #1f1f1f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        transition: transform .3s ease, box-shadow .3s ease;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, .55);
+        box-sizing: border-box;
+        padding: 14px;
+        will-change: transform;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        cursor: pointer;
+        z-index: 1
+    }
 
-        .carousel-dots button.active {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #6E32D5;
-        }
+    .popular .carousel .slide:hover,
+    .favorites .carousel .slide:hover {
+        transform: scale(1.06);
+        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.25);
+        border-color: rgba(124, 58, 237, 0.35);
+    }
 
-        /* === GRID CAROUSELS (Popular & Favorites) === */
-        .popular .carousel-wrap,
-        .favorites .carousel-wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 20px 10;
-            overflow: hidden;
-            padding: 10px;
-        }
+    .carousel .slide.center:hover {
+        transform: translate(-50%, -50%) translateZ(40px) scale(1.12);
+        box-shadow: 0 16px 48px rgba(124, 58, 237, 0.28);
+        border-color: rgba(124, 58, 237, 0.38);
+        z-index: 80;
+    }
+
+    .carousel .slide.left:hover {
+        transform: translate(-200%, -50%) translateZ(0) scale(0.98);
+        box-shadow: 0 10px 30px rgba(124, 58, 237, 0.20);
+        border-color: rgba(124, 58, 237, 0.32);
+        z-index: 40;
+    }
+
+    .carousel .slide.right:hover {
+        transform: translate(120%, -50%) translateZ(0) scale(0.98);
+        box-shadow: 0 10px 30px rgba(124, 58, 237, 0.20);
+        border-color: rgba(124, 58, 237, 0.32);
+        z-index: 40;
+    }
+
+    .popular .carousel .slide.center,
+    .popular .carousel .slide.left,
+    .popular .carousel .slide.right,
+    .popular .carousel .slide.left-2,
+    .popular .carousel .slide.right-2,
+    .popular .carousel .slide.hidden,
+    .favorites .carousel .slide.center,
+    .favorites .carousel .slide.left,
+    .favorites .carousel .slide.right,
+    .favorites .carousel .slide.left-2,
+    .favorites .carousel .slide.right-2,
+    .favorites .carousel .slide.hidden {
+        position: relative;
+        transform: none;
+        opacity: 1;
+        display: flex;
+        z-index: 1
+    }
+
+    .popular .carousel-arrow,
+    .favorites .carousel-arrow {
+        position: relative;
+        top: auto;
+        transform: none;
+        z-index: 50;
+        align-self: center;
+        margin: 0 12px;
+        padding: 12px 16px;
+        font-size: 24px
+    }
+
+    .popular .carousel-dots,
+    .favorites .carousel-dots {
+        display: none
+    }
+
+    @media (max-width: 1200px) {
 
         .popular .carousel,
         .favorites .carousel {
-            position: relative;
-            width: 100%;
-            height: auto;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 16px;
-            overflow: visible;
-            padding: 0;
-            margin: 0;
-            flex: 1
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .popular .carousel,
+        .favorites .carousel {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px
+        }
+    }
+
+    @media (max-width: 520px) {
+
+        .popular .carousel,
+        .favorites .carousel {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px
+        }
+    }
+
+    @media (max-width:900px) {
+        .carousel {
+            width: 92%;
+            height: 320px
         }
 
-        .popular .carousel .slide,
-        .favorites .carousel .slide {
-            position: relative;
-            top: auto;
-            left: auto;
-            transform: none;
-            width: 100%;
-            aspect-ratio: 9/14;
-            height: auto;
-            border: 2px solid #444;
-            background: #1f1f1f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            transition: transform .3s ease, box-shadow .3s ease;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, .55);
-            box-sizing: border-box;
-            padding: 14px;
-            will-change: transform;
-            transform-style: preserve-3d;
-            backface-visibility: hidden;
-            cursor: pointer;
-            z-index: 1
+        .carousel .slide.center {
+            width: 250px;
+            height: 350px
         }
 
-        .popular .carousel .slide:hover,
-        .favorites .carousel .slide:hover {
-            transform: scale(1.06);
-            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.25);
-            border-color: rgba(124, 58, 237, 0.35);
+        .carousel .slide {
+            width: 150px;
+            height: 230px
+        }
+    }
+
+    @media (max-width:520px) {
+        .header-inner {
+            padding-right: 12px
         }
 
-        /* Recent carousel: preserve positional transforms when hovering so slides don't jump */
-        .carousel .slide.center:hover {
-            transform: translate(-50%, -50%) translateZ(40px) scale(1.12);
-            box-shadow: 0 16px 48px rgba(124, 58, 237, 0.28);
-            border-color: rgba(124, 58, 237, 0.38);
-            z-index: 80;
+        .search-form {
+            min-width: 180px
         }
 
-        .carousel .slide.left:hover {
-            transform: translate(-200%, -50%) translateZ(0) scale(0.98);
-            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.20);
-            border-color: rgba(124, 58, 237, 0.32);
-            z-index: 40;
+        .logo {
+            padding: 12px 18px
         }
 
-        .carousel .slide.right:hover {
-            transform: translate(120%, -50%) translateZ(0) scale(0.98);
-            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.20);
-            border-color: rgba(124, 58, 237, 0.32);
-            z-index: 40;
+        .carousel {
+            height: 300px
         }
+    }
+</style>
+{% endblock %}
 
-        .popular .carousel .slide.center,
-        .popular .carousel .slide.left,
-        .popular .carousel .slide.right,
-        .popular .carousel .slide.left-2,
-        .popular .carousel .slide.right-2,
-        .popular .carousel .slide.hidden,
-        .favorites .carousel .slide.center,
-        .favorites .carousel .slide.left,
-        .favorites .carousel .slide.right,
-        .favorites .carousel .slide.left-2,
-        .favorites .carousel .slide.right-2,
-        .favorites .carousel .slide.hidden {
-            position: relative;
-            transform: none;
-            opacity: 1;
-            display: flex;
-            z-index: 1
-        }
+{% block content %}
 
-        .popular .carousel-arrow,
-        .favorites .carousel-arrow {
-            position: relative;
-            top: auto;
-            transform: none;
-            z-index: 50;
-            align-self: center;
-            margin: 0 12px;
-            padding: 12px 16px;
-            font-size: 24px
-        }
+<main>
+    <section class="recent">
+        <h2>THE MOST RECENT</h2>
 
-        .popular .carousel-dots,
-        .favorites .carousel-dots {
-            display: none
-        }
-
-        /* Responsive: 5 columns for tablet */
-        @media (max-width: 1200px) {
-
-            .popular .carousel,
-            .favorites .carousel {
-                grid-template-columns: repeat(5, 1fr);
-                gap: 12px
-            }
-        }
-
-        /* Responsive: 3 columns for mobile */
-        @media (max-width: 768px) {
-
-            .popular .carousel,
-            .favorites .carousel {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px
-            }
-        }
-
-        /* Responsive: 2 columns for small mobile */
-        @media (max-width: 520px) {
-
-            .popular .carousel,
-            .favorites .carousel {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px
-            }
-        }
-
-        /* Responsive tweaks */
-        @media (max-width:900px) {
-            .carousel {
-                width: 92%;
-                height: 320px
-            }
-
-            .carousel .slide.center {
-                width: 250px;
-                height: 350px
-            }
-
-            .carousel .slide {
-                width: 150px;
-                height: 230px
-            }
-        }
-
-        @media (max-width:520px) {
-            .header-inner {
-                padding-right: 12px
-            }
-
-            .search-form {
-                min-width: 180px
-            }
-
-            .logo {
-                padding: 12px 18px
-            }
-
-            .carousel {
-                height: 300px
-            }
-        }
-    </style>
-
-
-
-</head>
-
-<body>
-
-    <header class="site-header">
-        <div class="logo-container">
-            <a href="home.html">
-                <img src="img/logo_filmbox.png" alt="Logo" class="logo-img">
-            </a>
+        <div class="carousel-wrap">
+            <button class="carousel-arrow prev" aria-label="Anterior">‹</button>
+            <div class="carousel" id="carousel">
+                <div class="slide">
+                    <a href="{% url 'pelicula' %}">Ver película</a>
+                </div>
+            </div>
+            <button class="carousel-arrow next" aria-label="Siguiente">›</button>
         </div>
 
-        <div class="right-section">
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Search" style="font-family: Arial;">
-                <button id="search-button">
-                    <i class="bi bi-search"></i>
-                </button>
+        <div class="carousel-dots" id="dots"></div>
+    </section>
+
+    <section class="popular">
+        <h3>THE MOST POPULAR</h3>
+
+        <div class="carousel-wrap">
+            <button class="carousel-arrow prev" data-carousel="popular" aria-label="Anterior">‹</button>
+            <div class="carousel" id="carousel-popular">
+                <div class="slide">
+                    <a href="{% url 'pelicula' %}"> </a>
+                </div>
             </div>
-            <div class="profile-container">
-                <a href="account/perfil_user.html">
-                    <img src="img/foto-perfil-usuario.jpg" alt="Perfil" class="profile-img">
-                </a>
-            </div>
+            <button class="carousel-arrow next" data-carousel="popular" aria-label="Siguiente">›</button>
         </div>
-    </header>
+    </section>
 
-    <main>
-        <section class="recent">
-            <h2>THE MOST RECENT</h2>
+    <section class="favorites">
+        <h3>PEOPLE'S FAVORITES</h3>
 
-            <div class="carousel-wrap">
-                <button class="carousel-arrow prev" aria-label="Anterior">‹</button>
-                <div class="carousel" id="carousel">
-                    <!-- Slides rendered by JavaScript -->
+        <div class="carousel-wrap">
+            <button class="carousel-arrow prev" data-carousel="favorites" aria-label="Anterior">‹</button>
+
+            <div class="carousel" id="carousel-favorites">
+                <div class="slide">
+                    <a href="{% url 'pelicula' %}"> </a>
                 </div>
-                <button class="carousel-arrow next" aria-label="Siguiente">›</button>
             </div>
+            <button class="carousel-arrow next" data-carousel="favorites" aria-label="Siguiente">›</button>
+        </div>
 
-            <div class="carousel-dots" id="dots"></div>
-        </section>
-
-        <section class="popular">
-            <h3>THE MOST POPULAR</h3>
-
-            <div class="carousel-wrap">
-                <button class="carousel-arrow prev" data-carousel="popular" aria-label="Anterior">‹</button>
-                <div class="carousel" id="carousel-popular">
-                    <!-- Slides rendered by JavaScript -->
-                </div>
-                <button class="carousel-arrow next" data-carousel="popular" aria-label="Siguiente">›</button>
-            </div>
-        </section>
-
-        <section class="favorites">
-            <h3>PEOPLE'S FAVORITES</h3>
-
-            <div class="carousel-wrap">
-                <button class="carousel-arrow prev" data-carousel="favorites" aria-label="Anterior">‹</button>
-                <div class="carousel" id="carousel-favorites">
-                    <!-- Slides rendered by JavaScript -->
-                </div>
-                <button class="carousel-arrow next" data-carousel="favorites" aria-label="Siguiente">›</button>
-            </div>
-        </section>
-    </main>
+    </section>
+</main>
 
 
-    <script>
-        // === DATA ===
-        const recentMovies = [
-            { id: 1, title: 'Frankenstein' },
-            { id: 2, title: 'Midnight Runner' },
-            { id: 3, title: 'Crimson Dawn' },
-            { id: 4, title: 'Quiet Harbor' },
-            { id: 5, title: 'Broken Compass' },
-            { id: 6, title: 'Neon Skies' },
-            { id: 7, title: 'Last Horizon' }
-        ];
+<script>
+    // === DATA ===
+    const recentMovies = [
+        { id: 1, title: 'Frankenstein' },
+        { id: 2, title: 'Midnight Runner' },
+        { id: 3, title: 'Crimson Dawn' },
+        { id: 4, title: 'Quiet Harbor' },
+        { id: 5, title: 'Broken Compass' },
+        { id: 6, title: 'Neon Skies' },
+        { id: 7, title: 'Last Horizon' }
+    ];
 
-        const popularMovies = [
-            { id: 8, title: 'The Shawshank Redemption' },
-            { id: 9, title: 'Inception' },
-            { id: 10, title: 'The Dark Knight' },
-            { id: 11, title: 'Pulp Fiction' },
-            { id: 12, title: 'Forrest Gump' },
-            { id: 13, title: 'The Matrix' },
-            { id: 14, title: 'Gladiator' }
-        ];
+    const popularMovies = [
+        { id: 8, title: 'The Shawshank Redemption' },
+        { id: 9, title: 'Inception' },
+        { id: 10, title: 'The Dark Knight' },
+        { id: 11, title: 'Pulp Fiction' },
+        { id: 12, title: 'Forrest Gump' },
+        { id: 13, title: 'The Matrix' },
+        { id: 14, title: 'Gladiator' }
+    ];
 
-        const favoritesMovies = [
-            { id: 15, title: 'Interstellar' },
-            { id: 16, title: 'The Godfather' },
-            { id: 17, title: 'Titanic' },
-            { id: 18, title: 'Avatar' },
-            { id: 19, title: 'Avengers' },
-            { id: 20, title: 'Parasite' },
-            { id: 21, title: 'Dune' }
-        ];
+    const favoritesMovies = [
+        { id: 15, title: 'Interstellar' },
+        { id: 16, title: 'The Godfather' },
+        { id: 17, title: 'Titanic' },
+        { id: 18, title: 'Avatar' },
+        { id: 19, title: 'Avengers' },
+        { id: 20, title: 'Parasite' },
+        { id: 21, title: 'Dune' }
+    ];
 
-        // === CAROUSEL STATE ===
-        const carousels = {
-            recent: { movies: recentMovies, currentList: [...recentMovies], currentIndex: 0, autoplayId: null },
-            popular: { movies: popularMovies, currentList: [...popularMovies], offset: 0 },
-            favorites: { movies: favoritesMovies, currentList: [...favoritesMovies], offset: 0 }
+    // === CAROUSEL STATE ===
+    const carousels = {
+        recent: { movies: recentMovies, currentList: [...recentMovies], currentIndex: 0, autoplayId: null },
+        popular: { movies: popularMovies, currentList: [...popularMovies], offset: 0 },
+        favorites: { movies: favoritesMovies, currentList: [...favoritesMovies], offset: 0 }
+    };
+
+    // === HELPER: GET ELEMENTS FOR A CAROUSEL ===
+    function getCarouselElements(name) {
+        const suffix = name === 'recent' ? '' : `-${name}`;
+        return {
+            carousel: document.getElementById(`carousel${suffix}`),
+            dotsWrap: document.getElementById(`dots${suffix}`),
+            prevBtn: document.querySelector(`.carousel-arrow.prev[data-carousel="${name === 'recent' ? '' : name}"]`)
+                || (name === 'recent' ? document.querySelector('.carousel-arrow.prev:not([data-carousel])') : null),
+            nextBtn: document.querySelector(`.carousel-arrow.next[data-carousel="${name === 'recent' ? '' : name}"]`)
+                || (name === 'recent' ? document.querySelector('.carousel-arrow.next:not([data-carousel])') : null)
         };
+    }
 
-        // === HELPER: GET ELEMENTS FOR A CAROUSEL ===
-        function getCarouselElements(name) {
-            const suffix = name === 'recent' ? '' : `-${name}`;
-            return {
-                carousel: document.getElementById(`carousel${suffix}`),
-                dotsWrap: document.getElementById(`dots${suffix}`),
-                prevBtn: document.querySelector(`.carousel-arrow.prev[data-carousel="${name === 'recent' ? '' : name}"]`)
-                    || (name === 'recent' ? document.querySelector('.carousel-arrow.prev:not([data-carousel])') : null),
-                nextBtn: document.querySelector(`.carousel-arrow.next[data-carousel="${name === 'recent' ? '' : name}"]`)
-                    || (name === 'recent' ? document.querySelector('.carousel-arrow.next:not([data-carousel])') : null)
-            };
+    // === RENDER CAROUSEL ===
+    function renderCarousel(name) {
+        const state = carousels[name];
+        const els = getCarouselElements(name);
+        els.carousel.innerHTML = '';
+        if (els.dotsWrap) els.dotsWrap.innerHTML = '';
+
+        if (state.currentList.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'slide center';
+            empty.innerHTML = '<div class="title">No results</div>';
+            els.carousel.appendChild(empty);
+            return;
         }
 
-        // === RENDER CAROUSEL ===
-        function renderCarousel(name) {
-            const state = carousels[name];
-            const els = getCarouselElements(name);
-            els.carousel.innerHTML = '';
-            if (els.dotsWrap) els.dotsWrap.innerHTML = '';
-
-            if (state.currentList.length === 0) {
-                const empty = document.createElement('div');
-                empty.className = 'slide center';
-                empty.innerHTML = '<div class="title">No results</div>';
-                els.carousel.appendChild(empty);
-                return;
-            }
-
-            // For grid carousels (popular, favorites), show all movies
-            if (name !== 'recent') {
-                state.currentList.forEach((m, idx) => {
-                    const slide = document.createElement('div');
-                    slide.className = 'slide';
-                    slide.dataset.index = idx;
-                    slide.innerHTML = `<div class="title">${m.title}</div>`;
-                    slide.addEventListener('click', () => {
-                        window.location.href = 'pelicula.html';
-                    });
-                    els.carousel.appendChild(slide);
-                });
-                return;
-            }
-
-            // For recent carousel, use carousel positioning logic
+        // For grid carousels (popular, favorites), show all movies
+        if (name !== 'recent') {
             state.currentList.forEach((m, idx) => {
                 const slide = document.createElement('div');
                 slide.className = 'slide';
                 slide.dataset.index = idx;
                 slide.innerHTML = `<div class="title">${m.title}</div>`;
                 slide.addEventListener('click', () => {
-                    window.location.href = 'pelicula.html';
+                    window.location.href = '/pelicula/';
                 });
+
                 els.carousel.appendChild(slide);
+            });
+            return;
+        }
 
-                const dot = document.createElement('button');
-                dot.title = m.title;
-                dot.addEventListener('click', () => { goTo(name, idx); });
-                els.dotsWrap.appendChild(dot);
+        // For recent carousel, use carousel positioning logic
+        state.currentList.forEach((m, idx) => {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.dataset.index = idx;
+            slide.innerHTML = `<div class="title">${m.title}</div>`;
+            slide.addEventListener('click', () => {
+                window.location.href = '/pelicula/';
             });
 
+            els.carousel.appendChild(slide);
+
+            const dot = document.createElement('button');
+            dot.title = m.title;
+            dot.addEventListener('click', () => { goTo(name, idx); });
+            els.dotsWrap.appendChild(dot);
+        });
+
+        updatePositions(name);
+    }
+
+    // === UPDATE POSITIONS ===
+    function updatePositions(name) {
+        // Grid carousels don't need positioning logic
+        if (name !== 'recent') return;
+
+        const state = carousels[name];
+        const els = getCarouselElements(name);
+        const slides = Array.from(els.carousel.children);
+        slides.forEach(s => s.classList.remove('left', 'left-2', 'center', 'right', 'right-2', 'hidden'));
+
+        if (slides.length === 0) return;
+
+        const len = slides.length;
+        const center = state.currentIndex;
+        const left = (center - 1 + len) % len;
+        const right = (center + 1) % len;
+        const left2 = (center - 2 + len) % len;
+        const right2 = (center + 2) % len;
+
+        slides.forEach((s, i) => {
+            if (i === center) s.classList.add('center');
+            else if (i === left) s.classList.add('left');
+            else if (i === right) s.classList.add('right');
+            else if (i === left2) s.classList.add('left-2');
+            else if (i === right2) s.classList.add('right-2');
+            else s.classList.add('hidden');
+        });
+
+        const dots = Array.from(els.dotsWrap.children);
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[state.currentIndex]) dots[state.currentIndex].classList.add('active');
+    }
+
+    // === CAROUSEL CONTROLS ===
+    function prev(name) {
+        const state = carousels[name];
+        if (name === 'recent') {
+            state.currentIndex = (state.currentIndex - 1 + state.currentList.length) % state.currentList.length;
             updatePositions(name);
+        } else {
+            // For grid carousels, scroll left (reduce offset)
+            state.offset = Math.max(0, state.offset - 1);
+            scrollCarousel(name);
         }
+    }
 
-        // === UPDATE POSITIONS ===
-        function updatePositions(name) {
-            // Grid carousels don't need positioning logic
-            if (name !== 'recent') return;
-
-            const state = carousels[name];
-            const els = getCarouselElements(name);
-            const slides = Array.from(els.carousel.children);
-            slides.forEach(s => s.classList.remove('left', 'left-2', 'center', 'right', 'right-2', 'hidden'));
-
-            if (slides.length === 0) return;
-
-            const len = slides.length;
-            const center = state.currentIndex;
-            const left = (center - 1 + len) % len;
-            const right = (center + 1) % len;
-            const left2 = (center - 2 + len) % len;
-            const right2 = (center + 2) % len;
-
-            slides.forEach((s, i) => {
-                if (i === center) s.classList.add('center');
-                else if (i === left) s.classList.add('left');
-                else if (i === right) s.classList.add('right');
-                else if (i === left2) s.classList.add('left-2');
-                else if (i === right2) s.classList.add('right-2');
-                else s.classList.add('hidden');
-            });
-
-            const dots = Array.from(els.dotsWrap.children);
-            dots.forEach(d => d.classList.remove('active'));
-            if (dots[state.currentIndex]) dots[state.currentIndex].classList.add('active');
-        }
-
-        // === CAROUSEL CONTROLS ===
-        function prev(name) {
-            const state = carousels[name];
-            if (name === 'recent') {
-                state.currentIndex = (state.currentIndex - 1 + state.currentList.length) % state.currentList.length;
-                updatePositions(name);
-            } else {
-                // For grid carousels, scroll left (reduce offset)
-                state.offset = Math.max(0, state.offset - 1);
-                scrollCarousel(name);
-            }
-        }
-
-        function next(name) {
-            const state = carousels[name];
-            if (name === 'recent') {
-                state.currentIndex = (state.currentIndex + 1) % state.currentList.length;
-                updatePositions(name);
-            } else {
-                // For grid carousels, scroll right (increase offset)
-                const maxOffset = Math.max(0, state.currentList.length - 7);
-                state.offset = Math.min(maxOffset, state.offset + 1);
-                scrollCarousel(name);
-            }
-        }
-
-        function scrollCarousel(name) {
-            const els = getCarouselElements(name);
-            const slides = Array.from(els.carousel.children);
-            slides.forEach((slide, idx) => {
-                slide.style.order = idx;
-            });
-            // Scroll effect via CSS transform
-            els.carousel.style.transform = `translateX(${-carousels[name].offset * (100 / 7)}%)`;
-        }
-
-        function goTo(name, i) {
-            const state = carousels[name];
-            state.currentIndex = Math.max(0, Math.min(i, state.currentList.length - 1));
+    function next(name) {
+        const state = carousels[name];
+        if (name === 'recent') {
+            state.currentIndex = (state.currentIndex + 1) % state.currentList.length;
             updatePositions(name);
-            resetAutoplay(name);
+        } else {
+            // For grid carousels, scroll right (increase offset)
+            const maxOffset = Math.max(0, state.currentList.length - 7);
+            state.offset = Math.min(maxOffset, state.offset + 1);
+            scrollCarousel(name);
         }
+    }
 
-        // === AUTOPLAY ===
-        function startAutoplay(name) {
-            stopAutoplay(name);
-            const state = carousels[name];
-            state.autoplayId = setInterval(() => { next(name); }, 4000);
+    function scrollCarousel(name) {
+        const els = getCarouselElements(name);
+        const slides = Array.from(els.carousel.children);
+        slides.forEach((slide, idx) => {
+            slide.style.order = idx;
+        });
+        // Scroll effect via CSS transform
+        els.carousel.style.transform = `translateX(${-carousels[name].offset * (100 / 7)}%)`;
+    }
+
+    function goTo(name, i) {
+        const state = carousels[name];
+        state.currentIndex = Math.max(0, Math.min(i, state.currentList.length - 1));
+        updatePositions(name);
+        resetAutoplay(name);
+    }
+
+    // === AUTOPLAY ===
+    function startAutoplay(name) {
+        stopAutoplay(name);
+        const state = carousels[name];
+        state.autoplayId = setInterval(() => { next(name); }, 4000);
+    }
+
+    function stopAutoplay(name) {
+        const state = carousels[name];
+        if (state.autoplayId) { clearInterval(state.autoplayId); state.autoplayId = null; }
+    }
+
+    function resetAutoplay(name) { startAutoplay(name); }
+
+    // === EVENT LISTENERS ===
+    function setupCarouselEvents(name) {
+        const els = getCarouselElements(name);
+        if (els.prevBtn) els.prevBtn.addEventListener('click', () => { prev(name); if (name === 'recent') resetAutoplay(name); });
+        if (els.nextBtn) els.nextBtn.addEventListener('click', () => { next(name); if (name === 'recent') resetAutoplay(name); });
+
+        // Only add mouse events to recent carousel (it has autoplay)
+        if (name === 'recent') {
+            els.carousel.addEventListener('mouseenter', () => stopAutoplay(name));
+            els.carousel.addEventListener('mouseleave', () => startAutoplay(name));
         }
+    }
 
-        function stopAutoplay(name) {
-            const state = carousels[name];
-            if (state.autoplayId) { clearInterval(state.autoplayId); state.autoplayId = null; }
-        }
+    // === SEARCH (only for recent carousel) ===
+    // The markup in this file uses an input with id 'search-input' (hyphen).
+    // Try both ids and only attach listener if a form exists to avoid runtime errors
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput') || document.getElementById('search-input');
 
-        function resetAutoplay(name) { startAutoplay(name); }
-
-        // === EVENT LISTENERS ===
-        function setupCarouselEvents(name) {
-            const els = getCarouselElements(name);
-            if (els.prevBtn) els.prevBtn.addEventListener('click', () => { prev(name); if (name === 'recent') resetAutoplay(name); });
-            if (els.nextBtn) els.nextBtn.addEventListener('click', () => { next(name); if (name === 'recent') resetAutoplay(name); });
-
-            // Only add mouse events to recent carousel (it has autoplay)
-            if (name === 'recent') {
-                els.carousel.addEventListener('mouseenter', () => stopAutoplay(name));
-                els.carousel.addEventListener('mouseleave', () => startAutoplay(name));
+    if (searchForm && searchInput) {
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const q = searchInput.value.trim().toLowerCase();
+            const state = carousels.recent;
+            if (!q) {
+                state.currentList = [...recentMovies];
+                state.currentIndex = 0;
+            } else {
+                state.currentList = recentMovies.filter(m => m.title.toLowerCase().includes(q));
+                state.currentIndex = 0;
             }
-        }
+            renderCarousel('recent');
+            resetAutoplay('recent');
+        });
+    }
 
-        // === SEARCH (only for recent carousel) ===
-        // The markup in this file uses an input with id 'search-input' (hyphen).
-        // Try both ids and only attach listener if a form exists to avoid runtime errors
-        const searchForm = document.getElementById('searchForm');
-        const searchInput = document.getElementById('searchInput') || document.getElementById('search-input');
+    // === INITIALIZE ALL CAROUSELS ===
+    renderCarousel('recent');
+    renderCarousel('popular');
+    renderCarousel('favorites');
 
-        if (searchForm && searchInput) {
-            searchForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const q = searchInput.value.trim().toLowerCase();
-                const state = carousels.recent;
-                if (!q) {
-                    state.currentList = [...recentMovies];
-                    state.currentIndex = 0;
-                } else {
-                    state.currentList = recentMovies.filter(m => m.title.toLowerCase().includes(q));
-                    state.currentIndex = 0;
-                }
-                renderCarousel('recent');
-                resetAutoplay('recent');
-            });
-        }
+    setupCarouselEvents('recent');
+    setupCarouselEvents('popular');
+    setupCarouselEvents('favorites');
 
-        // === INITIALIZE ALL CAROUSELS ===
-        renderCarousel('recent');
-        renderCarousel('popular');
-        renderCarousel('favorites');
-
-        setupCarouselEvents('recent');
-        setupCarouselEvents('popular');
-        setupCarouselEvents('favorites');
-
-        // Only autoplay for recent carousel
-        startAutoplay('recent');
-    </script>
-
-</body>
-
-</html
+    // Only autoplay for recent carousel
+    startAutoplay('recent');
+</script>
+{% endblock %}

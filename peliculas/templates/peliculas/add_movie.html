@@ -1,334 +1,293 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base/base.html" %} 
 
-<head>
+{% block title %}Añadir película{% endblock %}
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Add Movie</title>
+<style>
+    :root {
+        --bg: #191919;
+        --panel: #262626;
+        --accent: #e9dff0;
+        --muted: #bdbdbd;
+        --accent: #7c3aed;
+        --accent-2: #6d28d9;
+        --white: #fafafa;
+    }
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    * {
+        box-sizing: border-box
+    }
 
-        <!-- CSS Header -->
-        <link rel="stylesheet" href="css/header.css">
+    html,
+    body {
+        height: 100%
+    }
 
-        <link
-            href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-            rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Gantari:ital,wght@0,100..900;1,100..900&display=swap"
-            rel="stylesheet">
+    body {
+        margin: 0;
+        font-family: 'Gantari';
+        background: var(--bg);
+        color: var(--white);
+        -webkit-font-smoothing: antialiased;
+    }
 
-        <style>
-            :root {
-                --bg: #191919;
-                --panel: #262626;
-                --accent: #e9dff0;
-                --muted: #bdbdbd;
-                --accent: #7c3aed;
-                --accent-2: #6d28d9;
-                --white: #fafafa;
-            }
+    h1 {
+        font-family: 'Exo 2';
+        font-weight: 800;
+        font-size: 40px;
+        letter-spacing: 1px;
+        color: var(--white);
+        text-transform: uppercase;
+    }
 
-            * {
-                box-sizing: border-box
-            }
+    /* Main card */
+    .card-wrap {
+        padding: 28px 48px;
+    }
 
-            html,
-            body {
-                height: 100%
-            }
+    .card {
+        background: var(--card);
+        padding: 36px;
+        border-radius: 15px;
+        max-width: 1200px;
+        margin: 0 auto;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
+    }
 
-            body {
-                margin: 0;
-                font-family: 'Gantari';
-                background: var(--bg);
-                color: var(--white);
-                -webkit-font-smoothing: antialiased;
-            }
+    .card h1 {
+        margin: 0 0 24px 0;
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--white);
+    }
 
-            h1 {
-                font-family: 'Exo 2';
-                font-weight: 800;
-                font-size: 40px;
-                letter-spacing: 1px;
-                color: var(--white);
-                text-transform: uppercase;
-            }
+    .content {
+        display: flex;
+        gap: 48px;
+        align-items: flex-start;
+    }
 
-            /* Main card */
-            .card-wrap {
-                padding: 28px 48px;
-            }
+    /* Left: image dropzone */
+    .thumb-wrap {
+        width: 320px;
+        height: 440px;
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        background: #2a2a2a;
+        border-radius: 4px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
 
-            .card {
-                background: var(--card);
-                padding: 36px;
-                border-radius: 15px;
-                max-width: 1200px;
-                margin: 0 auto;
-                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
-            }
+    .thumb-inner {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        font-size: 14px;
+    }
 
-            .card h1 {
-                margin: 0 0 24px 0;
-                font-size: 32px;
-                font-weight: 700;
-                color: var(--white);
-            }
+    .thumb-inner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
 
-            .content {
-                display: flex;
-                gap: 48px;
-                align-items: flex-start;
-            }
+    .thumb-overlay {
+        position: absolute;
+        inset: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 2px;
+        pointer-events: none;
+    }
 
-            /* Left: image dropzone */
-            .thumb-wrap {
-                width: 320px;
-                height: 440px;
-                border: 2px solid rgba(255, 255, 255, 0.08);
-                background: #2a2a2a;
-                border-radius: 4px;
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                overflow: hidden;
-            }
+    .thumb-actions {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        pointer-events: none;
+    }
 
-            .thumb-inner {
-                width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: var(--muted);
-                font-size: 14px;
-            }
+    .upload-btn {
+        background: transparent;
+        color: var(--muted);
+        padding: 0;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        pointer-events: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-            .thumb-inner img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                display: block;
-            }
+    #removeBtn {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        display: none;
+        background: #D9BDFE;
+        color: black;
+        border: 2px dashed rgba(255, 255, 255, 0.06);
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        pointer-events: auto;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
 
-            .thumb-overlay {
-                position: absolute;
-                inset: 12px;
-                border: 1px solid rgba(255, 255, 255, 0.15);
-                border-radius: 2px;
-                pointer-events: none;
-            }
+    }
 
-            .thumb-actions {
-                position: absolute;
-                inset: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 0;
-                pointer-events: none;
-            }
+    #removeBtn:hover {
+        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        transform: translateY(-2px) scale(1.05);
+        font-weight: 700;
+    }
 
-            .upload-btn {
-                background: transparent;
-                color: var(--muted);
-                padding: 0;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 13px;
-                pointer-events: auto;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-            }
+    input[type=file] {
+        display: none;
+    }
 
-            #removeBtn {
-                position: absolute;
-                bottom: 12px;
-                right: 12px;
-                display: none;
-                background: #D9BDFE;
-                color: black;
-                border: 2px dashed rgba(255, 255, 255, 0.06);
-                padding: 8px 12px;
-                border-radius: 4px;
-                cursor: pointer;
-                pointer-events: auto;
-                transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+    /* Right: form */
+    .form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
 
-            }
+    .row {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
 
-            #removeBtn:hover {
-                background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
-                color: var(--white);
-                box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-                transform: translateY(-2px) scale(1.05);
-                font-weight: 700;
-            }
+    .form-group {
 
-            input[type=file] {
-                display: none;
-            }
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
 
-            /* Right: form */
-            .form {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                gap: 18px;
-            }
+    .form-group label {
+        width: 160px;
+        text-align: left;
+        font-family: 'Gantari';
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--white);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        padding-top: 8px;
 
-            .row {
-                display: flex;
-                flex-direction: column;
-                gap: 14px;
-            }
+    }
 
-            .form-group {
+    .form-group input,
+    .form-group textarea {
+        flex: 1;
+        padding: 12px 14px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        background: var(--input);
+        color: var(--muted);
+        font-size: 14px;
+        resize: vertical;
+        min-height: 40px;
+        font-family: 'Gantari';
+    }
 
-                display: flex;
-                align-items: flex-start;
-                gap: 10px;
-            }
+    .form-group textarea {
+        min-height: 100px;
+    }
 
-            .form-group label {
-                width: 160px;
-                text-align: left;
-                font-family: 'Gantari';
-                font-weight: 700;
-                font-size: 18px;
-                color: var(--white);
-                text-transform: uppercase;
-                letter-spacing: 0.6px;
-                padding-top: 8px;
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: #999;
+    }
 
-            }
+    /* bottom row for button */
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 18px;
+    }
 
-            .form-group input,
-            .form-group textarea {
-                flex: 1;
-                padding: 12px 14px;
-                border-radius: 6px;
-                border: 1px solid rgba(255, 255, 255, 0.04);
-                background: var(--input);
-                color: var(--muted);
-                font-size: 14px;
-                resize: vertical;
-                min-height: 40px;
-                font-family: 'Gantari';
-            }
+    .add-btn {
+        background: #6E32D5;
+        color: var(--white);
+        width: 250px;
+        height: 50px;
+        padding: 12px 18px;
+        border-radius: 8px;
+        border: 0;
+        font-family: 'Exo 2';
+        font-weight: 700;
+        font-size: 30px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        text-align: center;
+        justify-content: center;
+        font-size: 20px;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+    }
 
-            .form-group textarea {
-                min-height: 100px;
-            }
+    .add-btn:hover {
+        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        transform: translateY(-2px) scale(1.05);
+    }
 
-            .form-group input::placeholder,
-            .form-group textarea::placeholder {
-                color: #999;
-            }
-
-            /* bottom row for button */
-            .actions {
-                display: flex;
-                justify-content: flex-end;
-                margin-top: 18px;
-            }
-
-            .add-btn {
-                background: #6E32D5;
-                color: var(--white);
-                width: 250px;
-                height: 50px;
-                padding: 12px 18px;
-                border-radius: 8px;
-                border: 0;
-                font-family: 'Exo 2';
-                font-weight: 700;
-                font-size: 30px;
-                display: inline-flex;
-                align-items: center;
-                gap: 10px;
-                cursor: pointer;
-                text-align: center;
-                justify-content: center;
-                font-size: 20px;
-                transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
-            }
-
-            .add-btn:hover {
-                background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
-                color: var(--white);
-                box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-                transform: translateY(-2px) scale(1.05);
-            }
-
-            .add-btn .hover-icon {
-                display: none;
-            }
+    .add-btn .hover-icon {
+        display: none;
+    }
 
 
 
 
 
 
-            .plus {
-                width: 28px;
-                height: 28px;
-                border-radius: 6px;
-                background: rgba(255, 255, 255, 0.12);
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: 700;
-            }
+    .plus {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.12);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
 
-            @media (max-width:980px) {
-                .content {
-                    flex-direction: column;
-                    align-items: center
-                }
+    @media (max-width:980px) {
+        .content {
+            flex-direction: column;
+            align-items: center
+        }
 
-                .thumb-wrap {
-                    width: 280px;
-                    height: 380px
-                }
+        .thumb-wrap {
+            width: 280px;
+            height: 380px
+        }
 
-                .labels {
-                    width: 140px
-                }
-            }
-        </style>
-    </head>
+        .labels {
+            width: 140px
+        }
+    }
+</style>
+{% endblock %}
 
-<body>
-
-    <header class="site-header">
-        <div class="logo-container">
-            <a href="home.html">
-                <img src="img/logo_filmbox.png" alt="Logo" class="logo-img">
-            </a>
-        </div>
-
-        <div class="right-section">
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Search" style="font-family: Arial;">
-                <button id="search-button">
-                    <i class="bi bi-search"></i>
-                </button>
-            </div>
-            <div class="profile-container">
-                <a href="account/perfil_user.html">
-                    <img src="img/foto-perfil-usuario.jpg" alt="Perfil" class="profile-img">
-                </a>
-            </div>
-        </div>
-    </header>
-
+{% block content %}
+<main>
     <div class="card-wrap">
         <div class="card">
             <h1>ADD MOVIE</h1>
@@ -395,6 +354,9 @@
             </div>
         </div>
     </div>
+</main>
+
+
 
     <script>
         // handle image upload + preview
@@ -485,4 +447,5 @@
     </script>
 </body>
 
-</html>
+
+{% endblock %}

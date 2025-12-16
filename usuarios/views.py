@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def perfil_user(request):
+    return render(request, "usuarios/perfil_user.html")
