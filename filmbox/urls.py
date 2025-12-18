@@ -20,5 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('peliculas.urls')),   # rutas de películas
-    path('usuarios/', include('usuarios.urls')),  # rutas de usuarios
+    path('usuarios/', include('usuarios.urls')), # aquí se conecta la app usuarios
 ]
