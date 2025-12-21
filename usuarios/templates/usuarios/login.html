@@ -1,16 +1,15 @@
+<!-- ACCESO -->
+
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="es">
-<!-- Color morado: 6E32D5 -->
-<!-- Color lila: D9BDFE -->
-<!-- Color morado + oscuro: 6C00FA -->
+
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-
+    <title>Inicio de sesión</title>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -31,7 +30,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Gantari';
             background-color: #191919;
             display: flex;
             justify-content: center;
@@ -59,8 +58,8 @@
             top: 100px;
             left: 50%;
             transform: translateX(-50%);
-
         }
+
 
         .login-card {
             background-color: #f5f5f5;
@@ -72,6 +71,7 @@
             max-width: 400px;
             height: 100%;
             font-family: 'Gantari';
+            font-weight: 400;
         }
 
         .form-group {
@@ -80,13 +80,15 @@
 
         label {
             display: block;
-            font-size: 14px;
+            font-size: 17px;
             font-weight: 500;
-            color: #333333;
+            color: black;
             margin-bottom: 8px;
+            font-family: 'Gantari';
+            font-weight: 500;
         }
 
-        input[type="email"],
+        input[type="text"],
         input[type="password"] {
             width: 100%;
             padding: 12px;
@@ -96,14 +98,15 @@
             color: #666666;
             background-color: #ffffff;
             transition: border-color 0.3s ease;
+            font-family: 'Gantari';
         }
 
-        input[type="email"]::placeholder,
+        input[type="text"]::placeholder,
         input[type="password"]::placeholder {
             color: #999999;
         }
 
-        input[type="email"]:focus,
+        input[type="text"]:focus,
         input[type="password"]:focus {
             outline: none;
             border-color: #7c3aed;
@@ -125,21 +128,40 @@
 
         }
 
-
         .sign-in-btn:hover {
             background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
             box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
             transform: translateY(-2px);
         }
 
-
         .sign-in-btn:active {
             transform: translateY(0);
         }
 
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
 
-        /* Responsividad */
+        .forgot-password a {
+            color: #333333;
+            text-decoration: underline;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #7c3aed;
+        }
+
+        /* Responsive */
         @media (max-width: 600px) {
+            .logo {
+                padding: 20px 40px;
+                margin-bottom: 60px;
+                font-size: 28px;
+            }
+
             .login-card {
                 padding: 30px 20px;
             }
@@ -152,149 +174,32 @@
 </head>
 
 <body>
-    <div class="logo">
-        <img src="{% static 'img/logo_filmbox.png' %}" alt="Logo Filmbox" class="logo-img">
-    </div>
-
     <div class="container">
 
-        <form class="login-card" id="loginForm">
+        <div class="logo">
+            <img src="{% static 'img/logo_filmbox.png' %}" alt="Logo Filmbox" class="logo-img">
+        </div>
+
+        <form class="login-card" method="POST" action="">
+            {% csrf_token %}
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Value" required>
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
             </div>
 
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Value" required>
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Contraseña" required>
             </div>
 
-            <div id="password-requirements" style="display: none; margin-top: 10px;">
-                <ul style="list-style: none; padding: 0; font-size: 12px; color: #666;">
-                    <li id="req-length">⦁ La contraseña debe tener al menos 12 caracteres.</li>
-                    <li id="req-case">⦁ La contraseña debe tener al menos una mayúscula y una minúscula.</li>
-                    <li id="req-number">⦁ La contraseña debe tener al menos un número.</li>
-                    <li id="req-symbol">⦁ La contraseña debe tener al menos un símbolo.</li>
-                </ul>
+            <button type="submit" class="sign-in-btn">ACCEDER</button>
+
+            <div class="forgot-password">
+                <a href="#forgot">Forgot password?</a>
             </div>
-
-            <button type="submit" class="sign-in-btn">LOGIN</button>
-
         </form>
     </div>
 
-    <!-- Modal de advertencia -->
-    <div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="warningModalLabel">Advertencia</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="modalBody">
-                    <!-- Mensajes de error -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            let errors = [];
-
-            // Validación básica
-            if (!email.trim() || !password.trim()) {
-                errors.push('Por favor, rellena todos los campos.');
-            }
-
-            // Validación de email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.(com|es|net)$/;
-            if (email.trim() && !emailRegex.test(email)) {
-                errors.push('El correo electrónico debe tener un @ y terminar en .com, .es o .net.');
-            }
-
-            // Validación de contraseña
-            if (password.trim()) {
-                if (password.length < 12) {
-                    errors.push('La contraseña debe tener al menos 12 caracteres.');
-                }
-                if (!(/[a-z]/.test(password) && /[A-Z]/.test(password))) {
-                    errors.push('La contraseña debe tener al menos una mayúscula y una minúscula.');
-                }
-                if (!/\d/.test(password)) {
-                    errors.push('La contraseña debe tener al menos un número.');
-                }
-                if (!/[^a-zA-Z0-9]/.test(password)) {
-                    errors.push('La contraseña debe tener al menos un símbolo.');
-                }
-            }
-
-            if (errors.length > 0) {
-                // Mostrar modal con errores
-                const modalBody = document.getElementById('modalBody');
-                modalBody.innerHTML = '<ul>' + errors.map(error => '<li>' + error + '</li>').join('') + '</ul>';
-                const modal = new bootstrap.Modal(document.getElementById('warningModal'));
-                modal.show();
-                return;
-            }
-
-            // Aquí irá la lógica de login
-            console.log('Email:', email);
-            console.log('Password:', password);
-
-            // Ejemplo: mostrar un mensaje de éxito
-            alert('Login exitoso: ' + email);
-
-        });
-
-        // Password requirements
-        const passwordInput = document.getElementById('password');
-        const requirementsDiv = document.getElementById('password-requirements');
-        const reqLength = document.getElementById('req-length');
-        const reqCase = document.getElementById('req-case');
-        const reqNumber = document.getElementById('req-number');
-        const reqSymbol = document.getElementById('req-symbol');
-
-        passwordInput.addEventListener('focus', function () {
-            requirementsDiv.style.display = 'block';
-        });
-
-        passwordInput.addEventListener('input', function () {
-            const password = passwordInput.value;
-            // Check length
-            if (password.length >= 12) {
-                reqLength.style.color = 'green';
-            } else {
-                reqLength.style.color = '#666';
-            }
-            // Check case
-            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) {
-                reqCase.style.color = 'green';
-            } else {
-                reqCase.style.color = '#666';
-            }
-            // Check number
-            if (/\d/.test(password)) {
-                reqNumber.style.color = 'green';
-            } else {
-                reqNumber.style.color = '#666';
-            }
-            // Check symbol
-            if (/[^a-zA-Z0-9]/.test(password)) {
-                reqSymbol.style.color = 'green';
-            } else {
-                reqSymbol.style.color = '#666';
-            }
-        });
-    </script>
 </body>
 
 </html>
