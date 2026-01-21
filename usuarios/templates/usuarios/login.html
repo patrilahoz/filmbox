@@ -1,4 +1,4 @@
-<!-- ACCESO -->
+<!-- INICIO DE SESIÓN -->
 
 {% load static %}
 
@@ -36,39 +36,42 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding-top: 40px;
         }
 
+        /* Logo */
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .logo-img {
+            width: 400px;
+            height: auto;
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        /* Contenedor de registro */
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
             padding: 20px;
         }
-
-        /* Logo */
-        .logo-img {
-            width: 500px;
-            height: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            position: absolute;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
 
         .login-card {
             background-color: #f5f5f5;
             padding: 50px;
-            margin: 50px;
-            border-radius: 8px;
+            margin: 100px;
+            border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            max-width: 400px;
+            width: 450px;
             height: 100%;
             font-family: 'Gantari';
             font-weight: 400;
@@ -88,7 +91,7 @@
             font-weight: 500;
         }
 
-        input[type="text"],
+        input[type="email"],
         input[type="password"] {
             width: 100%;
             padding: 12px;
@@ -101,19 +104,19 @@
             font-family: 'Gantari';
         }
 
-        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
         input[type="password"]::placeholder {
             color: #999999;
         }
 
-        input[type="text"]:focus,
+        input[type="email"]:focus,
         input[type="password"]:focus {
             outline: none;
             border-color: #7c3aed;
             box-shadow: 0 0 5px rgba(124, 58, 237, 0.3);
         }
 
-        .sign-in-btn {
+        .login-btn {
             width: 100%;
             padding: 10px;
             background: linear-gradient(135deg, #6E32D5 0%, #6d28d9 100%);
@@ -128,17 +131,18 @@
 
         }
 
-        .sign-in-btn:hover {
+        .login-btn:hover {
             background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
             box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
             transform: translateY(-2px);
         }
 
-        .sign-in-btn:active {
+        .login-btn:active {
             transform: translateY(0);
         }
 
-        .forgot-password {
+        .forgot-password,
+        .register-link {
             text-align: center;
             margin-top: 10px;
         }
@@ -150,20 +154,37 @@
             transition: color 0.3s ease;
         }
 
-        .forgot-password a:hover {
+        
+        .register-link a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover,
+        .register-link a:hover {
             color: #7c3aed;
         }
 
-        /* Responsive */
+        .error { 
+            background-color: #ff4d4d; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-top: 15px; 
+            font-size: 14px; 
+        }
+
+        /* Responsividad */
         @media (max-width: 600px) {
             .logo {
                 padding: 20px 40px;
                 margin-bottom: 60px;
-                font-size: 28px;
             }
 
             .login-card {
-                padding: 30px 20px;
+                width: 400px;
+                padding: 30px;
             }
 
             .form-group {
@@ -180,8 +201,9 @@
             <img src="{% static 'img/logo_filmbox.png' %}" alt="Logo Filmbox" class="logo-img">
         </div>
 
-        <form class="login-card" method="POST" action="">
+        <form class="login-card" method="POST" action="" id="loginForm">
             {% csrf_token %}
+
             <div class="form-group">
                 <label for="email">Correo electrónico</label>
                 <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
@@ -192,11 +214,26 @@
                 <input type="password" id="password" name="password" placeholder="Contraseña" required>
             </div>
 
-            <button type="submit" class="sign-in-btn">ACCEDER</button>
+            <button type="submit" class="login-btn">ACCEDER</button>
 
+            <!--
             <div class="forgot-password">
                 <a href="#forgot">Forgot password?</a>
             </div>
+            -->
+            
+            {% if error %} 
+                <p class="error">{{ error }}</p> 
+            {% endif %}
+
+            <div class="forgot-password"> 
+                <a href="/usuarios/recuperar/">¿Has olvidado tu contraseña?</a> 
+            </div>
+            
+            <div class="register-link"> 
+                <a href="/usuarios/registrarse/">¿No tienes cuenta? <b>Regístrate</b></a> 
+            </div>
+
         </form>
     </div>
 
