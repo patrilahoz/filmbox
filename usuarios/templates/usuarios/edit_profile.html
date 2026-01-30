@@ -375,7 +375,7 @@
     </div>
 
     <script>
-        // Favorites handling
+        // Películas favoritas
         const favContainer = document.getElementById('favorites');
         const favSlots = Array.from(favContainer.querySelectorAll('.fav-slot'));
 
@@ -401,7 +401,6 @@
             slot.classList.remove('has-image');
         }
 
-        // Form submit - demo
         const form = document.getElementById('profileForm');
         form.addEventListener('submit', (ev) => {
             ev.preventDefault();

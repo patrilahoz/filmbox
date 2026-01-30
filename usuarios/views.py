@@ -91,6 +91,11 @@ def perfil_user(request):
 def perfil_admin(request):
     return render(request, "usuarios/perfil_admin.html")
 
+@login_required
+def edit_profile(request):
+    return render(request, "usuarios/edit_profile.html")
+
+
 # @login_required
 # def perfil_moderador(request):
 #    return render(request, "usuarios/perfil_moderador.html")
