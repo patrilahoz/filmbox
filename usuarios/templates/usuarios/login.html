@@ -215,12 +215,6 @@
             </div>
 
             <button type="submit" class="login-btn">ACCEDER</button>
-
-            <!--
-            <div class="forgot-password">
-                <a href="#forgot">Forgot password?</a>
-            </div>
-            -->
             
             {% if error %} 
                 <p class="error">{{ error }}</p> 
@@ -231,7 +225,9 @@
             </div>
             
             <div class="register-link"> 
-                <a href="/usuarios/registrarse/">¿No tienes cuenta? <b>Regístrate</b></a> 
+                <a href="{% url 'register' %}">
+                    ¿No tienes cuenta? <b>Regístrate</b>
+                </a>
             </div>
 
         </form>
