@@ -389,10 +389,17 @@
         <div class="carousel-wrap">
             <button class="carousel-arrow prev" aria-label="Anterior">‹</button>
             <div class="carousel" id="carousel">
+                {% for p in peliculas %}
                 <div class="slide">
-                    <a href="{% url 'pelicula' %}">Ver película</a>
+                    <a href="{% url 'pelicula' %}">
+                        <img src="{{ p.poster_url }}" alt="{{ p.titulo }}">
+                        <h3>{{ p.titulo }}</h3>
+                        <p>{{ p.director }} ({{ p.año }})</p>
+                    </a>
                 </div>
+                {% endfor %}
             </div>
+
             <button class="carousel-arrow next" aria-label="Siguiente">›</button>
         </div>
 

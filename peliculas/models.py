@@ -15,6 +15,9 @@ class Pelicula(models.Model):
     duracion_min = models.IntegerField()
     descripcion = models.TextField(blank=True)
     poster_url = models.CharField(max_length=255, blank=True)
+    # Si más adelante quieres subir imágenes reales en vez de URLs, cambia esta linea por:
+    # poster = models.ImageField(upload_to='peliculas/', blank=True, null=True)
+
     generos = models.ManyToManyField(Genero, through='PeliculaGenero', related_name='peliculas')
 
     def __str__(self):
