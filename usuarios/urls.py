@@ -17,7 +17,8 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
 
     path("perfil/", views.perfil_user, name="perfil_user"),
-    path("perfil/admin/", views.perfil_admin, name="perfil_admin"),
+    path("panel-admin/perfil/", views.perfil_admin, name="perfil_admin"),
+
     path("perfil/editar/", views.edit_profile, name="edit_profile"),
 ]
 

@@ -53,28 +53,22 @@ def login_view(request):
         email = request.POST["email"]
         password = request.POST["password"]
 
-        try:
-            user_obj = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return render(request, "usuarios/login.html", {
-                "error": "Correo no registrado"
-            })
-
         user = authenticate(
             request,
-            username=user_obj.username,
+            email=email,
             password=password
         )
 
         if user is None:
             return render(request, "usuarios/login.html", {
-                "error": "Contraseña incorrecta"
+                "error": "Correo o contraseña incorrectos"
             })
 
         login(request, user)
         return redirect("home")
 
     return render(request, "usuarios/login.html")
+
 
 
 from django.contrib.auth.decorators import login_required
@@ -87,7 +81,7 @@ User = get_user_model()
 def perfil_user(request):
     return render(request, "usuarios/perfil_user.html")
 
-@login_required
+#@login_required
 def perfil_admin(request):
     return render(request, "usuarios/perfil_admin.html")
 

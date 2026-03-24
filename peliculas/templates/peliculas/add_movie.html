@@ -1,4 +1,4 @@
-{% extends "base/base.html" %} 
+{% extends "base/base.html" %}
 
 {% block title %}Añadir película{% endblock %}
 
@@ -310,7 +310,8 @@
                 </div>
 
                 <!-- Right: form -->
-                <form class="form" id="addMovieForm">
+                <form class="form" id="addMovieForm" method="POST">
+                    {% csrf_token %}
                     <div class="row">
                         <div class="form-group">
                             <label for="title">TITLE</label>
@@ -358,93 +359,93 @@
 
 
 
-    <script>
-        // handle image upload + preview
-        const posterInput = document.getElementById('posterInput');
-        const thumbInner = document.getElementById('thumbInner');
-        const removeBtn = document.getElementById('removeBtn');
-        const uploadLabel = document.getElementById('uploadLabel');
+<script>
+    // handle image upload + preview
+    const posterInput = document.getElementById('posterInput');
+    const thumbInner = document.getElementById('thumbInner');
+    const removeBtn = document.getElementById('removeBtn');
+    const uploadLabel = document.getElementById('uploadLabel');
 
-        function clearPreview() {
-            thumbInner.innerHTML = '';
-            thumbInner.style.justifyContent = 'center';
-            thumbInner.style.alignItems = 'center';
-            // show subtle placeholder (empty)
-            // hide the remove button when there's no image
-            if (removeBtn) removeBtn.style.display = 'none';
-            if (uploadLabel) uploadLabel.style.display = 'inline-flex';
-        }
+    function clearPreview() {
+        thumbInner.innerHTML = '';
+        thumbInner.style.justifyContent = 'center';
+        thumbInner.style.alignItems = 'center';
+        // show subtle placeholder (empty)
+        // hide the remove button when there's no image
+        if (removeBtn) removeBtn.style.display = 'none';
+        if (uploadLabel) uploadLabel.style.display = 'inline-flex';
+    }
 
-        function showPreview(file) {
-            const img = document.createElement('img');
-            img.alt = 'Movie Poster';
-            const url = URL.createObjectURL(file);
-            img.src = url;
-            // clear previous
-            thumbInner.innerHTML = '';
-            thumbInner.appendChild(img);
-            // show the remove button when an image is present
-            if (removeBtn) removeBtn.style.display = 'inline-block';
-            if (uploadLabel) uploadLabel.style.display = 'none';
-        }
+    function showPreview(file) {
+        const img = document.createElement('img');
+        img.alt = 'Movie Poster';
+        const url = URL.createObjectURL(file);
+        img.src = url;
+        // clear previous
+        thumbInner.innerHTML = '';
+        thumbInner.appendChild(img);
+        // show the remove button when an image is present
+        if (removeBtn) removeBtn.style.display = 'inline-block';
+        if (uploadLabel) uploadLabel.style.display = 'none';
+    }
 
-        posterInput.addEventListener('change', (e) => {
-            const file = e.target.files && e.target.files[0];
-            if (!file) return clearPreview();
-            if (!file.type.startsWith('image/')) { alert('Por favor selecciona una imagen.'); posterInput.value = ''; return; }
-            showPreview(file);
-        });
+    posterInput.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return clearPreview();
+        if (!file.type.startsWith('image/')) { alert('Por favor selecciona una imagen.'); posterInput.value = ''; return; }
+        showPreview(file);
+    });
 
-        removeBtn.addEventListener('click', () => {
-            posterInput.value = '';
-            clearPreview();
-        });
-
-        // initialize empty preview (no text as requested)
+    removeBtn.addEventListener('click', () => {
+        posterInput.value = '';
         clearPreview();
+    });
 
-        // handle submit
-        const form = document.getElementById('addMovieForm');
-        form.addEventListener('submit', (ev) => {
-            ev.preventDefault();
+    // initialize empty preview (no text as requested)
+    clearPreview();
 
-            const data = new FormData();
-            const title = document.getElementById('title').value.trim();
-            const director = document.getElementById('director').value.trim();
-            const year = document.getElementById('year').value.trim();
-            const genres = document.getElementById('genres').value.trim();
-            const cast = document.getElementById('cast').value.trim();
-            const synopsis = document.getElementById('synopsis').value.trim();
+    // handle submit
+    const form = document.getElementById('addMovieForm');
+    form.addEventListener('submit', (ev) => {
+        ev.preventDefault();
 
-            if (!title) { alert('El título es obligatorio'); return; }
+        const data = new FormData();
+        const title = document.getElementById('title').value.trim();
+        const director = document.getElementById('director').value.trim();
+        const year = document.getElementById('year').value.trim();
+        const genres = document.getElementById('genres').value.trim();
+        const cast = document.getElementById('cast').value.trim();
+        const synopsis = document.getElementById('synopsis').value.trim();
 
-            data.append('title', title);
-            data.append('director', director);
-            data.append('year', year);
-            data.append('genres', genres);
-            data.append('cast', cast);
-            data.append('synopsis', synopsis);
+        if (!title) { alert('El título es obligatorio'); return; }
 
-            if (posterInput.files && posterInput.files[0]) {
-                data.append('poster', posterInput.files[0]);
-            }
+        data.append('title', title);
+        data.append('director', director);
+        data.append('year', year);
+        data.append('genres', genres);
+        data.append('cast', cast);
+        data.append('synopsis', synopsis);
 
-            // Demo: mostrar datos en consola
-            console.log('Formulario Add Movie');
-            for (const pair of data.entries()) {
-                console.log(pair[0], pair[1]);
-            }
+        if (posterInput.files && posterInput.files[0]) {
+            data.append('poster', posterInput.files[0]);
+        }
 
-            // Ejemplo de envío a backend (descomentar y adaptar URL)
-            // fetch('/api/movies', { method:'POST', body: data })
-            //   .then(r=>r.json())
-            //   .then(res=>{ console.log(res); alert('Pelicula añadida') })
-            //   .catch(err=>{ console.error(err); alert('Error al añadir') });
+        // Demo: mostrar datos en consola
+        console.log('Formulario Add Movie');
+        for (const pair of data.entries()) {
+            console.log(pair[0], pair[1]);
+        }
 
-            alert('Pelicula preparada para enviar (ver consola).');
-            // opcional: form.reset(); clearPreview();
-        });
-    </script>
+        // Ejemplo de envío a backend (descomentar y adaptar URL)
+        // fetch('/api/movies', { method:'POST', body: data })
+        //   .then(r=>r.json())
+        //   .then(res=>{ console.log(res); alert('Pelicula añadida') })
+        //   .catch(err=>{ console.error(err); alert('Error al añadir') });
+
+        alert('Pelicula preparada para enviar (ver consola).');
+        // opcional: form.reset(); clearPreview();
+    });
+</script>
 </body>
 
 
