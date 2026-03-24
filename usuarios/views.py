@@ -78,12 +78,12 @@ from django.shortcuts import render
 User = get_user_model()
 
 @login_required
-def perfil_user(request):
-    return render(request, "usuarios/perfil_user.html")
+def perfil(request):
+    if request.user.is_staff:
+        return render(request, "usuarios/perfil_admin.html")
+    else:
+        return render(request, "usuarios/perfil_user.html")
 
-#@login_required
-def perfil_admin(request):
-    return render(request, "usuarios/perfil_admin.html")
 
 @login_required
 def edit_profile(request):
