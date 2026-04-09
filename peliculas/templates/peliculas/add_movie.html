@@ -2,6 +2,8 @@
 
 {% block title %}Añadir película{% endblock %}
 
+{% block extra_css %}
+
 <style>
     :root {
         --bg: #191919;
@@ -220,6 +222,91 @@
         margin-top: 18px;
     }
 
+
+
+
+
+    /* Selector múltiple de géneros */
+    /* Contenedor principal */
+    .multi-select {
+        position: relative;
+        width: 100%;
+
+        flex: 1;
+        background: var(--input);
+        color: var(--muted);
+        font-size: 14px;
+        resize: vertical;
+        min-height: 40px;
+        font-family: 'Gantari';
+        
+    }
+
+    /* Botón */
+    .select-btn {
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.3s ease;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        flex: 1;
+        padding: 12px 14px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        background: var(--input);
+        color: var(--muted);
+        font-size: 14px;
+        resize: vertical;
+        min-height: 40px;
+        font-family: 'Gantari';
+
+    }
+
+    .select-btn:hover {
+        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+
+    /* Dropdown */
+    .select-dropdown {
+        display: none;
+        position: absolute;
+        width: 100%;
+        background: #f8f0fc;
+        border: 1px solid #d0b3ff;
+        border-radius: 6px;
+        margin-top: 5px;
+        padding: 10px;
+        max-height: 180px;
+        overflow-y: auto;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+    }
+
+    /* Opciones */
+    .option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 4px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .option:hover {
+        background: #e9d8fd;
+    }
+
+
+
+
+
+
+
     .add-btn {
         background: #6E32D5;
         color: var(--white);
@@ -290,13 +377,13 @@
 <main>
     <div class="card-wrap">
         <div class="card">
-            <h1>ADD MOVIE</h1>
+            <h1>AÑADIR PELÍCULA</h1>
 
             <div class="content">
+
                 <!-- Left: image upload / preview -->
                 <div class="thumb-wrap" id="thumbWrap">
                     <div class="thumb-inner" id="thumbInner">
-                        <!-- empty until image selected -->
                         <span style="color:rgba(255,255,255,0.12)"></span>
                     </div>
                     <div class="thumb-overlay"></div>
@@ -306,51 +393,85 @@
                         </label>
                         <button class="upload-btn" type="button" id="removeBtn" title="Quitar">Quitar</button>
                     </div>
-                    <input type="file" id="posterInput" accept="image/*">
+
+                    <!-- Este input SÍ debe tener name="poster" -->
+                    <input type="file" id="posterInput" name="poster" accept="image/*">
                 </div>
 
                 <!-- Right: form -->
-                <form class="form" id="addMovieForm" method="POST">
+                <form class="form" id="addMovieForm" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+
                     <div class="row">
+
+                        <!-- TÍTULO -->
                         <div class="form-group">
-                            <label for="title">TITLE</label>
-                            <input type="text" id="title" name="title" placeholder="Add Title" required>
+                            <label for="title">TÍTULO</label>
+                            <input type="text" id="titulo" name="titulo" placeholder="Añadir título" required>
                         </div>
 
+                        <!-- AÑO -->
+                        <div class="form-group">
+                            <label for="year">AÑO</label>
+                            <input type="number" id="año" name="año" placeholder="Añadir año">
+                        </div>
+
+                        <!-- DIRECTOR -->
                         <div class="form-group">
                             <label for="director">DIRECTOR</label>
-                            <input type="text" id="director" name="director" placeholder="Add Director">
+                            <input type="text" id="director" name="director" placeholder="Añadir director">
                         </div>
 
+                        <!-- DURACIÓN -->
                         <div class="form-group">
-                            <label for="year">YEAR</label>
-                            <input type="text" id="year" name="year" placeholder="Add Year">
+                            <label for="duracion_min">DURACIÓN (min)</label>
+                            <input type="number" id="duracion_min" name="duracion_min" placeholder="Añadir duración">
                         </div>
 
+                        <!-- REPARTO -->
                         <div class="form-group">
-                            <label for="genres">GENRES</label>
-                            <input type="text" id="genres" name="genres" placeholder="Add Genres (comma separated)">
+                            <label for="cast">REPARTO</label>
+                            <textarea id="reparto_info" name="reparto_info" placeholder="Añadir reparto"></textarea>
                         </div>
 
+                        <!-- GÉNEROS (selector múltiple) -->
                         <div class="form-group">
-                            <label for="cast">CAST</label>
-                            <textarea id="cast" name="cast" placeholder="Add Cast"></textarea>
+                            <label for="generos">GÉNEROS</label>
+
+                            <div class="multi-select" id="genreSelect">
+                                <div class="select-btn" id="genreSelectBtn">
+                                    Seleccionar géneros
+                                    <i class="bi bi-caret-down-fill"></i>
+                                </div>
+
+                                <div class="select-dropdown" id="genreDropdown">
+                                    {% for genero in form.generos.field.queryset %}
+                                    <label class="option">
+                                        <input type="checkbox" name="generos" value="{{ genero.id }}">
+                                        {{ genero.nombre }}
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
 
+
+
+                        <!-- SINOPSIS -->
                         <div class="form-group">
-                            <label for="synopsis">SYNOPSIS</label>
-                            <textarea id="synopsis" name="synopsis" placeholder="Add Synopsis"></textarea>
+                            <label for="sinopsis">SINOPSIS</label>
+                            <textarea id="sinopsis" name="sinopsis" placeholder="Añadir sinopsis"></textarea>
                         </div>
+
                     </div>
 
                     <div class="actions">
                         <button type="submit" class="add-btn">
-                            <i class="bi bi-plus me-2" style="font-size: 2rem;"></i>
-                            ADD MOVIE
+                            <i class="bi bi-save" style="font-size: 1.2rem; margin-right: 6px;"></i>
+                            GUARDAR
                         </button>
-
                     </div>
+
                 </form>
             </div>
         </div>
@@ -360,6 +481,42 @@
 
 
 <script>
+    // JavaScript para abrir/cerrar el desplegable
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("genreSelectBtn");
+        const dropdown = document.getElementById("genreDropdown");
+
+        // Abrir/cerrar menú
+        btn.addEventListener("click", () => {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Cerrar si se hace clic fuera
+        document.addEventListener("click", (e) => {
+            if (!document.getElementById("genreSelect").contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+
+        // Actualizar texto del botón según selección
+        dropdown.addEventListener("change", () => {
+            const checked = [...dropdown.querySelectorAll("input[type='checkbox']:checked")];
+            if (checked.length === 0) {
+                btn.textContent = "Seleccionar géneros";
+            } else if (checked.length === 1) {
+                btn.textContent = checked[0].parentElement.textContent.trim();
+            } else {
+                btn.textContent = `${checked.length} géneros seleccionados`;
+            }
+        });
+    });
+
+
+
+
+
+
     // handle image upload + preview
     const posterInput = document.getElementById('posterInput');
     const thumbInner = document.getElementById('thumbInner');
@@ -430,6 +587,8 @@
             data.append('poster', posterInput.files[0]);
         }
 
+
+
         // Demo: mostrar datos en consola
         console.log('Formulario Add Movie');
         for (const pair of data.entries()) {
@@ -446,7 +605,5 @@
         // opcional: form.reset(); clearPreview();
     });
 </script>
-</body>
-
 
 {% endblock %}

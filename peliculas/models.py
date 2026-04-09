@@ -8,28 +8,42 @@ class Genero(models.Model):
         return self.nombre
 
 
+#PELÍCULAS
 class Pelicula(models.Model):
     titulo = models.CharField(max_length=200)
     año = models.IntegerField()
     director = models.CharField(max_length=100, blank=True)
     duracion_min = models.IntegerField()
-    descripcion = models.TextField(blank=True)
-    poster_url = models.CharField(max_length=255, blank=True)
-    # Si más adelante quieres subir imágenes reales en vez de URLs, cambia esta linea por:
-    # poster = models.ImageField(upload_to='peliculas/', blank=True, null=True)
+    reparto_info = models.TextField(blank=True)
+    sinopsis = models.TextField(blank=True)
 
-    generos = models.ManyToManyField(Genero, through='PeliculaGenero', related_name='peliculas')
+    poster = models.ImageField(upload_to="peliculas/", blank=True, null=True)
+
+    generos = models.ManyToManyField(
+    Genero,
+    through='PeliculaGenero',
+    related_name='peliculas'
+)
+
 
     def __str__(self):
         return self.titulo
+
+
+
 
 
 class PeliculaGenero(models.Model):
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
     genero = models.ForeignKey(Genero, on_delete=models.CASCADE)
 
-    class Meta:
-        unique_together = ('pelicula', 'genero')
+    def __str__(self):
+        return f"{self.pelicula} - {self.genero}"
+
+    
+    
+    # class Meta:
+    #    unique_together = ('pelicula', 'genero')
 
 
 class Reparto(models.Model):

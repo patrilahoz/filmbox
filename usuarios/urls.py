@@ -1,13 +1,3 @@
-#from django.urls import path
-#from . import views
-
-#urlpatterns = [
-#    path("registrarse/", views.register_view, name="register"),
-#    path("perfil/", views.perfil_user, name="perfil_user"),
-#]
-
-# path("login/", views.login_view, name="login"),
-
 from django.urls import path
 from . import views
 
@@ -18,8 +8,9 @@ urlpatterns = [
 
     path("perfil/", views.perfil, name="perfil"),
 
-
+    
     path("perfil/editar/", views.edit_profile, name="edit_profile"),
+    # path("peliculas/add/", views.add_movie, name="add_movie"),
 ]
 
 

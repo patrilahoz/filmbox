@@ -1,17 +1,8 @@
-# from django.shortcuts import render
-# def register_view(request):
-#    return render(request, "usuarios/registrarse.html")
-# def perfil_user(request):
-#    return render(request, "usuarios/perfil_user.html")
-
-# Vista de inicio de sesión (login real)
-# def login_view(request):
-#    return render(request, "usuarios/login.html")
-
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
+from peliculas.forms import PeliculaForm
+
 
 User = get_user_model()
 
@@ -73,7 +64,8 @@ def login_view(request):
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from peliculas.forms import PeliculaForm
 
 User = get_user_model()
 
@@ -83,13 +75,33 @@ def perfil(request):
         return render(request, "usuarios/perfil_admin.html")
     else:
         return render(request, "usuarios/perfil_user.html")
+    
+
+
 
 
 @login_required
 def edit_profile(request):
     return render(request, "usuarios/edit_profile.html")
 
+"""
+@login_required
+def add_movie(request):
+    if not request.user.is_staff:
+        return redirect("perfil")  # seguridad: solo admins pueden entrar
+
+    if request.method == "POST":
+        form = PeliculaForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("perfil")
+    else:
+        form = PeliculaForm()
+
+    return render(request, "usuarios/add_movie.html", {"form": form})
+"""
 
 # @login_required
 # def perfil_moderador(request):
 #    return render(request, "usuarios/perfil_moderador.html")
+
