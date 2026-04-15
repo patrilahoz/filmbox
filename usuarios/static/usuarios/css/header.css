@@ -29,16 +29,37 @@
         background-color: #2a2a2a;
         border-radius: 20px;
         padding: 5px 15px;
+
+        font-size: 14px;
+        font-weight: 500;
+        font-family: 'Gantari';
+        color: var(--white);
+
+        transition:
+            border 0.55s cubic-bezier(0.33, 1, 0.68, 1),
+            transform 0.55s cubic-bezier(0.33, 1, 0.68, 1),
+            box-shadow 0.55s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    .search-container:hover {
+        border: 1px solid #d0b3ff;
+        transform: translateY(-0.5px) scale(1.008);
+        box-shadow: 0 4px 12px rgba(208, 179, 255, 0.15);
     }
 
     #search-input {
-        background: transparent;
+        background-color: #2a2a2a;
         border: none;
-        color: white;
         width: 200px;
         padding: 5px;
         outline: none;
+
+        font-size: 16px;
+        font-weight: 300;
+        font-family: 'Gantari' !important;
+        color: var(--white);
     }
+
 
     #search-button {
         background: none;
@@ -49,9 +70,11 @@
         font-size: 1rem;
     }
 
+
+
     .avatar-img {
-        height: 20px;
-        width: 20px;
+        height: 40px;
+        width: 40px;
         border-radius: 50%;
         object-fit: cover;
         cursor: pointer;
