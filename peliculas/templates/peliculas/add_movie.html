@@ -160,24 +160,74 @@
 
     /* Right: form */
     .form {
-        flex: 1;
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 18px;
     }
 
-    .row {
+    .form-content {
+        display: flex;
+        gap: 48px;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .form-content>div:first-child {
+        flex-shrink: 0;
+        width: 320px;
+    }
+
+    .form-content>.row {
+        flex: 1;
         display: flex;
         flex-direction: column;
         gap: 14px;
     }
 
-    .form-group {
 
+
+
+
+
+    /* Mantiene tu diseño: label a la izquierda, campo a la derecha */
+    .form-group {
         display: flex;
         align-items: flex-start;
         gap: 10px;
     }
+
+    /* NUEVO: contenedor para input + error debajo */
+    .field-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    /* Input en error */
+    .input-error {
+        border: 2px solid red !important;
+    }
+
+    /* Mensaje de error debajo del input */
+    .error-msg {
+        color: red;
+        font-size: 0.85rem;
+        margin-top: 4px;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     .form-group label {
         width: 160px;
@@ -414,15 +464,61 @@
         font-weight: 700;
     }
 
+
+
+    /* Cambiar fuente del título */
+    .swal-title {
+        font-family: 'Gantari', sans-serif !important;
+        font-size: 1.6rem;
+    }
+
+    /* Cambiar fuente y estilo del botón */
+    .swal-confirm {
+        font-family: 'Gantari', sans-serif !important;
+        background-color: #6E32D5 !important;
+        /* morado */
+        color: white !important;
+        border-radius: 8px !important;
+        padding: 10px 20px !important;
+    }
+
+    /* Cambiar color del icono */
+    .swal-icon .swal2-success-ring {
+        border-color: #6E32D5 !important;
+    }
+
+    .swal-icon .swal2-success-line-tip,
+    .swal-icon .swal2-success-line-long {
+        background-color: #6E32D5 !important;
+    }
+
+
+
+    /** Pantallas más pequeñas */
     @media (max-width:980px) {
         .content {
             flex-direction: column;
             align-items: center
         }
 
+        .form-content {
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .form-content>div:first-child {
+            width: 100%;
+        }
+
+        .form-content>.row {
+            width: 100%;
+        }
+
         .thumb-wrap {
-            width: 280px;
-            height: 380px
+            width: 100%;
+            height: auto;
+            aspect-ratio: 320 / 440;
         }
 
         .labels {
@@ -440,99 +536,132 @@
 
             <div class="content">
 
-                <!-- Left: image upload / preview -->
-
-
-                <!-- Right: form -->
-
-
 
                 <form class="form" id="addMovieForm" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
-
-                    <div class="thumb-wrap" id="thumbWrap">
-                        <div class="thumb-inner" id="thumbInner">
-                            <span style="color:rgba(255,255,255,0.12)"></span>
-                        </div>
-                        <div class="thumb-overlay"></div>
-                        <div class="thumb-actions">
-                            <label id="uploadLabel" class="upload-btn" for="posterInput">
-                                <i class="bi bi-plus" aria-hidden style="font-size: 5rem;"></i>
-                            </label>
-                            <button class="upload-btn" type="button" id="removeBtn" title="Quitar">Quitar</button>
-                        </div>
-
-                        <!-- Este input SÍ debe tener name="poster" -->
-                        <input type="file" id="posterInput" name="poster" accept="image/*">
-                    </div>
-
-
-
-                    <div class="row">
-
-                        <!-- TÍTULO -->
-                        <div class="form-group">
-                            <label for="title">TÍTULO</label>
-                            <input type="text" id="titulo" name="titulo" placeholder="Añadir título" required>
-                        </div>
-
-                        <!-- AÑO -->
-                        <div class="form-group">
-                            <label for="year">AÑO</label>
-                            <input type="number" id="año" name="año" placeholder="Añadir año">
-                        </div>
-
-                        <!-- DIRECTOR -->
-                        <div class="form-group">
-                            <label for="director">DIRECTOR</label>
-                            <input type="text" id="director" name="director" placeholder="Añadir director">
-                        </div>
-
-                        <!-- DURACIÓN -->
-                        <div class="form-group">
-                            <label for="duracion_min">DURACIÓN (min)</label>
-                            <input type="number" id="duracion_min" name="duracion_min" placeholder="Añadir duración">
-                        </div>
-
-                        <!-- REPARTO -->
-                        <div class="form-group">
-                            <label for="cast">REPARTO</label>
-                            <textarea id="reparto_info" name="reparto_info" placeholder="Añadir reparto"></textarea>
-                        </div>
-
-                        <!-- GÉNEROS (selector múltiple) -->
-                        <div class="form-group">
-                            <label for="generos">GÉNEROS</label>
-
-                            <div class="multi-select" id="genreSelect">
-                                <div class="select-btn" id="genreSelectBtn">
-                                    Seleccionar géneros
-                                    <i class="bi bi-caret-down-fill" style="font-size: 0.75rem; margin-right: 3px;"></i>
+                    <div class="form-content">
+                        <!-- POSTER (left column) -->
+                        <div>
+                            <div class="thumb-wrap" id="thumbWrap">
+                                <div class="thumb-inner" id="thumbInner">
+                                    <span style="color:rgba(255,255,255,0.12)"></span>
+                                </div>
+                                <div class="thumb-overlay"></div>
+                                <div class="thumb-actions">
+                                    <label id="uploadLabel" class="upload-btn" for="posterInput">
+                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem;"></i>
+                                    </label>
+                                    <button class="upload-btn" type="button" id="removeBtn"
+                                        title="Quitar">Quitar</button>
                                 </div>
 
-                                <div class="select-dropdown" id="genreDropdown">
-                                    {% for genero in form.generos.field.queryset %}
-                                    <label class="option">
-                                        <input type="checkbox" class="check-generos" name="generos"
-                                            value="{{ genero.id }}">
-                                        <span>{{ genero.nombre }}</span>
-                                    </label>
+                                <input type="file" id="posterInput" name="poster" accept="image/*">
+                            </div>
 
-                                    {% endfor %}
+                            <div class="error-msg" id="error-poster"></div>
+                        </div>
+
+                        <!-- FORM FIELDS (right column) -->
+                        <div class="row">
+
+                            <!-- TÍTULO -->
+                            <div class="form-group">
+                                <label for="titulo">TÍTULO</label>
+
+                                <div class="field-wrapper">
+                                    <input type="text" id="titulo" name="titulo" placeholder="Añadir título">
+                                    <div class="error-msg" id="error-titulo"></div>
+                                </div>
+                            </div>
+
+
+                            <!-- AÑO -->
+                            <div class="form-group">
+                                <label for="year">AÑO</label>
+
+                                <div class="field-wrapper">
+                                    <input type="number" id="año" name="año" placeholder="Añadir año">
+                                    <div class="error-msg" id="error-año"></div>
+                                </div>
+                            </div>
+
+
+                            <!-- DIRECTOR -->
+                            <div class="form-group">
+                                <label for="director">DIRECTOR</label>
+
+                                <div class="field-wrapper">
+                                    <input type="text" id="director" name="director" placeholder="Añadir director">
+                                    <div class="error-msg" id="error-director"></div>
+                                </div>
+                            </div>
+
+
+                            <!-- DURACIÓN -->
+                            <div class="form-group">
+                                <label for="duracion_min">DURACIÓN (min)</label>
+
+                                <div class="field-wrapper">
+                                    <input type="number" id="duracion_min" name="duracion_min"
+                                        placeholder="Añadir duración">
+                                    <div class="error-msg" id="error-duracion"></div>
+                                </div>
+                            </div>
+
+
+                            <!-- REPARTO -->
+                            <div class="form-group">
+                                <label for="cast">REPARTO</label>
+
+                                <div class="field-wrapper">
+                                    <textarea id="reparto_info" name="reparto_info"
+                                        placeholder="Añadir reparto"></textarea>
+                                    <div class="error-msg" id="error-reparto"></div>
+                                </div>
+                            </div>
+
+
+                            <!-- GÉNEROS (selector múltiple) -->
+                            <div class="form-group">
+                                <label for="generos">GÉNEROS</label>
+
+                                <div class="field-wrapper">
+                                    <div class="multi-select" id="genreSelect">
+                                        <div class="select-btn" id="genreSelectBtn">
+                                            Seleccionar géneros
+                                            <i class="bi bi-caret-down-fill"
+                                                style="font-size: 0.75rem; margin-right: 3px;"></i>
+                                        </div>
+
+                                        <div class="select-dropdown" id="genreDropdown">
+                                            {% for genero in form.generos.field.queryset %}
+                                            <label class="option">
+                                                <input type="checkbox" class="check-generos" name="generos"
+                                                    value="{{ genero.id }}">
+                                                <span>{{ genero.nombre }}</span>
+                                            </label>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <div class="error-msg" id="error-generos"></div>
+                                </div>
+                            </div>
+
+
+                            <!-- SINOPSIS -->
+                            <div class="form-group">
+                                <label for="sinopsis">SINOPSIS</label>
+
+                                <div class="field-wrapper">
+                                    <textarea id="sinopsis" name="sinopsis" placeholder="Añadir sinopsis"></textarea>
+                                    <div class="error-msg" id="error-sinopsis"></div>
                                 </div>
                             </div>
                         </div>
-
-
-
-                        <!-- SINOPSIS -->
-                        <div class="form-group">
-                            <label for="sinopsis">SINOPSIS</label>
-                            <textarea id="sinopsis" name="sinopsis" placeholder="Añadir sinopsis"></textarea>
-                        </div>
-
                     </div>
+
 
                     <div class="actions">
                         <button type="submit" class="add-btn">
@@ -634,6 +763,118 @@
     });
 
     clearPreview();
+
+
+
+
+    document.getElementById("addMovieForm").addEventListener("submit", function (e) {
+
+        let valid = true;
+
+        // limpiar errores previos
+        document.querySelectorAll(".error-msg").forEach(el => el.textContent = "");
+        document.querySelectorAll(".input-error").forEach(el => el.classList.remove("input-error"));
+
+        // ===== VALIDAR POSTER =====
+        const poster = document.getElementById("posterInput");
+        if (!poster.files || poster.files.length === 0) {
+            valid = false;
+            document.getElementById("error-poster").textContent = "Debes subir un póster.";
+        }
+
+        // ===== VALIDAR TÍTULO =====
+        const titulo = document.getElementById("titulo");
+        if (titulo.value.trim() === "") {
+            valid = false;
+            titulo.classList.add("input-error");
+            document.getElementById("error-titulo").textContent = "Tienes que añadir un título.";
+        }
+
+        // ===== VALIDAR AÑO =====
+        const año = document.getElementById("año");
+        const añoNum = parseInt(año.value);
+        const currentYear = new Date().getFullYear();
+
+        if (!año.value || añoNum < 1888 || añoNum > currentYear) {
+            valid = false;
+            año.classList.add("input-error");
+            document.getElementById("error-año").textContent = "Tienes que añadir un año válido.";
+        }
+
+        // ===== VALIDAR DIRECTOR =====
+        const director = document.getElementById("director");
+        if (director.value.trim() === "") {
+            valid = false;
+            director.classList.add("input-error");
+            document.getElementById("error-director").textContent = "Tienes que añadir un director.";
+        }
+
+        // ===== VALIDAR DURACIÓN =====
+        const duracion = document.getElementById("duracion_min");
+        if (!duracion.value || parseInt(duracion.value) <= 0) {
+            valid = false;
+            duracion.classList.add("input-error");
+            document.getElementById("error-duracion").textContent = "Tienes que añadir una duración válida.";
+        }
+
+        // ===== VALIDAR REPARTO =====
+        const reparto = document.getElementById("reparto_info");
+        if (reparto.value.trim() === "") {
+            valid = false;
+            reparto.classList.add("input-error");
+            document.getElementById("error-reparto").textContent = "Tienes que añadir el reparto.";
+        }
+
+        // ===== VALIDAR GÉNEROS =====
+        const generosSeleccionados = document.querySelectorAll(".check-generos:checked");
+        if (generosSeleccionados.length === 0) {
+            valid = false;
+            document.getElementById("error-generos").textContent = "Tienes que seleccionar al menos un género.";
+        }
+
+        // ===== VALIDAR SINOPSIS =====
+        const sinopsis = document.getElementById("sinopsis");
+        if (sinopsis.value.trim() === "") {
+            valid = false;
+            sinopsis.classList.add("input-error");
+            document.getElementById("error-sinopsis").textContent = "Tienes que añadir una sinopsis.";
+        }
+
+        // ===== SI HAY ERRORES → BLOQUEAR ENVÍO =====
+        if (!valid) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            return;
+        }
+
+        // ===== SI TODO ES CORRECTO → MOSTRAR MODAL Y ENVIAR =====
+        e.preventDefault(); // detenemos envío temporalmente
+
+        Swal.fire({
+            title: "Película guardada correctamente",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+            customClass: {
+                title: 'swal-title',
+                confirmButton: 'swal-confirm',
+                icon: 'swal-icon'
+            }
+        }).then(() => {
+            // ahora sí enviamos el formulario
+            document.getElementById("addMovieForm").submit();
+        });
+
+
+
+    });
+
+
+
+
+
+
+
+
 </script>
 
 

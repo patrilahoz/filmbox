@@ -17,7 +17,8 @@ class Pelicula(models.Model):
     reparto_info = models.TextField(blank=True)
     sinopsis = models.TextField(blank=True)
 
-    poster = models.ImageField(upload_to="peliculas/", blank=True, null=True)
+
+    poster = models.ImageField(upload_to="posters/", blank=True, null=True)
 
     generos = models.ManyToManyField(
     Genero,
