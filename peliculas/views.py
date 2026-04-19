@@ -65,6 +65,7 @@ def catalogo(request):
     peliculas = Pelicula.objects.all()
     return render(request, "peliculas/catalogo.html", {"peliculas": peliculas})
 
+
 @login_required
 def select_movie(request):
     return render(request, "peliculas/select_movie.html")
