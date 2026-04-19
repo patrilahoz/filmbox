@@ -21,8 +21,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('usuarios.urls')),   # ← ahora usuarios es la página inicial
-    path('peliculas/', include('peliculas.urls')),  # ← movemos películas aquí
+
+    # Login, registro, logout
+    path('', include('usuarios.urls')),
+
+    # Rutas principales de la app
+    path('', include('peliculas.urls')),
 ]
 
 if settings.DEBUG:

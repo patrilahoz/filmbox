@@ -3,14 +3,9 @@ from . import views
 from .views import add_movie
 
 urlpatterns = [
-    path("", views.home, name="home"),
-
-    # Rutas de usuarios
-    path("usuarios/", include("usuarios.urls")),
-
-    # Rutas de películas
-    path('add/', add_movie, name='add_movie'),
-    
-    path("pelicula/", views.pelicula, name="pelicula"),
+    path("home/", views.home, name="home"),
+    path("catalogo/", views.catalogo, name="catalogo"),
+    path("pelicula/<int:id>/", views.pelicula, name="pelicula"),
     path("select/", views.select_movie, name="select_movie"),
+    path("add/", views.add_movie, name="add_movie"),
 ]

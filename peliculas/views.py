@@ -1,14 +1,15 @@
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from peliculas.forms import PeliculaForm
 from .models import Pelicula, Genero
 
+@login_required
 def home(request):
     peliculas = Pelicula.objects.all()
     return render(request, "peliculas/home.html", {"peliculas": peliculas})
 
-@staff_member_required
+@login_required
 def add_movie(request):
     if request.method == "POST":
         titulo = request.POST.get("titulo")
@@ -54,8 +55,16 @@ def add_movie(request):
 #                pelicula.generos.add(genero_obj)
 #       return redirect("home")
 
-def pelicula(request): 
-    return render(request, "peliculas/pelicula.html")
+@login_required
+def pelicula(request, id):
+    pelicula = Pelicula.objects.get(id=id)
+    return render(request, "peliculas/pelicula.html", {"pelicula": pelicula})
 
+@login_required
+def catalogo(request):
+    peliculas = Pelicula.objects.all()
+    return render(request, "peliculas/catalogo.html", {"peliculas": peliculas})
+
+@login_required
 def select_movie(request):
     return render(request, "peliculas/select_movie.html")

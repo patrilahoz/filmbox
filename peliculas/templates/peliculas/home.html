@@ -468,10 +468,11 @@
 
         <div class="carousel-wrap">
             <button class="carousel-arrow prev" aria-label="Anterior">‹</button>
+
             <div class="carousel" id="carousel">
                 {% for p in peliculas %}
                 <div class="slide">
-                    <a href="{% url 'pelicula' %}">
+                    <a href="{% url 'pelicula' p.id %}">
                         <img src="{{ p.poster_url }}" alt="{{ p.titulo }}">
                         <h3>{{ p.titulo }}</h3>
                         <p>{{ p.director }} ({{ p.año }})</p>
@@ -489,14 +490,11 @@
 
     <!-- BOTÓN CATALOGO PELÍCULAS-->
     <div class="catalogo-btn-wrap">
-        <a href="" class="catalogo-btn">
-            <!-- <i class="bi bi-film" style="font-size: 24px; margin-right: 10px;"></i> -->
+        <a href="{% url 'catalogo' %}" class="catalogo-btn">
             VER CATÁLOGO DE PELÍCULAS
             <i class="bi bi-arrow-right" style="font-size: 40px; margin-left: 20px;"></i>
         </a>
     </div>
-
-
 
 
     <section class="popular">
@@ -504,14 +502,23 @@
 
         <div class="carousel-wrap">
             <button class="carousel-arrow prev" data-carousel="popular" aria-label="Anterior">‹</button>
+
             <div class="carousel" id="carousel-popular">
+                {% for pelicula in peliculas %}
                 <div class="slide">
-                    <a href="{% url 'pelicula' %}"> </a>
+                    <a href="{% url 'pelicula' pelicula.id %}">
+                        <img src="{{ pelicula.poster_url }}" alt="{{ pelicula.titulo }}">
+                        <h3>{{ pelicula.titulo }}</h3>
+                        <p>{{ pelicula.director }} ({{ pelicula.año }})</p>
+                    </a>
                 </div>
+                {% endfor %}
             </div>
+
             <button class="carousel-arrow next" data-carousel="popular" aria-label="Siguiente">›</button>
         </div>
     </section>
+
 
     <section class="favorites">
         <h3>LAS FAVORITAS</h3>
@@ -520,15 +527,22 @@
             <button class="carousel-arrow prev" data-carousel="favorites" aria-label="Anterior">‹</button>
 
             <div class="carousel" id="carousel-favorites">
+                {% for pelicula in peliculas %}
                 <div class="slide">
-                    <a href="{% url 'pelicula' %}"> </a>
+                    <a href="{% url 'pelicula' pelicula.id %}">
+                        <img src="{{ pelicula.poster_url }}" alt="{{ pelicula.titulo }}">
+                        <h3>{{ pelicula.titulo }}</h3>
+                        <p>{{ pelicula.director }} ({{ pelicula.año }})</p>
+                    </a>
                 </div>
+                {% endfor %}
             </div>
+
             <button class="carousel-arrow next" data-carousel="favorites" aria-label="Siguiente">›</button>
         </div>
-
     </section>
 </main>
+
 
 
 <script>
