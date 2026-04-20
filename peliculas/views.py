@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from peliculas.forms import PeliculaForm
 from .models import Pelicula, Genero
@@ -56,13 +56,14 @@ def add_movie(request):
 #       return redirect("home")
 
 @login_required
-def pelicula(request, id):
-    pelicula = Pelicula.objects.get(id=id)
+def pelicula(request, pelicula_id):
+    pelicula = get_object_or_404(Pelicula, id=pelicula_id)
     return render(request, "peliculas/pelicula.html", {"pelicula": pelicula})
+
 
 @login_required
 def catalogo(request):
-    peliculas = Pelicula.objects.all()
+    peliculas = Pelicula.objects.all().order_by('-id')
     return render(request, "peliculas/catalogo.html", {"peliculas": peliculas})
 
 

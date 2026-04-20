@@ -1,15 +1,13 @@
 {% extends "base/base.html" %}
 {% load static %}
 
-{% block title %}Película{% endblock %}
+{% block title %}{{ pelicula.titulo }}{% endblock %}
 
 {% block extra_css %}
-
 <style>
     :root {
         --bg: #191919;
         --panel: #262626;
-        --accent: #e9dff0;
         --muted: #bdbdbd;
         --accent: #6E32D5;
     }
@@ -22,33 +20,32 @@
 
     .poster {
         width: 100%;
-        height: auto;
-        display: block;
         border-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.15);
     }
 
     .page-title {
         font-family: 'Exo 2', sans-serif;
         font-weight: 800;
-        font-size: 50px;
-        line-height: 1.1;
-        margin-bottom: 0;
+        font-size: 48px;
+        margin-bottom: 10px;
     }
 
-    .muted {
+    .meta-row strong {
+        color: var(--accent);
+        font-family: "Exo 2";
+    }
+
+    .meta-value {
         color: var(--muted);
+        font-size: 1rem;
     }
 
     .card-surface {
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 1.25rem;
-    }
-
-    .rating-row {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
+        background: var(--panel);
+        border-radius: 10px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255,255,255,0.08);
     }
 
     .stars {
@@ -59,117 +56,114 @@
     .star {
         font-size: 2.5rem;
         color: transparent;
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.45);
+        -webkit-text-stroke: 1px rgba(255,255,255,0.45);
         cursor: pointer;
         transition: color .12s, -webkit-text-stroke-color .12s;
     }
 
     .star.filled {
-        color: #6E32D5;
-        -webkit-text-stroke-color: #6E32D5;
+        color: var(--accent);
+        -webkit-text-stroke-color: var(--accent);
     }
 
     .save-btn {
-        background: #6E32D5;
-        width: 300px;
-        border: none;
-        font-family: 'Exo 2';
-        font-weight: 500;
-        font-size: 20px;
+        background: var(--accent);
         color: white;
-        padding: .55rem 1.25rem;
-        border-radius: .5rem;
-        gap: 10px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: none;
+        font-family: "Exo 2";
+        font-weight: 700;
+        font-size: 20px;
         cursor: pointer;
-        text-align: center;
-        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+        transition: 0.3s ease;
     }
 
     .save-btn:hover {
         background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
-        color: var(--white);
-        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
         transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
     }
 
-    .search-input {
-        background: #efe7f6;
-        border-radius: 30px;
-        padding: .25rem .75rem;
+    textarea {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        border-radius: 6px;
+        padding: 10px;
+        resize: vertical;
     }
 
-    .user.shadow-sm {
-        width: 40px;
-        height: 40px;
-        background: #d7c7ff;
-        border-radius: 50%;
-        display: inline-block;
-    }
-
-    .star::before {
-        content: '\2605';
-    }
-
-    .meta-row .col {
-        padding-right: 0.5rem;
-    }
-
-    /* Responsividad */
-    @media (max-width:767px) {
-        .page-title {
-            font-size: 2rem;
-        }
-
-        .star {
-            font-size: 1.5rem;
-        }
+    textarea::placeholder {
+        color: #aaa;
     }
 </style>
-
 {% endblock %}
 
 {% block content %}
-
 <main class="container my-5">
+
     <div class="row gy-4">
-        <!-- Left: poster -->
+
+        <!-- POSTER -->
         <div class="col-12 col-md-4">
-            <!-- Imagen Poster -->
-            <img src="{% static 'peliculas/img/corpse-bride.jpg' %}" alt="Poster de la película"
-                class="poster shadow-sm">
+            <img src="{{ pelicula.poster.url }}" alt="{{ pelicula.titulo }}" class="poster shadow-sm">
         </div>
 
-        <!-- Right: details -->
-        <div class="col-12 col-md-8 text-start">
-            <h1 class="page-title display-6">TÍTULO</h1>
+        <!-- INFO -->
+        <div class="col-12 col-md-8">
 
-            <div class="row meta-row mt-3 mb-3">
-                <div class="col-4 col-md-3"><strong>Director</strong></div>
-                <div class="col-4 col-md-2"><strong>Year</strong></div>
-                <div class="col-4 col-md-3"><strong>Genres</strong></div>
+            <h1 class="page-title">{{ pelicula.titulo }}</h1>
+
+            <div class="row meta-row mt-4 mb-4">
+                <div class="col-4 col-md-3">
+                    <strong>Director</strong>
+                    <div class="meta-value">{{ pelicula.director }}</div>
+                </div>
+
+                <div class="col-4 col-md-2">
+                    <strong>Año</strong>
+                    <div class="meta-value">{{ pelicula.año }}</div>
+                </div>
+
+                <div class="col-4 col-md-3">
+                    <strong>Duración</strong>
+                    <div class="meta-value">{{ pelicula.duracion_min }} min</div>
+                </div>
+
+                <div class="col-12 col-md-4 mt-3 mt-md-0">
+                    <strong>Géneros</strong>
+                    <div class="meta-value">
+                        {% for g in pelicula.generos.all %}
+                            {{ g.nombre }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
 
-            <p class="muted">Sinopsis</p>
+            <p class="muted">{{ pelicula.sinopsis }}</p>
 
-            <!-- Rating & review box -->
+            <!-- RATING + REVIEW -->
             <div class="card-surface mt-4">
+
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="stars" id="starsContainer">
-                        <span class="star" data-value="1" aria-hidden="true"></span>
-                        <span class="star" data-value="2" aria-hidden="true"></span>
-                        <span class="star" data-value="3" aria-hidden="true"></span>
-                        <span class="star" data-value="4" aria-hidden="true"></span>
-                        <span class="star" data-value="5" aria-hidden="true"></span>
+                        <span class="star" data-value="1"></span>
+                        <span class="star" data-value="2"></span>
+                        <span class="star" data-value="3"></span>
+                        <span class="star" data-value="4"></span>
+                        <span class="star" data-value="5"></span>
                     </div>
+
                     <button class="save-btn">
                         <i class="bi bi-save" style="font-size: 1.25rem; margin-right: 8px;"></i>
-                        SAVE
+                        GUARDAR
                     </button>
                 </div>
 
-                <label class="form-label small text-uppercase muted">Write a review</label>
-                <textarea class="form-control bg-transparent text-white" rows="4"
-                    placeholder="Write a review..."></textarea>
+                <label class="form-label small text-uppercase muted">ESCRIBE UNA RESEÑA</label>
+                <textarea rows="4" placeholder="Escribe tu reseña..."></textarea>
+
             </div>
         </div>
     </div>
