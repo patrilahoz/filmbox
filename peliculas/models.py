@@ -1,5 +1,5 @@
 from django.db import models
-from usuarios.models import Usuario
+from django.conf import settings
 
 class Genero(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
@@ -58,7 +58,7 @@ class Reparto(models.Model):
 
 
 class Puntuacion(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
     puntuacion = models.DecimalField(max_digits=2, decimal_places=1)  # 0.0 – 9.9
     fecha_puntuacion = models.DateTimeField(auto_now_add=True)
@@ -73,7 +73,7 @@ class Reseña(models.Model):
         ('oculta', 'Oculta'),
         ('eliminada', 'Eliminada'),
     ]
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
     contenido = models.TextField()
     fecha_reseña = models.DateTimeField(auto_now_add=True)
@@ -81,7 +81,7 @@ class Reseña(models.Model):
 
 
 class LikeReseña(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     reseña = models.ForeignKey(Reseña, on_delete=models.CASCADE)
     fecha_like = models.DateTimeField(auto_now_add=True)
 
@@ -90,7 +90,7 @@ class LikeReseña(models.Model):
 
 
 class Favorito(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
     fecha_agregado = models.DateTimeField(auto_now_add=True)
 

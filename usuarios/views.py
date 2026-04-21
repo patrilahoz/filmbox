@@ -1,11 +1,16 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from peliculas.forms import PeliculaForm
 
+from .forms import ProfileForm
 
 User = get_user_model()
 
+
+# -----------------------------
+# REGISTRO
+# -----------------------------
 def register_view(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -39,6 +44,9 @@ def register_view(request):
     return render(request, "usuarios/registrarse.html")
 
 
+# -----------------------------
+# LOGIN
+# -----------------------------
 def login_view(request):
     if request.method == "POST":
         email = request.POST["email"]
@@ -61,47 +69,29 @@ def login_view(request):
     return render(request, "usuarios/login.html")
 
 
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect
-from peliculas.forms import PeliculaForm
-
-User = get_user_model()
-
+# -----------------------------
+# PERFIL
+# -----------------------------
 @login_required
 def perfil(request):
     if request.user.is_staff:
         return render(request, "usuarios/perfil_admin.html")
-    else:
-        return render(request, "usuarios/perfil_user.html")
-    
+    return render(request, "usuarios/perfil_user.html")
 
 
-
-
+# -----------------------------
+# EDITAR PERFIL
+# -----------------------------
 @login_required
 def edit_profile(request):
-    return render(request, "usuarios/edit_profile.html")
+    profile = request.user.profile
 
-"""
-@login_required
-def add_movie(request):
-    if not request.user.is_staff:
-        return redirect("perfil")  # seguridad: solo admins pueden entrar
-
-    if request.method == "POST":
-        form = PeliculaForm(request.POST, request.FILES)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect("perfil")
+            return redirect('perfil_user')  # Cambia si tu URL se llama distinto
     else:
-        form = PeliculaForm()
+        form = ProfileForm(instance=profile)
 
-    return render(request, "usuarios/add_movie.html", {"form": form})
-"""
-
-# @login_required
-# def perfil_moderador(request):
-#    return render(request, "usuarios/perfil_moderador.html")
-
+    return render(request, 'usuarios/edit_profile.html', {'form': form})

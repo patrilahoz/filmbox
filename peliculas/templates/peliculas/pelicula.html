@@ -21,7 +21,7 @@
     .poster {
         width: 100%;
         border-radius: 6px;
-        border: 1px solid rgba(255,255,255,0.15);
+        border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .page-title {
@@ -41,13 +41,31 @@
         font-size: 1rem;
     }
 
-    .card-surface {
-        background: var(--panel);
-        border-radius: 10px;
-        padding: 1.5rem;
-        border: 1px solid rgba(255,255,255,0.08);
+
+    /* POSTER */
+    .col-md-4 {
+        padding-right: 40px;
     }
 
+
+    /* CONTENEDOR DE LA CAJA */
+    .card-surface {
+        background: #262626;
+        border-radius: 10px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        width: 100%;
+        margin-top: auto;
+    }
+
+
+    .pelicula-right {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    /* ESTRELLAS */
     .stars {
         display: flex;
         gap: .5rem;
@@ -56,38 +74,57 @@
     .star {
         font-size: 2.5rem;
         color: transparent;
-        -webkit-text-stroke: 1px rgba(255,255,255,0.45);
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.45);
         cursor: pointer;
         transition: color .12s, -webkit-text-stroke-color .12s;
     }
 
-    .star.filled {
-        color: var(--accent);
-        -webkit-text-stroke-color: var(--accent);
+    .star::before {
+        content: '\2605';
     }
 
+    .star.filled {
+        color: #6E32D5;
+        -webkit-text-stroke-color: #6E32D5;
+    }
+
+    /* BOTÓN GUARDAR */
     .save-btn {
-        background: var(--accent);
-        color: white;
-        padding: 12px 20px;
+        background: #6E32D5;
+        color: var(--white);
+        width: 250px;
+        height: 50px;
+        padding: 12px 18px;
         border-radius: 8px;
-        border: none;
-        font-family: "Exo 2";
+        border: 0;
+        font-family: 'Exo 2';
         font-weight: 700;
-        font-size: 20px;
+        font-size: 30px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
         cursor: pointer;
-        transition: 0.3s ease;
+        text-align: center;
+        justify-content: center;
+        font-size: 20px;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
     }
 
     .save-btn:hover {
         background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
-        transform: translateY(-2px) scale(1.05);
+        color: var(--white);
         box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        transform: translateY(-2px) scale(1.05);
     }
 
+
+
+
+    /* TEXTAREA */
     textarea {
+        width: 100%;
         background: transparent;
-        border: 1px solid rgba(255,255,255,0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         color: white;
         border-radius: 6px;
         padding: 10px;
@@ -97,6 +134,11 @@
     textarea::placeholder {
         color: #aaa;
     }
+
+
+
+
+
 </style>
 {% endblock %}
 
@@ -111,7 +153,8 @@
         </div>
 
         <!-- INFO -->
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-8 pelicula-right">
+
 
             <h1 class="page-title">{{ pelicula.titulo }}</h1>
 
@@ -135,13 +178,13 @@
                     <strong>Géneros</strong>
                     <div class="meta-value">
                         {% for g in pelicula.generos.all %}
-                            {{ g.nombre }}{% if not forloop.last %}, {% endif %}
+                        {{ g.nombre }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </div>
                 </div>
             </div>
 
-            <p class="muted">{{ pelicula.sinopsis }}</p>
+            <p class="muted" style="text-align: justify;">{{ pelicula.sinopsis }}</p>
 
             <!-- RATING + REVIEW -->
             <div class="card-surface mt-4">
@@ -161,7 +204,7 @@
                     </button>
                 </div>
 
-                <label class="form-label small text-uppercase muted">ESCRIBE UNA RESEÑA</label>
+                <label class="form-label small text-uppercase muted" style="font-family: 'Gantari'; font-size: 20px; font-weight: 500;">ESCRIBE UNA RESEÑA</label>
                 <textarea rows="4" placeholder="Escribe tu reseña..."></textarea>
 
             </div>
@@ -177,20 +220,18 @@
 
         function fill(upto) {
             stars.forEach((s, i) => {
-                if (i < upto) s.classList.add('filled'); else s.classList.remove('filled');
+                if (i < upto) s.classList.add('filled');
+                else s.classList.remove('filled');
             });
         }
 
         stars.forEach((s, idx) => {
             s.addEventListener('mouseover', () => fill(idx + 1));
-            s.addEventListener('focus', () => fill(idx + 1));
             s.addEventListener('click', () => { selected = idx + 1; fill(selected); });
         });
 
-        // Restaurar las estrellas cuando el ratón sale del contenedor de estrellas
-        const container = document.getElementById('starsContainer');
-        container.addEventListener('mouseleave', () => fill(selected));
-        container.addEventListener('blur', () => fill(selected));
+        document.getElementById('starsContainer')
+            .addEventListener('mouseleave', () => fill(selected));
     })();
 </script>
 {% endblock %}

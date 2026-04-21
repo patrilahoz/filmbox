@@ -7,9 +7,9 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
 
     path("perfil/", views.perfil, name="perfil"),
-
     
-    path("perfil/editar/", views.edit_profile, name="edit_profile"),
+    
+    path('editar-perfil/', views.edit_profile, name='edit_profile'),
     # path("peliculas/add/", views.add_movie, name="add_movie"),
 ]
 
