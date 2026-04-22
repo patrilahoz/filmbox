@@ -1,19 +1,18 @@
 {% extends "base/base.html" %}
 {% load static %}
 
-{% block title %}Editar usuario{% endblock %}
+{% block title %}Editar perfil{% endblock %}
 
 {% block extra_css %}
 
 <style>
     :root {
         --bg: #191919;
-        --card: #2d2d2d;
-        --panel: #373737;
-        --input: #1f1f1f;
+        --panel: #262626;
+        --accent: #e9dff0;
         --muted: #bdbdbd;
-        --accent: #eadbff;
-        --accent-dark: #7b3eb5;
+        --accent: #7c3aed;
+        --accent-2: #6d28d9;
         --white: #fafafa;
     }
 
@@ -34,164 +33,613 @@
         -webkit-font-smoothing: antialiased;
     }
 
-
-
-    .fav-box {
-        width: 100%;
-        height: 120px;
-        border: 2px dashed #bbb;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.2s;
+    h1 {
+        font-family: 'Exo 2';
+        font-weight: 800;
+        font-size: 40px;
+        letter-spacing: 1px;
+        color: var(--white);
+        text-transform: uppercase;
     }
 
-    .fav-box:hover {
-        background-color: #f5f5f5;
+    /* Main card */
+    .card-wrap {
+        padding: 28px 48px;
+    }
+
+    .card {
+        background: var(--card);
+        padding: 36px;
+        border-radius: 15px;
+        max-width: 1200px;
+        margin: 0 auto;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
+    }
+
+    .card h1 {
+        margin: 0 0 24px 0;
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--white);
+    }
+
+    .content {
+        display: flex;
+        gap: 100px;
+        align-items: center;
+    }
+
+    /* Left: image dropzone (circular for profile) */
+    .thumb-wrap {
+        width: 200px;
+        height: 200px;
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        background: #2a2a2a;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        flex-shrink: 0;
+        margin-top: 50px;
+    }
+
+    .thumb-inner {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        font-size: 14px;
+        border-radius: 50%;
+    }
+
+    .thumb-inner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 50%;
+    }
+
+    .thumb-overlay {
+        position: absolute;
+        inset: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .thumb-actions {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        pointer-events: none;
+        border-radius: 50%;
+    }
+
+    .upload-btn {
+        background: transparent;
+        color: var(--muted);
+        padding: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 13px;
+        pointer-events: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #removeBtn {
+        font-family: 'Gantari';
+        font-size: 16px;
+        font-weight: 500;
+        width: 120px;
+        height: 40px;
+        display: flex;
+        background: #D9BDFE;
+        color: black;
+        border: 2px dashed rgba(255, 255, 255, 0.06);
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin: 12px auto 0;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        pointer-events: auto;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+
+    }
+
+    #removeBtn:hover {
+        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        transform: translateY(-2px) scale(1.05);
+        font-weight: 700;
+    }
+
+    input[type=file] {
+        display: none;
+    }
+
+    /* Right: form */
+    .form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .form-content {
+        display: flex;
+        gap: 48px;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .form-content>div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+    .form-content>div:first-child {
+        flex-shrink: 0;
+        width: 240px;
+    }
+
+    .form-content>.row {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    /* Contenedor para input + error debajo */
+    .field-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    /* Input en error */
+    .input-error {
+        border: 2px solid red !important;
+    }
+
+    /* Mensaje de error debajo del input */
+    .error-msg {
+        color: red;
+        font-size: 0.85rem;
+        margin-top: 4px;
+    }
+
+    .form-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .form-group label {
+        width: 160px;
+        text-align: left;
+        font-family: 'Gantari';
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--white);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        padding-top: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        flex: 1;
+        padding: 12px 14px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        background: var(--input);
+        color: var(--muted);
+        font-size: 14px;
+        resize: vertical;
+        min-height: 40px;
+        font-family: 'Gantari';
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: #999;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 18px;
+    }
+
+    /* BOTÓN GUARDAR CAMBIOS */
+    .add-btn {
+        background: #6E32D5;
+        color: var(--white);
+        width: 280px;
+        height: 50px;
+        padding: 12px 18px;
+        border-radius: 8px;
+        border: 0;
+        font-family: 'Exo 2';
+        font-weight: 700;
+        font-size: 30px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        text-align: center;
+        justify-content: center;
+        font-size: 20px;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .add-btn:hover {
+        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        transform: translateY(-2px) scale(1.05);
+    }
+
+    /* Favoritas section */
+    .favorites-section {
+        margin-top: 24px;
+    }
+
+    h2.section {
+        margin: 0 0 12px 0;
+        color: var(--white);
+        font-size: 20px;
+        font-weight: 700;
+        font-family: 'Gantari';
+        color: white;
+        margin-bottom: 8px;
+        letter-spacing: 2px;
+    }
+
+    .favorites {
+        display: flex;
+        gap: 28px;
+        justify-content: space-between;
+        gap: 18px;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .fav-card {
+        width: 160px;
+        height: 230px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        border-radius: 2px;
+        overflow: hidden
+    }
+
+    .fav-card input[type=file] {
+        display: none
+    }
+
+    .fav-placeholder {
+        color: rgba(255, 255, 255, 0.12)
+    }
+
+    .fav-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block
+    }
+
+    .fav-actions {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        right: 8px;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px
+    }
+
+    .fav-btn {
+        background: transparent;
+        border: 1px dashed rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+        padding: 6px 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px
+    }
+
+    /* Cambiar fuente del título */
+    .swal-title {
+        font-family: 'Gantari', sans-serif !important;
+        font-size: 1.6rem;
+    }
+
+    /* Cambiar fuente y estilo del botón */
+    .swal-confirm {
+        font-family: 'Gantari', sans-serif !important;
+        background-color: #6E32D5 !important;
+        /* morado */
+        color: white !important;
+        border-radius: 8px !important;
+        padding: 10px 20px !important;
+    }
+
+    /* Cambiar color del icono */
+    .swal-icon .swal2-success-ring {
+        border-color: #6E32D5 !important;
+    }
+
+    .swal-icon .swal2-success-line-tip,
+    .swal-icon .swal2-success-line-long {
+        background-color: #6E32D5 !important;
+    }
+
+    /** Pantallas más pequeñas */
+    @media (max-width:980px) {
+        .content {
+            flex-direction: column;
+            align-items: center
+        }
+
+        .form-content {
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .form-content>div:first-child {
+            width: 100%;
+        }
+
+        .form-content>.row {
+            width: 100%;
+        }
+
+        .thumb-wrap {
+            width: 240px;
+            height: 240px;
+        }
+    }
+
+    @media (max-width:900px) {
+        .favorites {
+            flex-wrap: wrap
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
+<main>
+    <div class="card-wrap">
+        <div class="card">
+            <h1>EDITAR PERFIL</h1>
 
-<main style="padding: 40px 0">
+            <div class="content">
+                <form class="form" id="editProfileForm" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-    <div class="container mt-5">
+                    <div class="form-content">
+                        <!-- FOTO DE PERFIL (left column - circular) -->
+                        <div>
+                            <div class="thumb-wrap" id="thumbWrap">
+                                <div class="thumb-inner" id="thumbInner">
+                                    <span style="color:rgba(255,255,255,0.12)"></span>
+                                </div>
+                                <div class="thumb-overlay"></div>
+                                <div class="thumb-actions">
+                                    <label id="uploadLabel" class="upload-btn" for="profileImageInput">
+                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem;"></i>
+                                    </label>
+                                </div>
 
-        <h2 class="mb-4 fw-bold">EDIT PROFILE</h2>
+                                <input type="file" id="profileImageInput" name="profile_image" accept="image/*">
+                            </div>
 
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+                            <button class="upload-btn" type="button" id="removeBtn" title="Quitar">Quitar</button>
 
-            <div class="row">
+                            <div class="error-msg" id="error-profile"></div>
+                        </div>
 
-                <!-- FOTO DE PERFIL -->
-                <div class="col-md-4 text-center">
-                    <p class="fw-semibold">FOTO DE PERFIL</p>
+                        <!-- FORM FIELDS + FAVORITES (right column) -->
+                        <div class="row">
 
-                    <div class="mb-3">
-                        {% if request.user.profile.profile_image %}
-                        <img src="{{ request.user.profile.profile_image.url }}" class="rounded-circle shadow"
-                            width="180" height="180">
-                        {% else %}
-                        <img src="{% static 'img/default_profile.png' %}" class="rounded-circle shadow" width="180"
-                            height="180">
-                        {% endif %}
+                            <!-- FAVORITAS -->
+                            <div class="favorites-section">
+                                <h2 class="section">FAVORITAS</h2>
+                                <div class="favorites">
+                                    <div class="fav-card">
+                                        <img alt="Película favorita 1" style="display:none">
+                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <div class="fav-actions">
+                                        </div>
+                                    </div>
+
+                                    <div class="fav-card">
+                                        <img alt="Película favorita 2" style="display:none">
+                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <div class="fav-actions">
+                                        </div>
+                                    </div>
+
+                                    <div class="fav-card">
+                                        <img alt="Película favorita 3" style="display:none">
+                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <div class="fav-actions">
+                                        </div>
+                                    </div>
+
+                                    <div class="fav-card">
+                                        <img alt="Película favorita 4" style="display:none">
+                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <div class="fav-actions"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- NOMBRE -->
+                            <div class="form-group">
+                                <label for="nombre">NOMBRE</label>
+
+                                <div class="field-wrapper">
+                                    <input type="text" id="nombre" name="name" placeholder="Añadir nombre">
+                                    <div class="error-msg" id="error-nombre"></div>
+                                </div>
+                            </div>
+
+                            <!-- DESCRIPCIÓN -->
+                            <div class="form-group">
+                                <label for="descripcion">DESCRIPCIÓN</label>
+
+                                <div class="field-wrapper">
+                                    <textarea id="descripcion" name="description"
+                                        placeholder="Añadir descripción"></textarea>
+                                    <div class="error-msg" id="error-descripcion"></div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <div class="mt-2">
-                        {{ form.profile_image }}
+                    <div class="actions">
+                        <button type="submit" class="add-btn">
+                            <i class="bi bi-save" style="font-size: 1.2rem; margin-right: 6px;"></i>
+                            GUARDAR CAMBIOS
+                        </button>
                     </div>
-                </div>
 
-                <!-- FAVORITAS -->
-                <div class="col-md-8">
-                    <p class="fw-semibold">FAVORITAS</p>
-
-                    <div class="row g-3">
-
-                        <!-- Caja favorita 1 -->
-                        <div class="col-6 col-md-3">
-                            <div class="fav-box d-flex justify-content-center align-items-center">
-                                <span class="fs-1">+</span>
-                            </div>
-                        </div>
-
-                        <!-- Caja favorita 2 -->
-                        <div class="col-6 col-md-3">
-                            <div class="fav-box d-flex justify-content-center align-items-center">
-                                <span class="fs-1">+</span>
-                            </div>
-                        </div>
-
-                        <!-- Caja favorita 3 -->
-                        <div class="col-6 col-md-3">
-                            <div class="fav-box d-flex justify-content-center align-items-center">
-                                <span class="fs-1">+</span>
-                            </div>
-                        </div>
-
-                        <!-- Caja favorita 4 -->
-                        <div class="col-6 col-md-3">
-                            <div class="fav-box d-flex justify-content-center align-items-center">
-                                <span class="fs-1">+</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
+                </form>
             </div>
-
-            <!-- NOMBRE -->
-            <div class="mt-4">
-                <label class="fw-semibold">NOMBRE</label>
-                {{ form.name }}
-                {% if form.name.errors %}
-                <p class="text-danger small">{{ form.name.errors.0 }}</p>
-                {% endif %}
-            </div>
-
-            <!-- DESCRIPCIÓN -->
-            <div class="mt-3">
-                <label class="fw-semibold">DESCRIPCIÓN</label>
-                {{ form.description }}
-                {% if form.description.errors %}
-                <p class="text-danger small">{{ form.description.errors.0 }}</p>
-                {% endif %}
-            </div>
-
-            <!-- BOTÓN GUARDAR -->
-            <div class="text-end mt-4">
-                <button type="submit" class="btn btn-primary px-4 py-2">
-                    <i class="bi bi-save"></i> SAVE CHANGES
-                </button>
-            </div>
-
-        </form>
+        </div>
     </div>
 </main>
 
 <script>
-    // Películas favoritas
-    const favContainer = document.getElementById('favorites');
-    const favSlots = Array.from(favContainer.querySelectorAll('.fav-slot'));
+    // ============================
+    // PREVISUALIZACIÓN DE FOTO DE PERFIL
+    // ============================
+    const profileImageInput = document.getElementById('profileImageInput');
+    const thumbInner = document.getElementById('thumbInner');
+    const removeBtn = document.getElementById('removeBtn');
+    const uploadLabel = document.getElementById('uploadLabel');
 
-    favSlots.forEach(slot => {
-        const input = slot.querySelector('input[type=file]');
-        const img = slot.querySelector('img');
+    function clearPreview() {
+        thumbInner.innerHTML = '';
+        thumbInner.style.justifyContent = 'center';
+        thumbInner.style.alignItems = 'center';
 
-        slot.addEventListener('click', () => input.click());
-        input.addEventListener('change', (e) => {
-            const f = e.target.files && e.target.files[0];
-            if (!f) return clearFav(slot);
-            if (!f.type.startsWith('image/')) { alert('Por favor selecciona una imagen.'); input.value = ''; return }
-            const url = URL.createObjectURL(f);
-            img.src = url; img.style.display = 'block';
-            slot.classList.add('has-image');
-        });
-    });
-
-    function clearFav(slot) {
-        const img = slot.querySelector('img');
-        const input = slot.querySelector('input[type=file]');
-        img.src = ''; img.style.display = 'none'; input.value = '';
-        slot.classList.remove('has-image');
+        if (removeBtn) removeBtn.style.display = 'none';
+        if (uploadLabel) uploadLabel.style.display = 'inline-flex';
     }
 
-    const form = document.getElementById('profileForm');
-    form.addEventListener('submit', (ev) => {
-        ev.preventDefault();
-        const data = new FormData();
-        data.append('name', document.getElementById('name').value.trim());
-        data.append('description', document.getElementById('description').value.trim());
+    function showPreview(file) {
+        const img = document.createElement('img');
+        img.alt = 'Profile Image';
+        img.src = URL.createObjectURL(file);
 
-        const avatarInput = document.getElementById('avatarInput');
-        if (avatarInput.files && avatarInput.files[0]) data.append('avatar', avatarInput.files[0]);
-        favSlots.forEach((slot, i) => { const inp = slot.querySelector('input[type=file]'); if (inp.files && inp.files[0]) data.append('favorite_' + i, inp.files[0]) });
+        thumbInner.innerHTML = '';
+        thumbInner.appendChild(img);
 
-        console.log('Profile form ready to send:');
-        for (const p of data.entries()) console.log(p[0], p[1]);
-        alert('Cambios preparados (ver consola).');
+        if (removeBtn) removeBtn.style.display = 'inline-block';
+        if (uploadLabel) uploadLabel.style.display = 'none';
+    }
+
+    profileImageInput.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return clearPreview();
+
+        if (!file.type.startsWith('image/')) {
+            alert('Por favor selecciona una imagen válida.');
+            profileImageInput.value = '';
+            return;
+        }
+
+        showPreview(file);
+    });
+
+    removeBtn.addEventListener('click', () => {
+        profileImageInput.value = '';
+        clearPreview();
+    });
+
+    clearPreview();
+
+    // ============================
+    // VALIDACIÓN DEL FORMULARIO
+    // ============================
+    document.getElementById("editProfileForm").addEventListener("submit", function (e) {
+
+        let valid = true;
+
+        // limpiar errores previos
+        document.querySelectorAll(".error-msg").forEach(el => el.textContent = "");
+        document.querySelectorAll(".input-error").forEach(el => el.classList.remove("input-error"));
+
+        // ===== VALIDAR NOMBRE =====
+        const nombre = document.getElementById("nombre");
+        if (nombre.value.trim() === "") {
+            valid = false;
+            nombre.classList.add("input-error");
+            document.getElementById("error-nombre").textContent = "Tienes que añadir un nombre.";
+        }
+
+        // ===== VALIDAR DESCRIPCIÓN =====
+        const descripcion = document.getElementById("descripcion");
+        if (descripcion.value.trim() === "") {
+            valid = false;
+            descripcion.classList.add("input-error");
+            document.getElementById("error-descripcion").textContent = "Tienes que añadir una descripción.";
+        }
+
+        // ===== SI HAY ERRORES → BLOQUEAR ENVÍO =====
+        if (!valid) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            return;
+        }
+
+        // ===== SI TODO ES CORRECTO → MOSTRAR MODAL Y ENVIAR =====
+        e.preventDefault(); // detenemos envío temporalmente
+
+        Swal.fire({
+            title: "Perfil guardado correctamente",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+            customClass: {
+                title: 'swal-title',
+                confirmButton: 'swal-confirm',
+                icon: 'swal-icon'
+            }
+        }).then(() => {
+            // ahora sí enviamos el formulario
+            document.getElementById("editProfileForm").submit();
+        });
+
     });
 </script>
+
 {% endblock %}
