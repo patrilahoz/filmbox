@@ -87,11 +87,28 @@ def edit_profile(request):
     profile = request.user.profile
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('perfil_user')  # Cambia si tu URL se llama distinto
-    else:
-        form = ProfileForm(instance=profile)
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        image = request.FILES.get('profile_image')
 
+        # Validación básica (ya la haces en JS, pero por si acaso)
+        if not name or not description:
+            return render(request, 'usuarios/edit_profile.html', {
+                'form': ProfileForm(instance=profile),
+                'error': 'Debes rellenar todos los campos.'
+            })
+
+        # Guardar datos
+        profile.name = name
+        profile.description = description
+
+        if image:
+            profile.profile_image = image
+
+        profile.save()
+
+        return redirect('perfil')
+
+    # GET
+    form = ProfileForm(instance=profile)
     return render(request, 'usuarios/edit_profile.html', {'form': form})

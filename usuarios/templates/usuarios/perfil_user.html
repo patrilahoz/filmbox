@@ -50,7 +50,7 @@
     gap: 18px
   }
 
-  .avatar-wrap {
+  .profile-photo-wrap {
     width: 160px;
     height: 160px;
     border-radius: 999px;
@@ -60,12 +60,12 @@
     justify-content: center;
     position: relative;
     cursor: pointer;
-    border: 6px solid rgba(123, 62, 181, 0.08)
+    border: 6px solid rgba(123, 62, 181, 0.08);
   }
 
-  .avatar-icon {
-    width: 92px;
-    height: 92px;
+  .profile-photo-icon {
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     background: transparent;
     display: flex;
@@ -73,21 +73,33 @@
     justify-content: center;
     color: var(--accent-dark);
     font-weight: 700;
-    font-size: 40px
+    font-size: 40px;
+    margin-top: 40px;
   }
 
-  .avatar-input {
+  .profile-photo-input {
     display: none
   }
+
+  .profile-photo-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
 
   .name {
     font-size: 30px;
     font-weight: 700;
-    font-family: 'Gantari';
+    font-family: 'Exo 2';
     color: white;
-    margin-top: 6px;
-    margin-bottom: 8px;
-    letter-spacing: 2px;
+  }
+
+  .username {
+    font-size: 16px;
+    color: var(--muted);
+    font-family: 'Exo 2';
   }
 
   .follows {
@@ -99,10 +111,11 @@
   }
 
   .desc {
-    color: var(--muted);
+    color: white;
     margin-top: 12px;
-    max-width: 280px;
+    max-width: 260px;
     font-family: 'Gantari';
+    text-align: justify;
   }
 
 
@@ -300,25 +313,41 @@
 <main class="main">
   <div class="columns">
     <aside class="left">
-      <!-- Avatar (purple) - clickable to upload -->
+      <!-- FOTO DE PERFIL -->
       <label class="avatar-wrap" for="avatarInput" title="Añadir foto de perfil">
-        <div class="avatar-icon" id="avatarPreview" aria-hidden>
-          <!-- purple silhouette style: use simple circle/arc shapes via CSS text -->
+        <div class="profile-photo-icon" id="profilePhotoPreview" aria-hidden>
+          {% if request.user.profile.profile_image %}
+          <img src="{{ request.user.profile.profile_image.url }}" class="profile-photo-img">
+          {% else %}
+          <!-- SVG por defecto si no hay foto -->
           <svg width="80" height="80" viewBox="0 0 24 24" fill="none" aria-hidden>
             <circle cx="12" cy="8" r="3.2" stroke="rgba(123,62,181,1)" stroke-width="1.6" fill="rgba(237,221,255,1)" />
-            <path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="rgba(123,62,181,1)" stroke-width="1.6"
+            <path d="M4 20c0-3.3 3.6 6 8 6s8 2.7 8 6" stroke="rgba(123,62,181,1)" stroke-width="1.6"
               fill="rgba(237,221,255,1)" />
           </svg>
+          {% endif %}
         </div>
       </label>
-      <input id="avatarInput" class="avatar-input" type="file" accept="image/*">
+      <input id="profilePhotoInput" class="profile-photo-input" type="file" accept="image/*">
 
-      <div class="name">NOMBRE</div>
-      <div class="follows">
-        <div><strong>X</strong> seguidores</div>
-        <div><strong>X</strong> siguiendo</div>
+      <!-- NOMBRE -->
+      <div class="name">{{ request.user.profile.name }}</div>
+
+      <!-- USERNAME -->
+      <div class="username">
+        <p>@{{ request.user.username }}</p>
       </div>
-      <div class="desc">Descripción</div>
+
+      <!-- SEGUIDORES Y SEGUIDOS -->
+      <div class="follows">
+        <div><strong>{{ request.user.following.count }}</strong> siguiendo</div>
+        <div><strong>{{ request.user.followers.count }}</strong> seguidores</div>
+      </div>
+
+
+      <!-- DESCRIPCIÓN -->
+      <div class="desc">{{ request.user.profile.description }}</div>
+
 
       <a href="">
         <button class="diary-btn" id="diaryBtn">
