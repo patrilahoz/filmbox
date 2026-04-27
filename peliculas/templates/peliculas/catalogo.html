@@ -38,7 +38,6 @@
 
     .card {
         background: #191919;
-        /* border: 1px solid white; */
         border: transparent;
         padding: 50px;
         width: 90%;
@@ -55,58 +54,104 @@
     }
 
 
-    .catalogo-grid {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr); /* 8 columnas */
-    gap: 20px;
-    padding: 40px 20px;
-}
-
-.catalogo-item {
-    width: 100%;
-    aspect-ratio: 2 / 3; /* forma de póster */
-    background: #111;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.catalogo-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.catalogo-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    border: 2px solid #d0b3ff;
-}
-
-@media (max-width: 1400px) {
-    .catalogo-grid {
-        grid-template-columns: repeat(6, 1fr);
+    /* Search box */
+    .search-movie {
+        background: rgba(255, 255, 255, 0.06);
+        padding: 12px 20px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 30px;
+        margin-bottom: 10px;
+        margin-left: 20px;
+        margin-right: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition:
+            border 0.55s cubic-bezier(0.33, 1, 0.68, 1),
+            transform 0.55s cubic-bezier(0.33, 1, 0.68, 1),
+            box-shadow 0.55s cubic-bezier(0.33, 1, 0.68, 1);
     }
-}
 
-@media (max-width: 1100px) {
-    .catalogo-grid {
-        grid-template-columns: repeat(4, 1fr);
+    .search-movie input {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        outline: none;
+        flex: 1;
+        font-size: 14px;
     }
-}
 
-@media (max-width: 800px) {
-    .catalogo-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .search-movie:hover {
+        border: 1px solid #d0b3ff;
+        transform: translateY(-0.5px) scale(1.008);
+        box-shadow: 0 4px 12px rgba(208, 179, 255, 0.15);
     }
-}
 
-@media (max-width: 600px) {
-    .catalogo-grid {
-        grid-template-columns: repeat(2, 1fr);
+
+    .search-movie input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
     }
-}
 
+    .search-movie i {
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 16px;
+    }
+
+
+    .catalogo-grid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        /* 8 columnas */
+        gap: 20px;
+        padding: 40px 20px;
+    }
+
+    .catalogo-item {
+        width: 100%;
+        aspect-ratio: 2 / 3;
+        /* forma de póster */
+        background: #111;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .catalogo-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .catalogo-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        border: 2px solid #d0b3ff;
+    }
+
+    @media (max-width: 1400px) {
+        .catalogo-grid {
+            grid-template-columns: repeat(6, 1fr);
+        }
+    }
+
+    @media (max-width: 1100px) {
+        .catalogo-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    @media (max-width: 800px) {
+        .catalogo-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .catalogo-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
 </style>
 {% endblock %}
 
@@ -116,26 +161,42 @@
         <div class="card">
             <h1>CATÁLOGO DE PELÍCULAS</h1>
 
+            <div class="search-movie">
+                <i class="bi bi-search"></i>
+                <input type="text" id="searchInput" placeholder="Buscar película...">
+            </div>
 
-            <div class="catalogo-grid">
+
+            <div class="catalogo-grid" id="moviesGrid">
                 {% for pelicula in peliculas %}
-                <a href="{% url 'pelicula' pelicula.id %}" class="catalogo-item">
+                <a href="{% url 'pelicula' pelicula.id %}" class="catalogo-item" data-title="{{ pelicula.titulo }}">
                     <img src="{{ pelicula.poster.url }}" alt="{{ pelicula.titulo }}">
                 </a>
                 {% endfor %}
             </div>
 
-
         </div>
     </div>
-
-
 </main>
 
-
-
-
 <script>
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const moviesGrid = document.getElementById('moviesGrid');
+    const catalogoItems = moviesGrid.querySelectorAll('.catalogo-item');
+
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+
+        catalogoItems.forEach(item => {
+            const title = item.getAttribute('data-title').toLowerCase();
+            if (title.includes(searchTerm)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
 </script>
 
 {% endblock %}

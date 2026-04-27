@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+#GÉNEROS
 class Genero(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
 
@@ -26,11 +27,8 @@ class Pelicula(models.Model):
     related_name='peliculas'
 )
 
-
     def __str__(self):
         return self.titulo
-
-
 
 
 
@@ -41,12 +39,11 @@ class PeliculaGenero(models.Model):
     def __str__(self):
         return f"{self.pelicula} - {self.genero}"
 
-    
-    
     # class Meta:
     #    unique_together = ('pelicula', 'genero')
 
 
+#REPARTO
 class Reparto(models.Model):
     ROLES = [
         ('actor', 'Actor'),
@@ -57,38 +54,44 @@ class Reparto(models.Model):
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='reparto')
 
 
+#PUNTUACIONES
 class Puntuacion(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
-    puntuacion = models.DecimalField(max_digits=2, decimal_places=1)  # 0.0 – 9.9
-    fecha_puntuacion = models.DateTimeField(auto_now_add=True)
+    valor = models.IntegerField(null=True, blank=True)  # 1–5
+    fecha = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('usuario', 'pelicula')
 
 
+
+#RESEÑAS
 class Reseña(models.Model):
-    ESTADOS = [
-        ('visible', 'Visible'),
-        ('oculta', 'Oculta'),
-        ('eliminada', 'Eliminada'),
-    ]
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
-    contenido = models.TextField()
-    fecha_reseña = models.DateTimeField(auto_now_add=True)
-    estado = models.CharField(max_length=9, choices=ESTADOS, default='visible')
+    texto = models.TextField(blank=True, null=True)
+    puntuacion = models.IntegerField(null=True, blank=True)  # opcional
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha']
+        unique_together = ('usuario', 'pelicula')
 
 
+
+#LIKES RESEÑA
 class LikeReseña(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     reseña = models.ForeignKey(Reseña, on_delete=models.CASCADE)
-    fecha_like = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('usuario', 'reseña')
 
 
+
+#FAVORITOS
 class Favorito(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)

@@ -117,9 +117,6 @@
         transform: translateY(-2px) scale(1.05);
     }
 
-
-
-
     /* TEXTAREA */
     textarea {
         width: 100%;
@@ -136,9 +133,114 @@
     }
 
 
+    /* CAJA DE PUNTUACIÓN */
+    .review-box {
+        width: 100%;
+    }
+
+    .review-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .review-label {
+        display: block;
+        font-family: 'Gantari';
+        font-size: 20px;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 8px;
+    }
+
+    /* Título RESEÑAS */
+    .reviews-title {
+        font-family: 'Exo 2';
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    /* Tarjeta de reseña */
+    .review-card {
+        background: #262626;
+        border-radius: 10px;
+        padding: 1.2rem 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 16px;
+    }
+
+    /* Estrellas arriba derecha */
+    .review-card-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 8px;
+    }
+
+    .review-card-stars i {
+        color: #6E32D5;
+        font-size: 1.2rem;
+    }
+
+    /* Texto reseña */
+    .review-text {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+
+    /* Footer: likes izquierda, usuario derecha */
+    .review-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .review-likes {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+    }
+
+    .review-likes i {
+        color: #ff4d6d;
+    }
+
+    /* Usuario */
+    .review-user {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .review-username {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .review-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #6E32D5;
+    }
+
+    .review-date {
+        font-size: 14px;
+        color: var(--muted);
+    }
+
+    .star.filled {
+        color: #6E32D5;
+        -webkit-text-stroke-color: #6E32D5;
+    }
 
 
 
+    
 </style>
 {% endblock %}
 
@@ -182,40 +284,101 @@
                         {% endfor %}
                     </div>
                 </div>
+
+                <div class="col-12 mt-3">
+                    <strong>Reparto</strong>
+                    <div class="meta-value" style="text-align: justify;">{{ pelicula.reparto_info }}</div>
+                </div>
             </div>
 
             <p class="muted" style="text-align: justify;">{{ pelicula.sinopsis }}</p>
 
-            <!-- RATING + REVIEW -->
-            <div class="card-surface mt-4">
 
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="stars" id="starsContainer">
-                        <span class="star" data-value="1"></span>
-                        <span class="star" data-value="2"></span>
-                        <span class="star" data-value="3"></span>
-                        <span class="star" data-value="4"></span>
-                        <span class="star" data-value="5"></span>
+
+            <!-- CAJA PUNTUACIÓN + RESEÑA -->
+
+            <form method="POST" action="{% url 'guardar_reseña' pelicula.id %}">
+                {% csrf_token %}
+                <div class="card-surface mt-4 review-box">
+                    <div class="review-top-row">
+                        <div class="stars" id="starsContainer">
+                            <span class="star" data-value="1"></span>
+                            <span class="star" data-value="2"></span>
+                            <span class="star" data-value="3"></span>
+                            <span class="star" data-value="4"></span>
+                            <span class="star" data-value="5"></span>
+                        </div>
+                        <button class="save-btn" type="submit">
+                            <i class="bi bi-save" style="font-size: 1.25rem; margin-right: 8px;"></i>
+                            GUARDAR
+                        </button>
                     </div>
 
-                    <button class="save-btn">
-                        <i class="bi bi-save" style="font-size: 1.25rem; margin-right: 8px;"></i>
-                        GUARDAR
-                    </button>
+                    <input type="hidden" name="puntuacion" id="ratingInput">
+
+                    <label class="review-label">
+                        ESCRIBE UNA RESEÑA
+                    </label>
+                    <textarea name="reseña" rows="4" placeholder="Escribe tu reseña..."></textarea>
                 </div>
+            </form>
 
-                <label class="form-label small text-uppercase muted" style="font-family: 'Gantari'; font-size: 20px; font-weight: 500;">ESCRIBE UNA RESEÑA</label>
-                <textarea rows="4" placeholder="Escribe tu reseña..."></textarea>
 
+
+            <!-- RESEÑAS DE OTROS USUARIOS -->
+
+            <h2 class="reviews-title mt-5">RESEÑAS</h2>
+            <div class="reviews-section">
+                {% for r in reseñas %}
+                <div class="review-card">
+                    <div class="review-card-header">
+                        <div class="review-card-stars">
+                            {% for i in "12345" %}
+                            {% if forloop.counter <= r.puntuacion %} <i class="bi bi-star-fill"></i>
+                                {% else %}
+                                <i class="bi bi-star"></i>
+                                {% endif %}
+                                {% endfor %}
+                        </div>
+                    </div>
+
+                    <p class="review-text">{{ r.texto }}</p>
+
+
+                    <div class="review-date">
+                        {{ r.fecha|date:"d/m/Y H:i" }}
+                    </div>
+
+
+
+
+                    <div class="review-card-footer">
+                        <div class="review-likes">
+                            <i class="bi bi-heart"></i>
+                            {{ r.likereseña_set.count }} me gusta
+                        </div>
+                        <div class="review-user">
+                            <span class="review-username">{{ r.usuario.profile.name }}</span>
+                            <img src="{{ r.usuario.profile.profile_image.url }}" class="review-avatar">
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
+
+
+
+
+
+
         </div>
     </div>
 </main>
 
 <script>
-    // Star hover & click: pintar las estrellas del mismo color que el botón Save al pasar el ratón
     (function () {
         const stars = Array.from(document.querySelectorAll('.star'));
+        const ratingInput = document.getElementById('ratingInput');
         let selected = 0;
 
         function fill(upto) {
@@ -227,11 +390,17 @@
 
         stars.forEach((s, idx) => {
             s.addEventListener('mouseover', () => fill(idx + 1));
-            s.addEventListener('click', () => { selected = idx + 1; fill(selected); });
+            s.addEventListener('click', () => {
+                selected = idx + 1;
+                ratingInput.value = selected;
+                fill(selected);
+            });
         });
 
         document.getElementById('starsContainer')
             .addEventListener('mouseleave', () => fill(selected));
     })();
 </script>
+
+
 {% endblock %}

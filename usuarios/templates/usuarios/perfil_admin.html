@@ -93,12 +93,29 @@
     font-weight: 700;
     font-family: 'Exo 2';
     color: white;
+    margin-bottom: -15px;
   }
 
   .username {
     font-size: 16px;
     color: var(--muted);
     font-family: 'Exo 2';
+    margin-bottom: -20px;
+  }
+
+  .admin-card {
+    background: #D9BDFE;
+    color: #7b3eb5;
+    width: 150px;
+    height: 30px;
+    border-radius: 8px;
+    font-family: 'Exo 2';
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
   }
 
   .follows {
@@ -326,6 +343,9 @@
       <div class="username">
         <p>@{{ request.user.username }}</p>
       </div>
+
+      <!-- ADMIN CARD -->
+      <div class="admin-card">ADMINISTRADOR</div>
 
       <!-- SEGUIDORES Y SEGUIDOS -->
       <div class="follows">

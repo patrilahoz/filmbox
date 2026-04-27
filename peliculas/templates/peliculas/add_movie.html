@@ -121,7 +121,7 @@
         background: transparent;
         color: var(--muted);
         padding: 0;
-        border-radius: 4px;
+        border-radius: 50%;
         cursor: pointer;
         font-size: 13px;
         pointer-events: auto;
@@ -131,19 +131,26 @@
     }
 
     #removeBtn {
+        font-family: 'Gantari';
+        font-size: 16px;
+        font-weight: 500;
+        width: 120px;
+        height: 40px;
         position: absolute;
         bottom: 12px;
         right: 12px;
-        display: none;
         background: #D9BDFE;
         color: black;
         border: 2px dashed rgba(255, 255, 255, 0.06);
-        padding: 8px 12px;
         border-radius: 4px;
+        margin: 12px auto 0;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
         cursor: pointer;
         pointer-events: auto;
         transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
-
     }
 
     #removeBtn:hover {
@@ -171,6 +178,13 @@
         gap: 48px;
         width: 100%;
         align-items: flex-start;
+    }
+
+
+    .form-content>div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .form-content>div:first-child {
@@ -271,10 +285,6 @@
         margin-top: 18px;
     }
 
-
-
-
-
     /* Selector múltiple de géneros */
     /* Contenedor principal */
     .multi-select {
@@ -296,11 +306,9 @@
         cursor: pointer;
         user-select: none;
         transition: background 0.3s ease;
-
         display: flex;
         justify-content: space-between;
         align-items: center;
-
         flex: 1;
         padding: 12px 14px;
         border-radius: 6px;
@@ -311,7 +319,6 @@
         resize: vertical;
         min-height: 40px;
         font-family: 'Gantari';
-
     }
 
     .select-btn:hover {
@@ -319,9 +326,6 @@
         color: var(--white);
         box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
     }
-
-
-
 
     /* Desplegable */
     .select-dropdown {
@@ -409,12 +413,6 @@
 
 
 
-
-
-
-
-
-
     /* BOTÓN AÑADIR PELÍCULA*/
     .add-btn {
         background: #6E32D5;
@@ -449,10 +447,6 @@
     }
 
 
-
-
-
-
     .plus {
         width: 28px;
         height: 28px;
@@ -463,7 +457,6 @@
         justify-content: center;
         font-weight: 700;
     }
-
 
 
     /* Cambiar fuente del título */
@@ -787,7 +780,7 @@
         if (titulo.value.trim() === "") {
             valid = false;
             titulo.classList.add("input-error");
-            document.getElementById("error-titulo").textContent = "Tienes que añadir un título.";
+            document.getElementById("error-titulo").textContent = "Debes añadir un título.";
         }
 
         // ===== VALIDAR AÑO =====
@@ -798,7 +791,7 @@
         if (!año.value || añoNum < 1888 || añoNum > currentYear) {
             valid = false;
             año.classList.add("input-error");
-            document.getElementById("error-año").textContent = "Tienes que añadir un año válido.";
+            document.getElementById("error-año").textContent = "Debes añadir un año válido.";
         }
 
         // ===== VALIDAR DIRECTOR =====
@@ -806,7 +799,7 @@
         if (director.value.trim() === "") {
             valid = false;
             director.classList.add("input-error");
-            document.getElementById("error-director").textContent = "Tienes que añadir un director.";
+            document.getElementById("error-director").textContent = "Debes añadir un director.";
         }
 
         // ===== VALIDAR DURACIÓN =====
@@ -814,7 +807,7 @@
         if (!duracion.value || parseInt(duracion.value) <= 0) {
             valid = false;
             duracion.classList.add("input-error");
-            document.getElementById("error-duracion").textContent = "Tienes que añadir una duración válida.";
+            document.getElementById("error-duracion").textContent = "Debes añadir una duración válida.";
         }
 
         // ===== VALIDAR REPARTO =====
@@ -822,14 +815,14 @@
         if (reparto.value.trim() === "") {
             valid = false;
             reparto.classList.add("input-error");
-            document.getElementById("error-reparto").textContent = "Tienes que añadir el reparto.";
+            document.getElementById("error-reparto").textContent = "Debes añadir el reparto.";
         }
 
         // ===== VALIDAR GÉNEROS =====
         const generosSeleccionados = document.querySelectorAll(".check-generos:checked");
         if (generosSeleccionados.length === 0) {
             valid = false;
-            document.getElementById("error-generos").textContent = "Tienes que seleccionar al menos un género.";
+            document.getElementById("error-generos").textContent = "Debes seleccionar al menos un género.";
         }
 
         // ===== VALIDAR SINOPSIS =====
@@ -837,7 +830,7 @@
         if (sinopsis.value.trim() === "") {
             valid = false;
             sinopsis.classList.add("input-error");
-            document.getElementById("error-sinopsis").textContent = "Tienes que añadir una sinopsis.";
+            document.getElementById("error-sinopsis").textContent = "Debes añadir una sinopsis.";
         }
 
         // ===== SI HAY ERRORES → BLOQUEAR ENVÍO =====

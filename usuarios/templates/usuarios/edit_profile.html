@@ -329,8 +329,10 @@
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: #222;
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
         position: relative;
         border-radius: 2px;
         overflow: hidden
@@ -471,32 +473,34 @@
                             <div class="favorites-section">
                                 <h2 class="section">FAVORITAS</h2>
                                 <div class="favorites">
-                                    <div class="fav-card">
+                                    <!-- FAVORITA 1 -->
+                                    <a href="{% url 'select_movie' %}?slot=1" class="fav-card">
                                         <img alt="Película favorita 1" style="display:none">
                                         <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
-                                        <div class="fav-actions">
-                                        </div>
-                                    </div>
+                                        <div class="fav-actions"></div>
+                                    </a>
 
-                                    <div class="fav-card">
+                                    <!-- FAVORITA 2 -->
+                                    <a href="{% url 'select_movie' %}?slot=2" class="fav-card">
                                         <img alt="Película favorita 2" style="display:none">
                                         <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
-                                        <div class="fav-actions">
-                                        </div>
-                                    </div>
+                                        <div class="fav-actions"></div>
+                                    </a>
 
-                                    <div class="fav-card">
+                                    <!-- FAVORITA 3 -->
+                                    <a href="{% url 'select_movie' %}?slot=3" class="fav-card">
                                         <img alt="Película favorita 3" style="display:none">
                                         <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
-                                        <div class="fav-actions">
-                                        </div>
-                                    </div>
+                                        <div class="fav-actions"></div>
+                                    </a>
 
-                                    <div class="fav-card">
+                                    <!-- FAVORITA 4 -->
+                                    <a href="{% url 'select_movie' %}?slot=4" class="fav-card">
                                         <img alt="Película favorita 4" style="display:none">
                                         <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
                                         <div class="fav-actions"></div>
-                                    </div>
+                                    </a>
+
                                 </div>
                             </div>
 
