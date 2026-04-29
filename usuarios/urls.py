@@ -9,8 +9,9 @@ urlpatterns = [
     path("perfil/", views.perfil, name="perfil"),
     
     
+    path("diario/", views.diario, name="diario"),
     path('editar-perfil/', views.edit_profile, name='edit_profile'),
-    # path("peliculas/add/", views.add_movie, name="add_movie"),
+    
 ]
 
 

@@ -117,6 +117,27 @@
         transform: translateY(-2px) scale(1.05);
     }
 
+    /* ESTRELLAS DE PUNTUACIÓN */
+    .rating-stars {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .rating-star {
+        font-size: 2rem;
+        color: #6E32D5;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .rating-star:hover {
+        transform: scale(1.1);
+    }
+
+    .rating-star i {
+        display: block;
+    }
+
     /* TEXTAREA */
     textarea {
         width: 100%;
@@ -166,16 +187,19 @@
     .review-card {
         background: #262626;
         border-radius: 10px;
-        padding: 1.2rem 1.5rem;
+        padding: 1.5rem;
         border: 1px solid rgba(255, 255, 255, 0.08);
         margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
     }
 
-    /* Estrellas arriba derecha */
+    /* Header: estrellas, usuario, avatar */
     .review-card-header {
         display: flex;
-        justify-content: flex-end;
-        margin-bottom: 8px;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
     }
 
     .review-card-stars i {
@@ -183,33 +207,8 @@
         font-size: 1.2rem;
     }
 
-    /* Texto reseña */
-    .review-text {
-        font-size: 16px;
-        line-height: 1.5;
-        margin-bottom: 10px;
-    }
-
-    /* Footer: likes izquierda, usuario derecha */
-    .review-card-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .review-likes {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        color: var(--muted);
-    }
-
-    .review-likes i {
-        color: #ff4d6d;
-    }
-
-    /* Usuario */
-    .review-user {
+    /* Usuario con avatar */
+    .review-header-user {
         display: flex;
         align-items: center;
         gap: 8px;
@@ -228,9 +227,50 @@
         border: 2px solid #6E32D5;
     }
 
+    /* Texto reseña */
+    .review-text {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 16px;
+        flex-grow: 1;
+    }
+
+    /* Footer: likes izquierda, fecha derecha */
+    .review-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .review-likes {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+        cursor: pointer;
+    }
+
+    .review-likes i {
+        color: #6E32D5;
+        transition: color 0.2s ease;
+    }
+
+    .review-likes i.bi-heart-fill {
+        color: #6E32D5;
+    }
+
     .review-date {
         font-size: 14px;
         color: var(--muted);
+    }
+
+    /* Mensaje cuando no hay reseñas */
+    .no-reviews-message {
+        text-align: center;
+        color: var(--muted);
+        font-family: 'Gantari';
+        font-size: 18px;
+        padding: 40px 20px;
     }
 
     .star.filled {
@@ -238,9 +278,28 @@
         -webkit-text-stroke-color: #6E32D5;
     }
 
+    /* Estilos para SweetAlert2 */
+    .swal-title {
+        font-family: 'Gantari', sans-serif !important;
+        font-size: 1.6rem !important;
+    }
 
+    .swal-confirm {
+        font-family: 'Gantari', sans-serif !important;
+        background-color: #6E32D5 !important;
+        color: white !important;
+        border-radius: 8px !important;
+        padding: 10px 20px !important;
+    }
 
-    
+    .swal-icon .swal2-success-ring {
+        border-color: #6E32D5 !important;
+    }
+
+    .swal-icon .swal2-success-line-tip,
+    .swal-icon .swal2-success-line-long {
+        background-color: #6E32D5 !important;
+    }
 </style>
 {% endblock %}
 
@@ -297,16 +356,16 @@
 
             <!-- CAJA PUNTUACIÓN + RESEÑA -->
 
-            <form method="POST" action="{% url 'guardar_reseña' pelicula.id %}">
+            <form method="POST" action="{% url 'guardar_reseña' pelicula.id %}" id="reviewForm">
                 {% csrf_token %}
                 <div class="card-surface mt-4 review-box">
                     <div class="review-top-row">
-                        <div class="stars" id="starsContainer">
-                            <span class="star" data-value="1"></span>
-                            <span class="star" data-value="2"></span>
-                            <span class="star" data-value="3"></span>
-                            <span class="star" data-value="4"></span>
-                            <span class="star" data-value="5"></span>
+                        <div class="rating-stars" id="starsContainer">
+                            <span class="rating-star" data-value="1"><i class="bi bi-star"></i></span>
+                            <span class="rating-star" data-value="2"><i class="bi bi-star"></i></span>
+                            <span class="rating-star" data-value="3"><i class="bi bi-star"></i></span>
+                            <span class="rating-star" data-value="4"><i class="bi bi-star"></i></span>
+                            <span class="rating-star" data-value="5"><i class="bi bi-star"></i></span>
                         </div>
                         <button class="save-btn" type="submit">
                             <i class="bi bi-save" style="font-size: 1.25rem; margin-right: 8px;"></i>
@@ -328,9 +387,12 @@
             <!-- RESEÑAS DE OTROS USUARIOS -->
 
             <h2 class="reviews-title mt-5">RESEÑAS</h2>
+            <hr style="border: none; background-color: currentColor; height: 0.15rem; margin-bottom: 20px; opacity: 0.2;">
             <div class="reviews-section">
+                {% if reseñas %}
                 {% for r in reseñas %}
                 <div class="review-card">
+                    <!-- Header: estrellas, usuario, avatar -->
                     <div class="review-card-header">
                         <div class="review-card-stars">
                             {% for i in "12345" %}
@@ -340,51 +402,63 @@
                                 {% endif %}
                                 {% endfor %}
                         </div>
+                        <div class="review-header-user">
+                            <span class="review-username">{{ r.usuario.profile.name }}</span>
+                            {% if r.usuario.profile.profile_image %}
+                            <img src="{{ r.usuario.profile.profile_image.url }}" class="review-avatar">
+                            {% else %}
+                            <img src="/static/img/default_profile.png" class="review-avatar">
+                            {% endif %}
+
+
+                        </div>
                     </div>
 
+                    <!-- Texto de la reseña -->
                     <p class="review-text">{{ r.texto }}</p>
 
-
-                    <div class="review-date">
-                        {{ r.fecha|date:"d/m/Y H:i" }}
-                    </div>
-
-
-
-
+                    <!-- Footer: likes, fecha -->
                     <div class="review-card-footer">
-                        <div class="review-likes">
-                            <i class="bi bi-heart"></i>
-                            {{ r.likereseña_set.count }} me gusta
+                        <div class="review-likes like-btn" data-review-id="{{ r.id }}">
+                            <i class="bi bi-heart" style="color: #6E32D5;"></i>
+                            <span class="like-count"><span class="like-number">{{ r.likereseña_set.count }}</span> me
+                                gusta</span>
                         </div>
-                        <div class="review-user">
-                            <span class="review-username">{{ r.usuario.profile.name }}</span>
-                            <img src="{{ r.usuario.profile.profile_image.url }}" class="review-avatar">
+                        <div class="review-date">
+                            {{ r.fecha|date:"d/m/Y H:i" }}
                         </div>
                     </div>
                 </div>
                 {% endfor %}
+                {% else %}
+                <div class="no-reviews-message">
+                    Todavía no hay reseñas de esta película.
+                </div>
+                {% endif %}
             </div>
-
-
-
-
-
 
         </div>
     </div>
 </main>
 
 <script>
+    // ===== FUNCIONALIDAD DE ESTRELLAS DE PUNTUACIÓN =====
     (function () {
-        const stars = Array.from(document.querySelectorAll('.star'));
+        const stars = Array.from(document.querySelectorAll('.rating-star'));
         const ratingInput = document.getElementById('ratingInput');
+        const starsContainer = document.getElementById('starsContainer');
         let selected = 0;
 
         function fill(upto) {
             stars.forEach((s, i) => {
-                if (i < upto) s.classList.add('filled');
-                else s.classList.remove('filled');
+                const icon = s.querySelector('i');
+                if (i < upto) {
+                    icon.classList.remove('bi-star');
+                    icon.classList.add('bi-star-fill');
+                } else {
+                    icon.classList.add('bi-star');
+                    icon.classList.remove('bi-star-fill');
+                }
             });
         }
 
@@ -397,9 +471,49 @@
             });
         });
 
-        document.getElementById('starsContainer')
-            .addEventListener('mouseleave', () => fill(selected));
+        starsContainer.addEventListener('mouseleave', () => fill(selected));
     })();
+
+    // ===== FUNCIONALIDAD DE LIKES EN RESEÑAS =====
+    document.querySelectorAll('.like-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const heart = this.querySelector('i');
+            const likeNumber = this.querySelector('.like-number');
+
+            heart.classList.toggle('bi-heart');
+            heart.classList.toggle('bi-heart-fill');
+
+            // Cambiar solo el contador
+            let count = parseInt(likeNumber.textContent);
+            if (heart.classList.contains('bi-heart-fill')) {
+                count += 1;
+            } else {
+                count -= 1;
+            }
+            likeNumber.textContent = count;
+        });
+    });
+
+    // ===== MODAL DE ÉXITO AL GUARDAR RESEÑA =====
+    const reviewForm = document.getElementById('reviewForm');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: "Película puntuada y reseñada correctamente",
+                icon: "success",
+                confirmButtonText: "Aceptar",
+                customClass: {
+                    title: 'swal-title',
+                    confirmButton: 'swal-confirm',
+                    icon: 'swal-icon'
+                }
+            }).then(() => {
+                reviewForm.submit();
+            });
+        });
+    }
 </script>
 
 

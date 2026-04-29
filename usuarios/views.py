@@ -4,13 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from .forms import ProfileForm
+from peliculas.models import Reseña
 
 User = get_user_model()
 
 
-# -----------------------------
 # REGISTRO
-# -----------------------------
 def register_view(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -44,9 +43,7 @@ def register_view(request):
     return render(request, "usuarios/registrarse.html")
 
 
-# -----------------------------
 # LOGIN
-# -----------------------------
 def login_view(request):
     if request.method == "POST":
         email = request.POST["email"]
@@ -69,9 +66,7 @@ def login_view(request):
     return render(request, "usuarios/login.html")
 
 
-# -----------------------------
 # PERFIL
-# -----------------------------
 @login_required
 def perfil(request):
     if request.user.is_staff:
@@ -79,9 +74,7 @@ def perfil(request):
     return render(request, "usuarios/perfil_user.html")
 
 
-# -----------------------------
 # EDITAR PERFIL
-# -----------------------------
 @login_required
 def edit_profile(request):
     profile = request.user.profile
@@ -112,3 +105,13 @@ def edit_profile(request):
     # GET
     form = ProfileForm(instance=profile)
     return render(request, 'usuarios/edit_profile.html', {'form': form})
+
+
+# DIARIO
+@login_required
+def diario(request):
+    reseñas = Reseña.objects.filter(usuario=request.user).order_by('-fecha')
+
+    return render(request, "usuarios/diario.html", {
+        "reseñas": reseñas
+    })

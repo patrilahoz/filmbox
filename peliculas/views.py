@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.cache import never_cache
 
 from peliculas.forms import PeliculaForm
 from .models import Pelicula, Genero, LikeReseña, Reseña
@@ -48,16 +49,10 @@ def add_movie(request):
     })
 
 
-#if genres:
-#            lista_generos = [g.strip() for g in genres.split(",")]
-#            for g in lista_generos:
-#                genero_obj, _ = Genero.objects.get_or_create(nombre=g)
-#                pelicula.generos.add(genero_obj)
-#       return redirect("home")
-
 
 # VISTA PELÍCULA
 @login_required
+@never_cache
 def pelicula(request, pelicula_id):
     pelicula = get_object_or_404(Pelicula, id=pelicula_id)
 

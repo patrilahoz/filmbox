@@ -21,6 +21,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
+    # profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.png')
 
     fav1 = models.ForeignKey(Pelicula, on_delete=models.SET_NULL, null=True, blank=True, related_name='fav1_users')
     fav2 = models.ForeignKey(Pelicula, on_delete=models.SET_NULL, null=True, blank=True, related_name='fav2_users')
