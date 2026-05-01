@@ -73,9 +73,9 @@
     /* Tabla header */
     .diary-header {
         display: grid;
-        grid-template-columns: 2fr 150px 80px 80px 150px;
-        gap: 20px;
-        align-items: flex-end;
+        grid-template-columns: 60px 1fr 150px 80px 80px 150px;
+        gap: 30px;
+        align-items: center;
         padding: 20px 20px 15px 20px;
         margin-bottom: 10px;
         font-weight: 700;
@@ -85,13 +85,19 @@
         border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     }
 
+    .diary-header .header-spacer {
+        width: 100%;
+    }
+
     .diary-header span {
-        color: var(--muted);
+        color: white;
         text-align: center;
+        font-family: 'Exo 2';
+        font-size: 18px;
     }
 
     .diary-header span:first-child {
-        text-align: left;
+        text-align: center;
     }
 
     .diary-header i {
@@ -101,18 +107,11 @@
     /* Entrada de diario */
     .diary-entry {
         display: grid;
-        grid-template-columns: 2fr 150px 80px 80px 150px;
-        gap: 20px;
+        grid-template-columns: 60px 1fr 150px 80px 80px 150px;
+        gap: 30px;
         align-items: center;
         padding: 15px 20px;
         margin-bottom: 10px;
-    }
-
-    /* Contenedor poster + info */
-    .diary-poster-info {
-        display: flex;
-        gap: 15px;
-        align-items: flex-start;
     }
 
     .diary-poster {
@@ -138,6 +137,7 @@
         font-weight: 600;
         color: var(--white);
         margin: 0;
+        text-align: center;
     }
 
     /* Estrellas */
@@ -159,8 +159,8 @@
     }
 
     .diary-icon-link {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -173,8 +173,7 @@
         cursor: pointer;
     }
 
-    .diary-icon-link:hover,
-    .diary-icon-link.active {
+    .diary-icon-link:hover {
         background: rgba(124, 58, 237, 0.3);
         color: #6E32D5;
         transform: scale(1.05);
@@ -205,11 +204,10 @@
 
     /* Responsive */
     @media (max-width: 1200px) {
-
         .diary-header,
         .diary-entry {
-            grid-template-columns: 1.5fr 120px 70px 70px 120px;
-            gap: 15px;
+            grid-template-columns: 50px 1fr 120px 70px 70px 120px;
+            gap: 20px;
         }
 
         .diary-poster {
@@ -285,6 +283,7 @@
 
             <!-- Header -->
             <div class="diary-header">
+                <div class="header-spacer"></div>
                 <span>PELÍCULA</span>
                 <span>PUNTUACIÓN</span>
                 <span>RESEÑA</span>
@@ -297,12 +296,12 @@
                 {% if reseñas %}
                 {% for r in reseñas %}
                 <div class="diary-entry">
-                    <!-- Poster + Título + Estrellas -->
-                    <div class="diary-poster-info">
-                        <img src="{{ r.pelicula.poster.url }}" alt="{{ r.pelicula.titulo }}" class="diary-poster">
-                        <div class="diary-info">
-                            <h3 class="diary-title-text">{{ r.pelicula.titulo }}</h3>
-                        </div>
+                    <!-- Poster -->
+                    <img src="{{ r.pelicula.poster.url }}" alt="{{ r.pelicula.titulo }}" class="diary-poster">
+
+                    <!-- Título -->
+                    <div class="diary-info">
+                        <h3 class="diary-title-text">{{ r.pelicula.titulo }}</h3>
                     </div>
 
                     <!-- Puntuación (estrellas centradas) -->
@@ -319,13 +318,13 @@
                     <!-- Icono Ver reseña -->
                     <div class="diary-icon-cell">
                         <a href="{% url 'pelicula' r.pelicula.id %}" class="diary-icon-link" title="Ver reseña">
-                            <i class="bi bi-justify-left"></i>
+                            <i class="bi bi-justify-left" style="color: white; font-size: 1.5rem;"></i>
                         </a>
                     </div>
 
                     <!-- Icono Editar -->
                     <div class="diary-icon-cell">
-                        <a href="#" class="diary-icon-link" title="Editar reseña">
+                        <a href="#" class="diary-icon-link" style="color: white; font-size: 1.5rem;" title="Editar reseña">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                     </div>

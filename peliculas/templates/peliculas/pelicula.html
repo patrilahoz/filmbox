@@ -117,6 +117,84 @@
         transform: translateY(-2px) scale(1.05);
     }
 
+    /* BOTONES ADMINISTRADOR EDITAR Y ELIMINAR PELÍCULA */
+    .admin-movie-actions {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .editar-pelicula-btn {
+        flex: 1;
+        background: #D9BDFE;
+        color: black;
+        padding: 12px 18px;
+        border-radius: 8px;
+        border: 0;
+        font-family: 'Exo 2';
+        font-weight: 600;
+        font-size: 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        text-align: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .eliminar-pelicula-btn {
+        flex: 1;
+        background: #d33333;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 8px;
+        border: 0;
+        font-family: 'Exo 2';
+        font-weight: 600;
+        font-size: 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        text-align: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .editar-pelicula-btn:hover, .eliminar-pelicula-btn:hover {
+        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+        color: white;
+        transform: translateY(-1px) scale(1.05);
+    }
+
+    .eliminar-pelicula-btn:hover {
+        background: linear-gradient(100deg, #d33333 0%, #a00000 100%);
+        color: white;
+        transform: translateY(-1px) scale(1.05);
+    }
+
+    /* BOTÓN CANCELAR EDICIÓN */
+    .cancel-edit-btn {
+        padding: 8px 14px;
+        background-color: #999;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+
+    }
+
+    .cancel-edit-btn:hover {
+        background-color: #777;
+        transform: translateY(-2px) scale(1.05);
+    }
+
     /* ESTRELLAS DE PUNTUACIÓN */
     .rating-stars {
         display: flex;
@@ -264,6 +342,44 @@
         color: var(--muted);
     }
 
+    .edit-review-btn {
+        color: white;
+        background-color: #6E32D5;
+        margin-left: 12px;
+        width: 25px;
+        height: 25px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 0;
+        border-radius: 4px;
+        transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .delete-review-btn {
+        color: var(--muted);
+        background-color: #d33333;
+        margin-left: 6px;
+        width: 25px;
+        height: 25px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 0;
+        border-radius: 4px;
+        transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .edit-review-btn:hover,
+    .delete-review-btn:hover {
+        transform: scale(1.08);
+    }
+
+    .my-review {
+        margin-bottom: 2rem;
+        border: 1px solid #6E32D5;
+    }
+
     /* Mensaje cuando no hay reseñas */
     .no-reviews-message {
         text-align: center;
@@ -300,6 +416,9 @@
     .swal-icon .swal2-success-line-long {
         background-color: #6E32D5 !important;
     }
+
+
+
 </style>
 {% endblock %}
 
@@ -311,11 +430,24 @@
         <!-- POSTER -->
         <div class="col-12 col-md-4">
             <img src="{{ pelicula.poster.url }}" alt="{{ pelicula.titulo }}" class="poster shadow-sm">
+
+            {% if request.user.is_staff %}
+            <div class="admin-movie-actions mt-3">
+                <!-- <a href="{% url 'editar_pelicula' pelicula.id %}" class="editar-pelicula-btn"> -->
+                <a href="#" class="editar-pelicula-btn">
+                    <i class="bi bi-pencil-square"></i> Editar película
+                </a>
+                <a href="{% url 'eliminar_pelicula' pelicula.id %}" class="eliminar-pelicula-btn">
+                    <i class="bi bi-trash3"></i> Eliminar película
+                </a>
+            </div>
+            {% endif %}
         </div>
+
+
 
         <!-- INFO -->
         <div class="col-12 col-md-8 pelicula-right">
-
 
             <h1 class="page-title">{{ pelicula.titulo }}</h1>
 
@@ -367,18 +499,34 @@
                             <span class="rating-star" data-value="4"><i class="bi bi-star"></i></span>
                             <span class="rating-star" data-value="5"><i class="bi bi-star"></i></span>
                         </div>
+
+
+                        {% if reseña_editando %}
+                        <a href="{% url 'cancelar_edicion_reseña' pelicula.id %}" class="cancel-edit-btn">
+                            <i class="bi bi-x-lg"></i>CANCELAR
+                        </a>
+                        {% endif %}
+
+
+
+
                         <button class="save-btn" type="submit">
                             <i class="bi bi-save" style="font-size: 1.25rem; margin-right: 8px;"></i>
-                            GUARDAR
+                            {% if reseña_editando %}ACTUALIZAR{% else %}GUARDAR{% endif %}
+
+
                         </button>
+
                     </div>
 
-                    <input type="hidden" name="puntuacion" id="ratingInput">
+                    <input type="hidden" name="puntuacion" id="ratingInput"
+                        value="{{ reseña_editando.puntuacion|default:'' }}">
 
                     <label class="review-label">
                         ESCRIBE UNA RESEÑA
                     </label>
-                    <textarea name="reseña" rows="4" placeholder="Escribe tu reseña..."></textarea>
+                    <textarea name="reseña" rows="4"
+                        placeholder="Escribe tu reseña...">{{ reseña_editando.texto|default:'' }}</textarea>
                 </div>
             </form>
 
@@ -387,11 +535,12 @@
             <!-- RESEÑAS DE OTROS USUARIOS -->
 
             <h2 class="reviews-title mt-5">RESEÑAS</h2>
-            <hr style="border: none; background-color: currentColor; height: 0.15rem; margin-bottom: 20px; opacity: 0.2;">
+            <hr
+                style="border: none; background-color: currentColor; height: 0.15rem; margin-bottom: 20px; opacity: 0.2;">
             <div class="reviews-section">
                 {% if reseñas %}
                 {% for r in reseñas %}
-                <div class="review-card">
+                <div class="review-card {% if r.usuario == request.user %}my-review{% endif %}">
                     <!-- Header: estrellas, usuario, avatar -->
                     <div class="review-card-header">
                         <div class="review-card-stars">
@@ -426,7 +575,25 @@
                         </div>
                         <div class="review-date">
                             {{ r.fecha|date:"d/m/Y H:i" }}
+
+                            {% if r.usuario == request.user %}
+                            <a href="{% url 'editar_reseña' r.id %}" class="edit-review-btn" title="Editar reseña">
+                                <i class="bi bi-pencil-square" style="font-size: 1rem;"></i>
+                            </a>
+
+                            <a href="{% url 'eliminar_reseña' r.id %}" class="delete-review-btn"
+                                title="Eliminar reseña">
+                                <i class="bi bi-trash" style="font-size: 1rem;"></i>
+                            </a>
+                            {% endif %}
+
+
                         </div>
+
+
+
+
+
                     </div>
                 </div>
                 {% endfor %}
@@ -494,6 +661,7 @@
         });
     });
 
+
     // ===== MODAL DE ÉXITO AL GUARDAR RESEÑA =====
     const reviewForm = document.getElementById('reviewForm');
     if (reviewForm) {
@@ -514,7 +682,84 @@
             });
         });
     }
-</script>
 
+
+    // ===== MODAL DE ELIMINAR RESEÑA =====
+    document.querySelectorAll('.delete-review-btn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const url = this.getAttribute('href');
+
+            Swal.fire({
+                title: "¿Estás segur@ de que quieres eliminar la reseña?",
+                text: "No podrás revertir esto",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#6E32D5",
+                cancelButtonColor: "#d33333",
+                confirmButtonText: "Eliminar reseña"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Reseña eliminada correctamente",
+                        icon: "success",
+                        confirmButtonText: "Aceptar",
+                        customClass: {
+                            title: 'swal-title',
+                            confirmButton: 'swal-confirm',
+                            icon: 'swal-icon'
+                        }
+                    }).then(() => {
+                        if (url) {
+                            window.location.href = url;
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+    // ===== MODAL DE ELIMINAR PELÍCULA =====
+    document.querySelectorAll('.eliminar-pelicula-btn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const url = this.getAttribute('href');
+
+            Swal.fire({
+                title: "¿Estás segur@ de que quieres eliminar la película?",
+                text: "No podrás revertir esto",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33333",
+                cancelButtonColor: "#999999",
+                cancelButtonText: "Cancelar",
+                confirmButtonText: "Eliminar película",
+                customClass: {
+                    title: 'swal-title',
+                    confirmButton: 'swal-confirm',
+                    icon: 'swal-icon'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Película eliminada correctamente",
+                        icon: "success",
+                        confirmButtonText: "Aceptar",
+                        customClass: {
+                            title: 'swal-title',
+                            confirmButton: 'swal-confirm',
+                            icon: 'swal-icon'
+                        }
+                    }).then(() => {
+                        if (url) {
+                            window.location.href = url;
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+</script>
 
 {% endblock %}

@@ -1,3 +1,5 @@
+from urllib import request
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.cache import never_cache
@@ -56,12 +58,30 @@ def add_movie(request):
 def pelicula(request, pelicula_id):
     pelicula = get_object_or_404(Pelicula, id=pelicula_id)
 
-    reseñas = Reseña.objects.filter(pelicula=pelicula).order_by('-fecha')
+    # Todas las reseñas ordenadas por fecha
+    reseñas_qs = Reseña.objects.filter(pelicula=pelicula).order_by('-fecha')
+
+    # Si el usuario tiene reseña, ponerla la primera
+    if request.user.is_authenticated:
+        propia = reseñas_qs.filter(usuario=request.user)
+        otras = reseñas_qs.exclude(usuario=request.user)
+        reseñas = list(propia) + list(otras)
+    else:
+        reseñas = list(reseñas_qs)
+
+
+    # Si hay reseña en edición
+    edit_id = request.session.get('edit_reseña_id')
+    reseña_editando = None
+    if edit_id:
+        reseña_editando = Reseña.objects.filter(id=edit_id, usuario=request.user).first()
 
     return render(request, "peliculas/pelicula.html", {
         "pelicula": pelicula,
         "reseñas": reseñas,
+        "reseña_editando": reseña_editando,
     })
+
 
 
 
@@ -72,29 +92,71 @@ def catalogo(request):
     return render(request, "peliculas/catalogo.html", {"peliculas": peliculas})
 
 
+
 # VISTA PUNTUACIÓN + RESEÑA
 @login_required
 def guardar_reseña(request, pelicula_id):
     pelicula = get_object_or_404(Pelicula, id=pelicula_id)
-    profile = request.user.profile
 
     if request.method == "POST":
-        puntuacion = request.POST.get("puntuacion")  # 1–5 o vacío
-        texto = request.POST.get("reseña")  # texto o vacío
+        puntuacion = request.POST.get("puntuacion")
+        texto = request.POST.get("reseña")
 
-        # Buscar si ya existe reseña del usuario
-        reseña, created = Reseña.objects.get_or_create(
-            usuario=request.user,
-            pelicula=pelicula,
-            defaults={"texto": texto, "puntuacion": puntuacion}
-        )
+        # ¿Está editando una reseña?
+        edit_id = request.session.get('edit_reseña_id')
 
-        if not created:
+        if edit_id:
+            # EDITAR reseña existente
+            reseña = get_object_or_404(Reseña, id=edit_id, usuario=request.user)
             reseña.texto = texto
             reseña.puntuacion = puntuacion
             reseña.save()
 
+            # Limpiar estado de edición
+            del request.session['edit_reseña_id']
+
+        else:
+            # CREAR reseña nueva (tu lógica original)
+            reseña, created = Reseña.objects.get_or_create(
+                usuario=request.user,
+                pelicula=pelicula,
+                defaults={"texto": texto, "puntuacion": puntuacion}
+            )
+
+            if not created:
+                reseña.texto = texto
+                reseña.puntuacion = puntuacion
+                reseña.save()
+
         return redirect("pelicula", pelicula_id=pelicula.id)
+
+
+
+# VISTA EDITAR RESEÑA
+@login_required
+def editar_reseña(request, reseña_id):
+    reseña = get_object_or_404(Reseña, id=reseña_id, usuario=request.user)
+    
+    # Guardamos en sesión qué reseña se está editando
+    request.session['edit_reseña_id'] = reseña.id
+    
+    return redirect("pelicula", pelicula_id=reseña.pelicula.id)
+
+
+# VISTA CANCELAR EDITAR RESEÑA
+@login_required
+def cancelar_edicion_reseña(request, pelicula_id):
+    request.session.pop('edit_reseña_id', None)
+    return redirect("pelicula", pelicula_id=pelicula_id)
+
+
+# VISTA ELIMINAR RESEÑA
+@login_required
+def eliminar_reseña(request, reseña_id):
+    reseña = get_object_or_404(Reseña, id=reseña_id, usuario=request.user)
+    pelicula_id = reseña.pelicula.id
+    reseña.delete()
+    return redirect("pelicula", pelicula_id=pelicula_id)
 
 
 # VISTA "ME GUSTA" A UNA RESEÑA
@@ -113,17 +175,40 @@ def like_reseña(request, reseña_id):
     return redirect("pelicula", pelicula_id=reseña.pelicula.id)
 
 
+# VISTA EDITAR PELÍCULA
+@login_required
+def editar_pelicula(request, pelicula_id):
+    if not request.user.is_staff:
+        return redirect("home")
+
+    pelicula = get_object_or_404(Pelicula, id=pelicula_id)
+
+    if request.method == "POST":
+        pelicula.titulo = request.POST.get("titulo")
+        pelicula.director = request.POST.get("director")
+        pelicula.año = request.POST.get("año")
+        pelicula.duracion_min = request.POST.get("duracion_min")
+        pelicula.sinopsis = request.POST.get("sinopsis")
+        # etc...
+        pelicula.save()
+        return redirect("pelicula", pelicula_id=pelicula.id)
+
+    return render(request, "peliculas/editar_pelicula.html", {
+        "pelicula": pelicula
+    })
 
 
 
+# VISTA ELIMINAR PELÍCULA
+@login_required
+def eliminar_pelicula(request, pelicula_id):
+    if not request.user.is_staff:
+        return redirect("home")
 
+    pelicula = get_object_or_404(Pelicula, id=pelicula_id)
+    pelicula.delete()
 
-
-
-
-
-
-
+    return redirect("catalogo")
 
 
 
