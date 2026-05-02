@@ -99,24 +99,19 @@ def guardar_reseña(request, pelicula_id):
     pelicula = get_object_or_404(Pelicula, id=pelicula_id)
 
     if request.method == "POST":
-        puntuacion = request.POST.get("puntuacion")
+        puntuacion = request.POST.get("puntuacion") or None
         texto = request.POST.get("reseña")
 
-        # ¿Está editando una reseña?
         edit_id = request.session.get('edit_reseña_id')
 
         if edit_id:
-            # EDITAR reseña existente
             reseña = get_object_or_404(Reseña, id=edit_id, usuario=request.user)
             reseña.texto = texto
             reseña.puntuacion = puntuacion
             reseña.save()
-
-            # Limpiar estado de edición
             del request.session['edit_reseña_id']
 
         else:
-            # CREAR reseña nueva (tu lógica original)
             reseña, created = Reseña.objects.get_or_create(
                 usuario=request.user,
                 pelicula=pelicula,
@@ -129,6 +124,7 @@ def guardar_reseña(request, pelicula_id):
                 reseña.save()
 
         return redirect("pelicula", pelicula_id=pelicula.id)
+
 
 
 
