@@ -433,8 +433,7 @@
 
             {% if request.user.is_staff %}
             <div class="admin-movie-actions mt-3">
-                <!-- <a href="{% url 'editar_pelicula' pelicula.id %}" class="editar-pelicula-btn"> -->
-                <a href="#" class="editar-pelicula-btn">
+                <a href="{% url 'editar_pelicula' pelicula.id %}" class="editar-pelicula-btn">
                     <i class="bi bi-pencil-square"></i> Editar película
                 </a>
                 <a href="{% url 'eliminar_pelicula' pelicula.id %}" class="eliminar-pelicula-btn">
@@ -587,12 +586,7 @@
                             </a>
                             {% endif %}
 
-
                         </div>
-
-
-
-
 
                     </div>
                 </div>

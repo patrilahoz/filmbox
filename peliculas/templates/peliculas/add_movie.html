@@ -526,13 +526,16 @@
 <main>
     <div class="card-wrap">
         <div class="card">
-            <h1>AÑADIR PELÍCULA</h1>
+            <h1>{% if is_editing %}EDITAR PELÍCULA{% else %}AÑADIR PELÍCULA{% endif %}</h1>
 
             <div class="content">
 
 
-                <form class="form" id="addMovieForm" method="POST" enctype="multipart/form-data">
+                <form class="form" id="addMovieForm" method="POST" enctype="multipart/form-data" action="{% if is_editing %}{% url 'editar_pelicula' pelicula.id %}{% else %}{% url 'add_movie' %}{% endif %}">
                     {% csrf_token %}
+                    <input type="hidden" name="remove_poster" id="removePosterInput" value="0">
+                    <input type="hidden" id="initialPosterExists" value="{% if pelicula and pelicula.poster %}1{% else %}0{% endif %}">
+                    <input type="hidden" id="existingPosterUrl" value="{% if pelicula and pelicula.poster %}{{ pelicula.poster.url }}{% endif %}">
 
                     <div class="form-content">
                         <!-- POSTER (left column) -->
@@ -564,7 +567,7 @@
                                 <label for="titulo">TÍTULO</label>
 
                                 <div class="field-wrapper">
-                                    <input type="text" id="titulo" name="titulo" placeholder="Añadir título">
+                                    <input type="text" id="titulo" name="titulo" placeholder="Añadir título" value="{% if pelicula %}{{ pelicula.titulo }}{% endif %}">
                                     <div class="error-msg" id="error-titulo"></div>
                                 </div>
                             </div>
@@ -575,7 +578,7 @@
                                 <label for="year">AÑO</label>
 
                                 <div class="field-wrapper">
-                                    <input type="number" id="año" name="año" placeholder="Añadir año">
+                                    <input type="number" id="año" name="año" placeholder="Añadir año" value="{% if pelicula %}{{ pelicula.año }}{% endif %}">
                                     <div class="error-msg" id="error-año"></div>
                                 </div>
                             </div>
@@ -586,7 +589,7 @@
                                 <label for="director">DIRECTOR</label>
 
                                 <div class="field-wrapper">
-                                    <input type="text" id="director" name="director" placeholder="Añadir director">
+                                    <input type="text" id="director" name="director" placeholder="Añadir director" value="{% if pelicula %}{{ pelicula.director }}{% endif %}">
                                     <div class="error-msg" id="error-director"></div>
                                 </div>
                             </div>
@@ -598,7 +601,7 @@
 
                                 <div class="field-wrapper">
                                     <input type="number" id="duracion_min" name="duracion_min"
-                                        placeholder="Añadir duración">
+                                        placeholder="Añadir duración" value="{% if pelicula %}{{ pelicula.duracion_min }}{% endif %}">
                                     <div class="error-msg" id="error-duracion"></div>
                                 </div>
                             </div>
@@ -610,7 +613,7 @@
 
                                 <div class="field-wrapper">
                                     <textarea id="reparto_info" name="reparto_info"
-                                        placeholder="Añadir reparto"></textarea>
+                                        placeholder="Añadir reparto">{% if pelicula %}{{ pelicula.reparto_info }}{% endif %}</textarea>
                                     <div class="error-msg" id="error-reparto"></div>
                                 </div>
                             </div>
@@ -623,7 +626,7 @@
                                 <div class="field-wrapper">
                                     <div class="multi-select" id="genreSelect">
                                         <div class="select-btn" id="genreSelectBtn">
-                                            Seleccionar géneros
+                                            <span id="genreSelectLabel">Seleccionar géneros</span>
                                             <i class="bi bi-caret-down-fill"
                                                 style="font-size: 0.75rem; margin-right: 3px;"></i>
                                         </div>
@@ -632,7 +635,7 @@
                                             {% for genero in form.generos.field.queryset %}
                                             <label class="option">
                                                 <input type="checkbox" class="check-generos" name="generos"
-                                                    value="{{ genero.id }}">
+                                                    value="{{ genero.id }}" {% if is_editing and genero.id in selected_generos %}checked{% endif %}>
                                                 <span>{{ genero.nombre }}</span>
                                             </label>
                                             {% endfor %}
@@ -649,7 +652,7 @@
                                 <label for="sinopsis">SINOPSIS</label>
 
                                 <div class="field-wrapper">
-                                    <textarea id="sinopsis" name="sinopsis" placeholder="Añadir sinopsis"></textarea>
+                                    <textarea id="sinopsis" name="sinopsis" placeholder="Añadir sinopsis">{% if pelicula %}{{ pelicula.sinopsis }}{% endif %}</textarea>
                                     <div class="error-msg" id="error-sinopsis"></div>
                                 </div>
                             </div>
@@ -660,7 +663,7 @@
                     <div class="actions">
                         <button type="submit" class="add-btn">
                             <i class="bi bi-save" style="font-size: 1.2rem; margin-right: 6px;"></i>
-                            GUARDAR
+                            {% if is_editing %}ACTUALIZAR{% else %}GUARDAR{% endif %}
                         </button>
                     </div>
 
@@ -679,8 +682,22 @@
     // ============================
     document.addEventListener("DOMContentLoaded", () => {
         const btn = document.getElementById("genreSelectBtn");
+        const label = document.getElementById("genreSelectLabel");
         const dropdown = document.getElementById("genreDropdown");
         const wrapper = document.getElementById("genreSelect");
+        const existingPosterUrl = document.getElementById('existingPosterUrl').value;
+
+        function updateGenreButtonText() {
+            const checked = [...dropdown.querySelectorAll("input[type='checkbox']:checked")];
+
+            if (checked.length === 0) {
+                label.textContent = "Seleccionar géneros";
+            } else if (checked.length === 1) {
+                label.textContent = checked[0].parentElement.textContent.trim();
+            } else {
+                label.textContent = `${checked.length} géneros seleccionados`;
+            }
+        }
 
         // Abrir/cerrar menú
         btn.addEventListener("click", (e) => {
@@ -696,17 +713,13 @@
         });
 
         // Actualizar texto del botón según selección
-        dropdown.addEventListener("change", () => {
-            const checked = [...dropdown.querySelectorAll("input[type='checkbox']:checked")];
+        dropdown.addEventListener("change", updateGenreButtonText);
 
-            if (checked.length === 0) {
-                btn.textContent = "Seleccionar géneros";
-            } else if (checked.length === 1) {
-                btn.textContent = checked[0].parentElement.textContent.trim();
-            } else {
-                btn.textContent = `${checked.length} géneros seleccionados`;
-            }
-        });
+        updateGenreButtonText();
+
+        if (existingPosterUrl) {
+            showExistingPreview(existingPosterUrl);
+        }
     });
 
     // ============================
@@ -726,6 +739,18 @@
         if (uploadLabel) uploadLabel.style.display = 'inline-flex';
     }
 
+    function showExistingPreview(url) {
+        const img = document.createElement('img');
+        img.alt = 'Movie Poster';
+        img.src = url;
+
+        thumbInner.innerHTML = '';
+        thumbInner.appendChild(img);
+
+        if (removeBtn) removeBtn.style.display = 'inline-block';
+        if (uploadLabel) uploadLabel.style.display = 'none';
+    }
+
     function showPreview(file) {
         const img = document.createElement('img');
         img.alt = 'Movie Poster';
@@ -740,7 +765,11 @@
 
     posterInput.addEventListener('change', (e) => {
         const file = e.target.files && e.target.files[0];
-        if (!file) return clearPreview();
+        if (!file) {
+            clearPreview();
+            document.getElementById('removePosterInput').value = '0';
+            return;
+        }
 
         if (!file.type.startsWith('image/')) {
             alert('Por favor selecciona una imagen válida.');
@@ -748,11 +777,13 @@
             return;
         }
 
+        document.getElementById('removePosterInput').value = '0';
         showPreview(file);
     });
 
     removeBtn.addEventListener('click', () => {
         posterInput.value = '';
+        document.getElementById('removePosterInput').value = '1';
         clearPreview();
     });
 
@@ -771,7 +802,11 @@
 
         // ===== VALIDAR POSTER =====
         const poster = document.getElementById("posterInput");
-        if (!poster.files || poster.files.length === 0) {
+        const posterSelected = poster.files && poster.files.length > 0;
+        const initialPosterExists = document.getElementById("initialPosterExists").value === '1';
+        const removePoster = document.getElementById("removePosterInput").value === '1';
+
+        if (!posterSelected && (!initialPosterExists || removePoster)) {
             valid = false;
             document.getElementById("error-poster").textContent = "Debes subir un póster.";
         }
@@ -858,18 +893,8 @@
             document.getElementById("addMovieForm").submit();
         });
 
-
-
     });
 
-
-
-
-
-
-
-
 </script>
-
 
 {% endblock %}

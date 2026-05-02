@@ -182,6 +182,7 @@ def editar_pelicula(request, pelicula_id):
         return redirect("home")
 
     pelicula = get_object_or_404(Pelicula, id=pelicula_id)
+    form = PeliculaForm()
 
     if request.method == "POST":
         pelicula.titulo = request.POST.get("titulo")
@@ -189,14 +190,31 @@ def editar_pelicula(request, pelicula_id):
         pelicula.año = request.POST.get("año")
         pelicula.duracion_min = request.POST.get("duracion_min")
         pelicula.sinopsis = request.POST.get("sinopsis")
-        # etc...
+        pelicula.reparto_info = request.POST.get("reparto_info")
+
+        poster_file = request.FILES.get("poster")
+        remove_poster = request.POST.get("remove_poster") == "1"
+
+        if poster_file:
+            pelicula.poster = poster_file
+        elif remove_poster and pelicula.poster:
+            pelicula.poster.delete(save=False)
+            pelicula.poster = None
+
         pelicula.save()
+
+        pelicula.generos.clear()
+        for genero_id in request.POST.getlist("generos"):
+            pelicula.generos.add(genero_id)
+
         return redirect("pelicula", pelicula_id=pelicula.id)
 
-    return render(request, "peliculas/editar_pelicula.html", {
-        "pelicula": pelicula
+    return render(request, "peliculas/add_movie.html", {
+        "form": form,
+        "pelicula": pelicula,
+        "is_editing": True,
+        "selected_generos": list(pelicula.generos.values_list("id", flat=True))
     })
-
 
 
 # VISTA ELIMINAR PELÍCULA
