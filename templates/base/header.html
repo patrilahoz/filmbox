@@ -1,39 +1,71 @@
 {% load static %}
 
 <header class="site-header">
+
+    <!-- LOGO -->
     <div class="logo-container">
         <a href="{% url 'home' %}">
             <img src="{% static 'img/logo_filmbox.png' %}" alt="Logo" class="logo-img">
         </a>
     </div>
 
+    <!-- MENÚ PRINCIPAL -->
+    <nav class="main-menu">
+        <a href="{% url 'home' %}">INICIO</a>
+        <a href="{% url 'catalogo' %}">PELÍCULAS</a>
+        <a href="#">LISTAS</a>
+    </nav>
+
     <div class="right-section">
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search" style="font-family: Arial;">
-            <button id="search-button">
-                <i class="bi bi-search"></i>
-            </button>
-        </div>
+
+        <!-- FOTO DE PERFIL -->
         <div class="profile-container">
             <a href="{% url 'perfil' %}">
                 <img src="{% static 'usuarios/img/avatar.png' %}" alt="Avatar" class="avatar-img">
             </a>
-
         </div>
+
+        <!-- Botón que despliega el menú -->
+        <button id="desplegable-menu-user-btn" class="desplegable-menu-user-btn">
+            <i class="bi bi-caret-down-fill"></i>
+        </button>
+
+        <!-- Contenedor del menú -->
+        <div id="menu-user" class="menu-user">
+            <div class="menu-item">
+                <i class="bi bi-person-circle" style="margin-right: 10px;"></i>
+                <a href="{% url 'perfil' %}">Mi perfil</a>
+            </div>
+            <div class="menu-item">
+                <i class="bi bi-pencil-square" style="margin-right: 10px;"></i>
+                <a href="{% url 'edit_profile' %}">Editar perfil</a>
+            </div>
+            <div class="menu-item logout-btn">
+                <i class="bi bi-box-arrow-right" style="margin-right: 10px;"></i>
+                <span>Cerrar sesión</span>
+                
+            </div>
+        </div>
+
     </div>
 </header>
 
 <script>
-    document.getElementById('search-button').addEventListener('click', function () {
-        const query = document.getElementById('search-input').value.trim();
-        if (query) {
-            window.location.href = `/search?q=${encodeURIComponent(query)}`;
-        }
-    });
+    document.addEventListener("DOMContentLoaded", () => {
+        const btnMenuUser = document.getElementById("desplegable-menu-user-btn");
+        const menuUser = document.getElementById("menu-user");
 
-    document.getElementById('search-input').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            document.getElementById('search-button').click();
-        }
+        btnMenuUser.addEventListener("click", (e) => {
+            e.stopPropagation(); // evita que el click burbujee al document
+            const visible = menuUser.style.display === "flex";
+            menuUser.style.display = visible ? "none" : "flex";
+        });
+
+        // Cerrar el menú si se hace clic fuera
+        document.addEventListener("click", (e) => {
+            if (!menuUser.contains(e.target) && !btnMenuUser.contains(e.target)) {
+                menuUser.style.display = "none";
+            }
+        });
     });
 </script>

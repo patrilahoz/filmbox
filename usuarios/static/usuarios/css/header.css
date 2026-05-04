@@ -1,125 +1,197 @@
+.site-header {
+    background-color: #191919;
+    height: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    overflow: visible;
+}
+
+
+/* LOGO */
+.logo-img {
+    max-height: 70px;
+    object-fit: contain;
+    margin-top: 5px;
+    margin-left: 50px;
+}
+
+.logo-container {
+    margin-right: auto;
+}
+
+
+
+/* MENÚ PRINCIPAL */
+.main-menu {
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    align-items: center;
+    margin-right: 40px;
+}
+
+
+.main-menu a {
+    font-family: 'Exo 2';
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 30px;
+    transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-menu a:hover {
+    color: #6E32D5;
+    transform: translateY(-2px) scale(1.05);
+    font-weight: 800;
+}
+
+
+
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+/* Foto de perfil */
+.avatar-img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+
+/* Botón del menú */
+.desplegable-menu-user-btn {
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    margin-left: 5px;
+    transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.desplegable-menu-user-btn:hover {
+    color: #6E32D5;
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* Contenedor del menú */
+.menu-user {
+    background: #373737;
+    font-family: 'Gantari';
+    color: white;
+    text-decoration: none;
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    width: 160px;
+    border: 1px solid #d0b3ff;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+/* Cada apartado del menú */
+.menu-item {
+    font-size: 16px;
+    font-weight: 400;
+    padding: 12px 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e5e5;
+    transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+/* Último ítem sin línea inferior */
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+/* Estilo del texto dentro del menú */
+.menu-user a,
+.menu-user span {
+    font-family: 'Gantari';
+    color: white;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+/* Hover del item */
+.menu-item:hover {
+    color: white;
+    background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.menu-item:hover a,
+.menu-item:hover span {
+    color: white;
+}
+
+
+
+
+
+
+
+/* Pantallas pequeñas */
+@media (max-width: 576px) {
     .site-header {
-        background-color: #191919;
-        height: auto;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #191919;
-        padding: 10px 20px;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
     }
 
     .logo-img {
-        max-height: 70px;
-        object-fit: contain;
-        margin-top: 5px;
-        margin-left: 50px;
+        max-height: 40px;
+        margin-left: 0;
+        margin-bottom: 10px;
     }
 
     .right-section {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        width: 100%;
+        justify-content: space-between;
     }
 
     .search-container {
-        background-color: #2a2a2a;
-        border-radius: 20px;
-        padding: 5px 15px;
-
-        font-size: 14px;
-        font-weight: 500;
-        font-family: 'Gantari';
-        color: var(--white);
-
-        transition:
-            border 0.55s cubic-bezier(0.33, 1, 0.68, 1),
-            transform 0.55s cubic-bezier(0.33, 1, 0.68, 1),
-            box-shadow 0.55s cubic-bezier(0.33, 1, 0.68, 1);
-    }
-
-    .search-container:hover {
-        border: 1px solid #d0b3ff;
-        transform: translateY(-0.5px) scale(1.008);
-        box-shadow: 0 4px 12px rgba(208, 179, 255, 0.15);
+        display: flex;
+        align-items: center;
+        width: auto;
+        padding: 5px 10px;
     }
 
     #search-input {
-        background-color: #2a2a2a;
-        border: none;
-        width: 200px;
-        padding: 5px;
-        outline: none;
-
-        font-size: 16px;
-        font-weight: 300;
-        font-family: 'Gantari' !important;
-        color: var(--white);
+        width: 120px;
     }
-
 
     #search-button {
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
-        padding: 0;
-        font-size: 1rem;
+        margin-left: 5px;
     }
-
-
 
     .avatar-img {
-        height: 40px;
-        width: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-        cursor: pointer;
-        margin-left: 20px;
+        height: 20px;
+        width: 20px;
+        border-radius: 100%;
     }
-
-
-    /* Pantallas pequeñas */
-
-    @media (max-width: 576px) {
-        .site-header {
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 10px;
-        }
-
-        .logo-img {
-            max-height: 40px;
-            margin-left: 0;
-            margin-bottom: 10px;
-        }
-
-        .right-section {
-            width: 100%;
-            justify-content: space-between;
-        }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-            width: auto;
-            padding: 5px 10px;
-        }
-
-        #search-input {
-            width: 120px;
-        }
-
-        #search-button {
-            margin-left: 5px;
-        }
-
-        .avatar-img {
-            height: 20px;
-            width: 20px;
-            border-radius: 100%;
-        }
-    }
+}
