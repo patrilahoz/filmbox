@@ -6,12 +6,34 @@ from django.views.decorators.cache import never_cache
 
 from peliculas.forms import PeliculaForm
 from .models import Pelicula, Genero, LikeReseña, Reseña
+from django.db.models import Max
 
 # VISTA HOME
 @login_required
 def home(request):
-    peliculas = Pelicula.objects.all()
-    return render(request, "peliculas/home.html", {"peliculas": peliculas})
+    # Obtener el año más reciente
+    ultimo_año = Pelicula.objects.aggregate(Max("año"))["año__max"]
+
+    # Películas recientes
+    peliculas_recientes = (
+        Pelicula.objects
+        .filter(año=ultimo_año)
+        .order_by('-id')[:7]
+    )
+
+    # Película destacada (id=36)
+    try:
+        destacada = Pelicula.objects.get(id=36)
+    except Pelicula.DoesNotExist:
+        destacada = None
+
+    return render(request, "peliculas/home.html", {
+        "peliculas": peliculas_recientes,
+        "destacada": destacada
+    })
+
+
+
 
 
 # VISTA AÑADIR PELÍCULA
@@ -230,7 +252,12 @@ def catalogo(request):
     if q:
         peliculas = peliculas.filter(titulo__icontains=q)
 
-    # Filtro por géneros (lista de IDs)
+    # Filtro por género desde home (ej: ?genero=Comedia)
+    genero_nombre = request.GET.get("genero")
+    if genero_nombre:
+        peliculas = peliculas.filter(generos__nombre__icontains=genero_nombre)
+
+    # Filtro por géneros (lista de IDs desde el desplegable)
     generos_seleccionados = request.GET.getlist("generos")
     if generos_seleccionados:
         peliculas = peliculas.filter(generos__id__in=generos_seleccionados).distinct()
@@ -243,7 +270,9 @@ def catalogo(request):
         "generos": generos,
         "generos_seleccionados": generos_seleccionados,
         "q": q,
+        "genero_nombre": genero_nombre,  # opcional para mostrar en el catálogo
     })
+
 
 
 

@@ -1,6 +1,7 @@
 {% extends "base/base.html" %}
+{% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -22,53 +23,27 @@
 
     body {
         margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: 'Gantari';
         background: var(--bg);
         color: var(--accent);
     }
 
-
-
-    /* Botón de catálogo */
-    .catalogo-btn-wrap {
-        display: flex;
-        justify-content: center;
-        margin: 60px 0;
+    main {
+        /* padding: 28px 20px 60px; */
+        padding: 0 0 60px;
     }
-
-
-    .catalogo-btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 1000px;
-        height: 80px;
-        background-color: #6E32D5;
-        color: white;
-        font-family: "Exo 2";
-        font-size: 40px;
-        font-weight: 700;
-        border-radius: 10px;
-        text-decoration: none;
-        transition: 0.25s ease;
-        letter-spacing: 0.5px;
-    }
-
-
-
-    .catalogo-btn:hover {
-        background-color: #7c3aed;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35);
-    }
-
 
     h2 {
-        color: #6E32D5;
+        font-family: 'Exo 2';
+        font-size: 28px;
+        font-weight: 600;
+        margin-top: 20px;
+    }
+
+    h3 {
+        color: white;
         padding: 12px 18px;
         margin: 18px auto;
-        border-radius: 8px;
-        border: 0;
         font-family: 'Exo 2';
         font-weight: 900;
         font-size: 70px;
@@ -80,711 +55,474 @@
         justify-content: center;
     }
 
-
-    h3 {
-        color: #6E32D5;
-        padding: 12px 18px;
-        margin: 18px auto;
-        border-radius: 8px;
-        border: 0;
-        font-family: 'Exo 2';
-        font-weight: 900;
-        font-size: 50px;
-        line-height: 1;
-        align-items: center;
-        gap: 10px;
-        text-align: center;
-        justify-content: center;
+    /* SECCIÓN DESTACADA */
+    .destacada {
+        position: relative;
+        padding: 120px 20px 120px;
+        overflow: hidden;
+        width: 100%;
     }
 
-    main {
-        padding: 28px 20px 60px
+    .destacada-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 30%;
+        z-index: 0;
+        pointer-events: none;
     }
 
-    .recent {
+    .destacada-inner {
+        position: relative;
+        z-index: 1;
         max-width: 1200px;
         margin: 0 auto;
-        text-align: center
-    }
-
-    .carousel-wrap {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 30px auto;
-    }
-
-    .carousel {
-        width: 920px;
-        height: 480px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        overflow: visible
-    }
-
-    .carousel .slide {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) translateZ(0);
-        width: 230px;
-        height: 350px;
-        border: 2px solid #444;
-        background: #1f1f1f;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent);
-        transition: transform .8s cubic-bezier(.16, .84, .24, 1), opacity .5s ease, box-shadow .45s;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, .55);
-        box-sizing: border-box;
-        padding: 14px;
-        will-change: transform, opacity;
-        transform-style: preserve-3d;
-        backface-visibility: hidden
-    }
-
-    .carousel .slide .title {
-        font-weight: 700;
-        padding: 12px 10px;
-        text-align: center
-    }
-
-    .carousel .slide.center {
-        width: 370px;
-        height: 490px;
-        border-color: #444;
-        z-index: 30;
-        transform: translate(-50%, -50%) translateZ(40px) scale(1.02);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, .7)
-    }
-
-    .carousel .slide.left {
-        transform: translate(-200%, -50%) translateZ(0) scale(.92);
-        opacity: 1;
-        z-index: 10
-    }
-
-    .carousel .slide.right {
-        transform: translate(120%, -50%) translateZ(0) scale(.92);
-        opacity: 1;
-        z-index: 10
-    }
-
-    .carousel .slide.left-2,
-    .carousel .slide.right-2,
-    .carousel .slide.hidden {
-        display: none;
-        opacity: 0;
-        pointer-events: none;
-        z-index: 0
-    }
-
-    .carousel-arrow {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 70;
-        border: none;
-        background: rgba(0, 0, 0, 0.35);
-        color: var(--muted);
-        font-size: 28px;
-        cursor: pointer;
-        padding: 10px 12px;
-        border-radius: 999px;
-        color: #D9BDFE;
-        transition: background 0.3s ease, color 0.3s ease;
-    }
-
-    .carousel-arrow:hover {
-        color: #6E32D5;
-        ;
-        background: rgba(0, 0, 0, 0.5);
-    }
-
-    .carousel-arrow.prev {
-        left: 8px
-    }
-
-    .carousel-arrow.next {
-        right: 8px
-    }
-
-    .carousel-dots {
-        margin-top: 36px;
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        justify-content: center
-    }
-
-    .carousel-dots button {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        border: none;
-        background: #D9BDFE;
-        cursor: pointer
-    }
-
-    .carousel-dots button.active {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background: #6E32D5;
-    }
-
-    .popular .carousel-wrap,
-    .favorites .carousel-wrap {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 20px 10;
-        overflow: hidden;
-        padding: 10px;
-    }
-
-    .popular .carousel,
-    .favorites .carousel {
-        position: relative;
-        width: 100%;
-        height: auto;
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 16px;
-        overflow: visible;
-        padding: 0;
-        margin: 0;
-        flex: 1
+        grid-template-columns: minmax(280px, 1.1fr) minmax(260px, 0.9fr);
+        gap: 40px;
+        align-items: center;
+
     }
 
-    .popular .carousel .slide,
-    .favorites .carousel .slide {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
+    .destacada-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: left;
+    }
+
+    /* TÍTULO Y SINOPSIS */
+    .destacada-title {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 70px;
+        font-weight: 800;
+        line-height: 1.02;
+        margin: 0 0 20px;
+        color: #ffffff;
+    }
+
+    .destacada-sinopsis {
+        font-size: 1.05rem;
+        line-height: 1.5;
+        margin: 0 0 28px;
+        color: rgba(255, 255, 255, 0.92);
+        max-width: 660px;
+    }
+
+    /* BOTÓN DE VER DETALLES */
+    .destacada-btn {
+        font-family: 'Exo 2';
+        font-weight: 400;
+        font-size: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        background: #6E32D5;
+        color: var(--white);
+        border-radius: 8px;
+        border: 0;
+        text-decoration: none;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        width: fit-content;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .destacada-btn:hover {
+        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        transform: translateY(-2px) scale(1.05);
+    }
+
+    /* PÓSTER DESTACADO */
+    .destacada-poster {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .destacada-poster img {
         width: 100%;
-        aspect-ratio: 9/14;
-        height: auto;
-        border: 2px solid #444;
-        background: #1f1f1f;
+        max-width: 340px;
+        /* max-width: 320px; */
+        aspect-ratio: 2 / 3;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    /* BOTÓN BANNER */
+    /* .destacada-banner{} */
+    .destacada-banner img {
+        width: 100%;
+        display: block;
+        border-radius: 24px;
+        object-fit: cover;
+    }
+
+    /* BOTÓN CATALOGO */
+    .tarjeta-catalogo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        /* background: linear-gradient(100deg, #D9BDFE 0%, #cca5ff 100%); */
+        background: linear-gradient(100deg, #2e2e2e 0%, #262626 100%);
+        padding: 40px 40px;
+        border-radius: 12px;
+        max-width: 900px;
+        margin: 60px auto;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .tarjeta-catalogo-p {
+        font-size: 16px;
+        line-height: 1.5;
+        color: white;
+        text-align: center;
+        margin-top: 16px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    /* BOTÓN CATALOGO */
+    .catalogo-btn-wrap {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .catalogo-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 400px;
+        height: 70px;
+        background-color: #6E32D5;
+        color: white;
+        font-family: "Exo 2";
+        font-size: 30px;
+        font-weight: 600;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: 0.25s ease;
+        letter-spacing: 0.5px;
+    }
+
+    .catalogo-btn:hover {
+        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35);
+    }
+
+
+    /* GÉNEROS POPULARES */
+    .generos-populares {
+        margin: 50px;
+        text-align: center;
+    }
+
+    .generos-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        padding: 20px 130px 20px 130px;
+    }
+
+    .genero-card {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--accent);
-        transition: transform .3s ease, box-shadow .3s ease;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, .55);
-        box-sizing: border-box;
-        padding: 14px;
-        will-change: transform;
-        transform-style: preserve-3d;
-        backface-visibility: hidden;
-        cursor: pointer;
-        z-index: 1
+        width: 100%;
+        height: 140px;
+        border-radius: 10px;
+        font-family: 'Exo 2';
+        font-weight: 700;
+        font-size: 40px;
+        color: white;
+        text-decoration: none;
+        transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
-    .popular .carousel .slide:hover,
-    .favorites .carousel .slide:hover {
-        transform: scale(1.06);
-        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.25);
-        border-color: rgba(124, 58, 237, 0.35);
+    .genero-card:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
     }
 
-    .carousel .slide.center:hover {
-        transform: translate(-50%, -50%) translateZ(40px) scale(1.12);
-        box-shadow: 0 16px 48px rgba(124, 58, 237, 0.28);
-        border-color: rgba(124, 58, 237, 0.38);
-        z-index: 80;
+    /* Colores por género */
+    .fantasia {
+        background: #ef233c;
     }
 
-    .carousel .slide.left:hover {
-        transform: translate(-200%, -50%) translateZ(0) scale(0.98);
-        box-shadow: 0 10px 30px rgba(124, 58, 237, 0.20);
-        border-color: rgba(124, 58, 237, 0.32);
-        z-index: 40;
+    .fantasia:hover {
+        background: linear-gradient(100deg, #ef233c 0%, #780000 100%)
     }
 
-    .carousel .slide.right:hover {
-        transform: translate(120%, -50%) translateZ(0) scale(0.98);
-        box-shadow: 0 10px 30px rgba(124, 58, 237, 0.20);
-        border-color: rgba(124, 58, 237, 0.32);
-        z-index: 40;
+    .comedia {
+        background: #ffb400;
     }
 
-    .popular .carousel .slide.center,
-    .popular .carousel .slide.left,
-    .popular .carousel .slide.right,
-    .popular .carousel .slide.left-2,
-    .popular .carousel .slide.right-2,
-    .popular .carousel .slide.hidden,
-    .favorites .carousel .slide.center,
-    .favorites .carousel .slide.left,
-    .favorites .carousel .slide.right,
-    .favorites .carousel .slide.left-2,
-    .favorites .carousel .slide.right-2,
-    .favorites .carousel .slide.hidden {
-        position: relative;
-        transform: none;
-        opacity: 1;
-        display: flex;
-        z-index: 1
+    .comedia:hover {
+        background: linear-gradient(100deg, #ffb400 0%, #ffa500 100%)
     }
 
-    .popular .carousel-arrow,
-    .favorites .carousel-arrow {
-        position: relative;
-        top: auto;
-        transform: none;
-        z-index: 50;
-        align-self: center;
-        margin: 0 12px;
-        padding: 12px 16px;
-        font-size: 24px
+    .romance {
+        background: #FF6EB0
     }
 
-    .popular .carousel-dots,
-    .favorites .carousel-dots {
-        display: none
+    .romance:hover {
+        background: linear-gradient(100deg, #FF6EB0 0%, #FF3897 100%);
     }
 
-    @media (max-width: 1200px) {
+    .drama {
+        background: #0B478F;
+    }
 
-        .popular .carousel,
-        .favorites .carousel {
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px
+    .drama:hover {
+        background: linear-gradient(100deg, #0B478F 0%, #002854 100%)
+    }
+
+    .suspense {
+        background: #FF761F;
+    }
+
+    .suspense:hover {
+        background: linear-gradient(100deg, #FF761F 0%, #BF4B00 100%)
+    }
+
+    .aventura {
+        background: #3cb371;
+    }
+
+    .aventura:hover {
+        background: linear-gradient(100deg, #3cb371 0%, #289459 100%)
+    }
+
+
+    /* RESPONSIVIDAD PARA PANTALLAS MÁS PEQUEÑAS */
+    @media (max-width: 1024px) {
+
+        .destacada-inner {
+            grid-template-columns: 1fr 0.9fr;
+            gap: 25px;
+            max-width: 900px;
+        }
+
+        .destacada-title {
+            font-size: 52px;
+        }
+
+        .destacada-sinopsis {
+            font-size: 0.95rem;
+        }
+
+        .destacada-poster img {
+            max-width: 300px;
+        }
+
+
+        .tarjeta-catalogo {
+            padding: 30px 30px;
+            max-width: 700px;
+        }
+
+        .tarjeta-catalogo-p {
+            font-size: 15px;
+            padding: 0 15px;
+        }
+
+        .catalogo-btn {
+            width: 300px;
+            height: 60px;
+            font-size: 26px;
+        }
+
+        .generos-grid {
+            grid-template-columns: repeat(2, 1fr);
+            padding: 20px 60px;
+        }
+
+        .genero-card {
+            font-size: 32px;
+            height: 130px;
         }
     }
+
 
     @media (max-width: 768px) {
 
-        .popular .carousel,
-        .favorites .carousel {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px
-        }
-    }
 
-    @media (max-width: 520px) {
-
-        .popular .carousel,
-        .favorites .carousel {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px
-        }
-    }
-
-    @media (max-width:900px) {
-        .carousel {
-            width: 92%;
-            height: 320px
+        .destacada {
+            padding: 80px 20px;
         }
 
-        .carousel .slide.center {
-            width: 250px;
-            height: 350px
-        }
-
-        .carousel .slide {
-            width: 150px;
-            height: 230px
-        }
-
-        .catalogo-btn {
+        .destacada-inner {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            width: 800px;
-            height: auto;
-            background-color: #6E32D5;
-            color: white;
-            font-family: "Exo 2";
-            font-size: 24px;
-            font-weight: 600;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: 0.25s ease;
-            letter-spacing: 0.5px;
+            text-align: center;
+            gap: 25px;
         }
 
-        .bi-arrow-right {
-            font-size: 20px;
-            margin-left: 10px;
-        }
-    }
-
-    @media (max-width:520px) {
-        .header-inner {
-            padding-right: 12px
-        }
-
-        .search-form {
-            min-width: 180px
-        }
-
-        .logo {
-            padding: 12px 18px
-        }
-
-        .carousel {
-            height: 300px
-        }
-
-        .catalogo-btn {
-            display: flex;
-            justify-content: center;
+        .destacada-text {
+            text-align: center;
             align-items: center;
-            width: 300px;
-            height: auto;
-            background-color: #6E32D5;
-            color: white;
-            font-family: "Exo 2";
+        }
+
+        .destacada-title {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .destacada-sinopsis {
+            font-size: 0.95rem;
+            max-width: 90%;
+            margin-bottom: 10px;
+        }
+
+        .destacada-poster {
+            justify-content: center;
+        }
+
+        .destacada-poster img {
+            max-width: 260px;
+        }
+
+        .destacada-btn {
+            width: 100%;
+            max-width: 260px;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .tarjeta-catalogo {
+            padding: 30px 20px;
+            margin: 40px 30px;
+            max-width: 100%;
+        }
+
+        .tarjeta-catalogo-p {
             font-size: 16px;
-            font-weight: 600;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: 0.25s ease;
-            letter-spacing: 0.5px;
+            padding: 0 10px;
         }
 
-        .bi-arrow-right {
-            font-size: 20px;
-            margin-left: 10px;
+        .catalogo-btn {
+            width: 100%;
+            height: 60px;
+            font-size: 22px;
+            padding: 20px;
         }
+
+
+        .generos-grid {
+            grid-template-columns: 1fr;
+            padding: 20px 20px;
+        }
+
+        .genero-card {
+            font-size: 28px;
+            height: 120px;
+        }
+
+        h3 {
+            padding: 12px 18px;
+            margin: 18px auto;
+            font-weight: 800;
+            font-size: 50px;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+
+        }
+
     }
 </style>
 {% endblock %}
 
 {% block content %}
-
 <main>
-    <section class="recent">
-        <h2>LO MÁS RECIENTE</h2>
+    <!-- SECCIÓN PELÍCULA DESTACADA -->
+    <section class="destacada">
+        <!-- Banner -->
+        <img class="destacada-bg" src="/media/posters/banner-tdwp2.jpg" alt="Banner película destacada">
 
-        <div class="carousel-wrap">
-            <button class="carousel-arrow prev" aria-label="Anterior">‹</button>
-
-            <div class="carousel" id="carousel">
-                {% for p in peliculas %}
-                <div class="slide">
-                    <a href="{% url 'pelicula' p.id %}">
-                        <img src="{{ p.poster_url }}" alt="{{ p.titulo }}">
-                        <h3>{{ p.titulo }}</h3>
-                        <p>{{ p.director }} ({{ p.año }})</p>
-                    </a>
-                </div>
-                {% endfor %}
+        <div class="destacada-inner">
+            <div class="destacada-text">
+                <h2 class="destacada-title">{{ destacada.titulo }}</h2>
+                <p class="destacada-sinopsis">{{ destacada.sinopsis }}</p>
+                <a class="destacada-btn" href="{% url 'pelicula' destacada.id %}">VER DETALLES</a>
             </div>
 
-            <button class="carousel-arrow next" aria-label="Siguiente">›</button>
+            <div class="destacada-poster">
+                <img class="destacada-poster-img" src="{{ destacada.poster.url }}"
+                    alt="Póster de {{ destacada.titulo }}">
+            </div>
         </div>
-
-        <div class="carousel-dots" id="dots"></div>
     </section>
 
+    <!-- TARJETA CATALOGO PELÍCULAS -->
+    <div class="tarjeta-catalogo">
+        <i class="bi bi-film" style="font-size: 40px;"></i>
 
-    <!-- BOTÓN CATALOGO PELÍCULAS-->
-    <div class="catalogo-btn-wrap">
-        <a href="{% url 'catalogo' %}" class="catalogo-btn">
-            VER CATÁLOGO DE PELÍCULAS
-            <i class="bi bi-arrow-right" style="font-size: 40px; margin-left: 20px;"></i>
-        </a>
+        <h2>Explora nuestro catálogo de películas</h2>
+        <p class="tarjeta-catalogo-p">Descubre una amplia selección de películas para todos los gustos. Desde clásicos
+            atemporales hasta los últimos estrenos, nuestro catálogo tiene algo para cada cinéfilo.</p>
+
+        <!-- Botón Catálogo -->
+        <div class="catalogo-btn-wrap">
+            <a href="{% url 'catalogo' %}" class="catalogo-btn">
+                VER CATÁLOGO
+                <i class="bi bi-arrow-right" style="font-size: 30px; margin-left: 20px;"></i>
+            </a>
+        </div>
     </div>
 
 
-    <section class="popular">
-        <h3>LAS MÁS POPULARES</h3>
+    <!-- SECCIÓN GÉNEROS POPULARES -->
+    <section class="generos-populares">
+        <h3>GÉNEROS POPULARES</h3>
 
-        <div class="carousel-wrap">
-            <button class="carousel-arrow prev" data-carousel="popular" aria-label="Anterior">‹</button>
+        <div class="generos-grid">
 
-            <div class="carousel" id="carousel-popular">
-                {% for pelicula in peliculas %}
-                <div class="slide">
-                    <a href="{% url 'pelicula' pelicula.id %}">
-                        <img src="{{ pelicula.poster_url }}" alt="{{ pelicula.titulo }}">
-                        <h3>{{ pelicula.titulo }}</h3>
-                        <p>{{ pelicula.director }} ({{ pelicula.año }})</p>
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
+            <a href="{% url 'catalogo' %}?genero=Fantasía" class="genero-card fantasia">
+                <span>Fantasía</span>
+            </a>
 
-            <button class="carousel-arrow next" data-carousel="popular" aria-label="Siguiente">›</button>
+            <a href="{% url 'catalogo' %}?genero=Comedia" class="genero-card comedia">
+                <span>Comedia</span>
+            </a>
+
+            <a href="{% url 'catalogo' %}?genero=Romance" class="genero-card romance">
+                <span>Romance</span>
+            </a>
+
+            <a href="{% url 'catalogo' %}?genero=Drama" class="genero-card drama">
+                <span>Drama</span>
+            </a>
+
+            <a href="{% url 'catalogo' %}?genero=Suspense" class="genero-card suspense">
+                <span>Suspense</span>
+            </a>
+
+            <a href="{% url 'catalogo' %}?genero=Aventura" class="genero-card aventura">
+                <span>Aventura</span>
+            </a>
+
         </div>
     </section>
 
 
-    <section class="favorites">
-        <h3>LAS FAVORITAS</h3>
 
-        <div class="carousel-wrap">
-            <button class="carousel-arrow prev" data-carousel="favorites" aria-label="Anterior">‹</button>
 
-            <div class="carousel" id="carousel-favorites">
-                {% for pelicula in peliculas %}
-                <div class="slide">
-                    <a href="{% url 'pelicula' pelicula.id %}">
-                        <img src="{{ pelicula.poster_url }}" alt="{{ pelicula.titulo }}">
-                        <h3>{{ pelicula.titulo }}</h3>
-                        <p>{{ pelicula.director }} ({{ pelicula.año }})</p>
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
-
-            <button class="carousel-arrow next" data-carousel="favorites" aria-label="Siguiente">›</button>
-        </div>
-    </section>
 </main>
 
-
-
 <script>
-    // === DATA ===
-    const recentMovies = [
-        { id: 1, title: 'Frankenstein' },
-        { id: 2, title: 'Midnight Runner' },
-        { id: 3, title: 'Crimson Dawn' },
-        { id: 4, title: 'Quiet Harbor' },
-        { id: 5, title: 'Broken Compass' },
-        { id: 6, title: 'Neon Skies' },
-        { id: 7, title: 'Last Horizon' }
-    ];
-
-    const popularMovies = [
-        { id: 8, title: 'The Shawshank Redemption' },
-        { id: 9, title: 'Inception' },
-        { id: 10, title: 'The Dark Knight' },
-        { id: 11, title: 'Pulp Fiction' },
-        { id: 12, title: 'Forrest Gump' },
-        { id: 13, title: 'The Matrix' },
-        { id: 14, title: 'Gladiator' }
-    ];
-
-    const favoritesMovies = [
-        { id: 15, title: 'Interstellar' },
-        { id: 16, title: 'The Godfather' },
-        { id: 17, title: 'Titanic' },
-        { id: 18, title: 'Avatar' },
-        { id: 19, title: 'Avengers' },
-        { id: 20, title: 'Parasite' },
-        { id: 21, title: 'Dune' }
-    ];
-
-    // === CAROUSEL STATE ===
-    const carousels = {
-        recent: { movies: recentMovies, currentList: [...recentMovies], currentIndex: 0, autoplayId: null },
-        popular: { movies: popularMovies, currentList: [...popularMovies], offset: 0 },
-        favorites: { movies: favoritesMovies, currentList: [...favoritesMovies], offset: 0 }
-    };
-
-    // === HELPER: GET ELEMENTS FOR A CAROUSEL ===
-    function getCarouselElements(name) {
-        const suffix = name === 'recent' ? '' : `-${name}`;
-        return {
-            carousel: document.getElementById(`carousel${suffix}`),
-            dotsWrap: document.getElementById(`dots${suffix}`),
-            prevBtn: document.querySelector(`.carousel-arrow.prev[data-carousel="${name === 'recent' ? '' : name}"]`)
-                || (name === 'recent' ? document.querySelector('.carousel-arrow.prev:not([data-carousel])') : null),
-            nextBtn: document.querySelector(`.carousel-arrow.next[data-carousel="${name === 'recent' ? '' : name}"]`)
-                || (name === 'recent' ? document.querySelector('.carousel-arrow.next:not([data-carousel])') : null)
-        };
-    }
-
-    // === RENDER CAROUSEL ===
-    function renderCarousel(name) {
-        const state = carousels[name];
-        const els = getCarouselElements(name);
-        els.carousel.innerHTML = '';
-        if (els.dotsWrap) els.dotsWrap.innerHTML = '';
-
-        if (state.currentList.length === 0) {
-            const empty = document.createElement('div');
-            empty.className = 'slide center';
-            empty.innerHTML = '<div class="title">No results</div>';
-            els.carousel.appendChild(empty);
-            return;
-        }
-
-        // For grid carousels (popular, favorites), show all movies
-        if (name !== 'recent') {
-            state.currentList.forEach((m, idx) => {
-                const slide = document.createElement('div');
-                slide.className = 'slide';
-                slide.dataset.index = idx;
-                slide.innerHTML = `<div class="title">${m.title}</div>`;
-                slide.addEventListener('click', () => {
-                    window.location.href = '/pelicula/';
-                });
-
-                els.carousel.appendChild(slide);
-            });
-            return;
-        }
-
-        // For recent carousel, use carousel positioning logic
-        state.currentList.forEach((m, idx) => {
-            const slide = document.createElement('div');
-            slide.className = 'slide';
-            slide.dataset.index = idx;
-            slide.innerHTML = `<div class="title">${m.title}</div>`;
-            slide.addEventListener('click', () => {
-                window.location.href = '/pelicula/';
-            });
-
-            els.carousel.appendChild(slide);
-
-            const dot = document.createElement('button');
-            dot.title = m.title;
-            dot.addEventListener('click', () => { goTo(name, idx); });
-            els.dotsWrap.appendChild(dot);
-        });
-
-        updatePositions(name);
-    }
-
-    // === UPDATE POSITIONS ===
-    function updatePositions(name) {
-        // Grid carousels don't need positioning logic
-        if (name !== 'recent') return;
-
-        const state = carousels[name];
-        const els = getCarouselElements(name);
-        const slides = Array.from(els.carousel.children);
-        slides.forEach(s => s.classList.remove('left', 'left-2', 'center', 'right', 'right-2', 'hidden'));
-
-        if (slides.length === 0) return;
-
-        const len = slides.length;
-        const center = state.currentIndex;
-        const left = (center - 1 + len) % len;
-        const right = (center + 1) % len;
-        const left2 = (center - 2 + len) % len;
-        const right2 = (center + 2) % len;
-
-        slides.forEach((s, i) => {
-            if (i === center) s.classList.add('center');
-            else if (i === left) s.classList.add('left');
-            else if (i === right) s.classList.add('right');
-            else if (i === left2) s.classList.add('left-2');
-            else if (i === right2) s.classList.add('right-2');
-            else s.classList.add('hidden');
-        });
-
-        const dots = Array.from(els.dotsWrap.children);
-        dots.forEach(d => d.classList.remove('active'));
-        if (dots[state.currentIndex]) dots[state.currentIndex].classList.add('active');
-    }
-
-    // === CAROUSEL CONTROLS ===
-    function prev(name) {
-        const state = carousels[name];
-        if (name === 'recent') {
-            state.currentIndex = (state.currentIndex - 1 + state.currentList.length) % state.currentList.length;
-            updatePositions(name);
-        } else {
-            // For grid carousels, scroll left (reduce offset)
-            state.offset = Math.max(0, state.offset - 1);
-            scrollCarousel(name);
-        }
-    }
-
-    function next(name) {
-        const state = carousels[name];
-        if (name === 'recent') {
-            state.currentIndex = (state.currentIndex + 1) % state.currentList.length;
-            updatePositions(name);
-        } else {
-            // For grid carousels, scroll right (increase offset)
-            const maxOffset = Math.max(0, state.currentList.length - 7);
-            state.offset = Math.min(maxOffset, state.offset + 1);
-            scrollCarousel(name);
-        }
-    }
-
-    function scrollCarousel(name) {
-        const els = getCarouselElements(name);
-        const slides = Array.from(els.carousel.children);
-        slides.forEach((slide, idx) => {
-            slide.style.order = idx;
-        });
-        // Scroll effect via CSS transform
-        els.carousel.style.transform = `translateX(${-carousels[name].offset * (100 / 7)}%)`;
-    }
-
-    function goTo(name, i) {
-        const state = carousels[name];
-        state.currentIndex = Math.max(0, Math.min(i, state.currentList.length - 1));
-        updatePositions(name);
-        resetAutoplay(name);
-    }
-
-    // === AUTOPLAY ===
-    function startAutoplay(name) {
-        stopAutoplay(name);
-        const state = carousels[name];
-        state.autoplayId = setInterval(() => { next(name); }, 4000);
-    }
-
-    function stopAutoplay(name) {
-        const state = carousels[name];
-        if (state.autoplayId) { clearInterval(state.autoplayId); state.autoplayId = null; }
-    }
-
-    function resetAutoplay(name) { startAutoplay(name); }
-
-    // === EVENT LISTENERS ===
-    function setupCarouselEvents(name) {
-        const els = getCarouselElements(name);
-        if (els.prevBtn) els.prevBtn.addEventListener('click', () => { prev(name); if (name === 'recent') resetAutoplay(name); });
-        if (els.nextBtn) els.nextBtn.addEventListener('click', () => { next(name); if (name === 'recent') resetAutoplay(name); });
-
-        // Only add mouse events to recent carousel (it has autoplay)
-        if (name === 'recent') {
-            els.carousel.addEventListener('mouseenter', () => stopAutoplay(name));
-            els.carousel.addEventListener('mouseleave', () => startAutoplay(name));
-        }
-    }
-
-    // === SEARCH (only for recent carousel) ===
-    // The markup in this file uses an input with id 'search-input' (hyphen).
-    // Try both ids and only attach listener if a form exists to avoid runtime errors
-    const searchForm = document.getElementById('searchForm');
-    const searchInput = document.getElementById('searchInput') || document.getElementById('search-input');
-
-    if (searchForm && searchInput) {
-        searchForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const q = searchInput.value.trim().toLowerCase();
-            const state = carousels.recent;
-            if (!q) {
-                state.currentList = [...recentMovies];
-                state.currentIndex = 0;
-            } else {
-                state.currentList = recentMovies.filter(m => m.title.toLowerCase().includes(q));
-                state.currentIndex = 0;
-            }
-            renderCarousel('recent');
-            resetAutoplay('recent');
-        });
-    }
-
-    // === INITIALIZE ALL CAROUSELS ===
-    renderCarousel('recent');
-    renderCarousel('popular');
-    renderCarousel('favorites');
-
-    setupCarouselEvents('recent');
-    setupCarouselEvents('popular');
-    setupCarouselEvents('favorites');
-
-    // Only autoplay for recent carousel
-    startAutoplay('recent');
 </script>
 {% endblock %}

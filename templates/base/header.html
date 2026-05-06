@@ -33,18 +33,18 @@
         <!-- Contenedor del menú -->
         <div id="menu-user" class="menu-user">
             <div class="menu-item">
-                <i class="bi bi-person-circle" style="margin-right: 10px;"></i>
+                <i class="bi bi-person-circle" style="margin-right: 8px;"></i>
                 <a href="{% url 'perfil' %}">Mi perfil</a>
             </div>
             <div class="menu-item">
                 <i class="bi bi-pencil-square" style="margin-right: 10px;"></i>
                 <a href="{% url 'edit_profile' %}">Editar perfil</a>
             </div>
-            <div class="menu-item logout-btn">
-                <i class="bi bi-box-arrow-right" style="margin-right: 10px;"></i>
-                <span>Cerrar sesión</span>
-                
-            </div>
+            <a href="{% url 'logout' %}" class="menu-item logout-btn">
+    <i class="bi bi-box-arrow-right" style="margin-right: 10px;"></i>
+    Cerrar sesión
+</a>
+
         </div>
 
     </div>
