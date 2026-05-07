@@ -11,14 +11,10 @@ from django.db.models import Max
 # VISTA HOME
 @login_required
 def home(request):
-    # Obtener el año más reciente
-    ultimo_año = Pelicula.objects.aggregate(Max("año"))["año__max"]
-
-    # Películas recientes
+    # Obtener las 10 películas más actuales (año más alto → más bajo)
     peliculas_recientes = (
         Pelicula.objects
-        .filter(año=ultimo_año)
-        .order_by('-id')[:7]
+        .order_by('-año', '-id')[:10]
     )
 
     # Película destacada (id=36)
@@ -31,6 +27,8 @@ def home(request):
         "peliculas": peliculas_recientes,
         "destacada": destacada
     })
+
+
 
 
 
@@ -66,7 +64,7 @@ def add_movie(request):
         for genero_id in genres:
             pelicula.generos.add(genero_id)
 
-        return redirect("home")
+        return redirect("catalogo")
 
     # Si GET → mostrar formulario
     return render(request, "peliculas/add_movie.html", {

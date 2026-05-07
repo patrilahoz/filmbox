@@ -384,11 +384,12 @@
     <div class="card-wrap">
         <div class="card">
 
-            {% if genero_filtrado %}
-            <h1>Películas de {{ genero_filtrado }}</h1>
+            {% if genero_nombre %}
+            <h1 style="text-transform: uppercase">Películas de {{ genero_nombre }}</h1>
             {% else %}
             <h1>CATÁLOGO DE PELÍCULAS</h1>
             {% endif %}
+
 
             <div class="catalogo-toolbar">
                 <!-- BUSCADOR -->

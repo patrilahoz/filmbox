@@ -53,6 +53,12 @@
         gap: 10px;
         text-align: center;
         justify-content: center;
+        transition: color 0.3s ease;
+    }
+
+    h3:hover {
+        color: #6E32D5;
+        ;
     }
 
     /* SECCIÓN DESTACADA */
@@ -164,7 +170,12 @@
         object-fit: cover;
     }
 
-    /* BOTÓN CATALOGO */
+
+
+
+
+
+    /* TARJETA CATALOGO */
     .tarjeta-catalogo {
         display: flex;
         flex-direction: column;
@@ -219,6 +230,84 @@
         transform: translateY(-2px);
         box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35);
     }
+
+
+
+
+
+
+
+    /* LO ÚLTIMO */
+    .lo-ultimo {
+        margin: 50px 0;
+        text-align: center;
+    }
+
+    .slider-container {
+        position: relative;
+        overflow: visible;
+    }
+
+    .slider {
+        display: flex;
+        gap: 15px;
+        overflow: visible;
+        transition: transform 0.4s ease;
+    }
+
+    .lo-ultimo-item {
+        flex: 0 0 calc(16.66% - 15px);
+        /* 6 visibles */
+        aspect-ratio: 2 / 3;
+        border-radius: 8px;
+        overflow: hidden;
+        display: block;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    }
+
+    .lo-ultimo-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .lo-ultimo-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        border: 2px solid #d0b3ff;
+    }
+
+    .slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        border: none;
+        color: white;
+        font-size: 30px;
+        padding: 10px 15px;
+        cursor: pointer;
+        z-index: 10;
+        border-radius: 5px;
+    }
+
+    .slider-btn.left {
+        left: 0;
+    }
+
+    .slider-btn.right {
+        right: 0;
+    }
+
+    .slider-btn:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+
+
+
+
 
 
     /* GÉNEROS POPULARES */
@@ -485,6 +574,33 @@
     </div>
 
 
+
+    <!-- SECCIÓN LO ÚLTIMO -->
+    <section class="lo-ultimo">
+        <h3>LO ÚLTIMO</h3>
+
+        <div class="slider-container">
+            <button class="slider-btn left" id="btn-left">❮</button>
+
+            <div class="slider" id="slider">
+                {% for pelicula in peliculas %}
+                <a href="{% url 'pelicula' pelicula.id %}" class="lo-ultimo-item" data-title="{{ pelicula.titulo }}">
+                    <img src="{{ pelicula.poster.url }}" alt="{{ pelicula.titulo }}">
+                </a>
+                {% endfor %}
+            </div>
+
+            <button class="slider-btn right" id="btn-right">❯</button>
+        </div>
+
+    </section>
+
+
+
+
+
+
+
     <!-- SECCIÓN GÉNEROS POPULARES -->
     <section class="generos-populares">
         <h3>GÉNEROS POPULARES</h3>
@@ -524,5 +640,32 @@
 </main>
 
 <script>
+    // SECCIÓN LO ÚLTIMO - FUNCIONALIDAD DE CARRUSEL
+    document.addEventListener("DOMContentLoaded", () => {
+        const slider = document.getElementById("slider");
+        const btnLeft = document.getElementById("btn-left");
+        const btnRight = document.getElementById("btn-right");
+
+        const itemWidth = slider.querySelector(".lo-ultimo-item").offsetWidth + 15;
+        const visibleItems = 6;
+        const totalItems = slider.children.length;
+
+        let currentPosition = 0;
+
+        btnRight.addEventListener("click", () => {
+            if (currentPosition > -(itemWidth * (totalItems - visibleItems))) {
+                currentPosition -= itemWidth;
+                slider.style.transform = `translateX(${currentPosition}px)`;
+            }
+        });
+
+        btnLeft.addEventListener("click", () => {
+            if (currentPosition < 0) {
+                currentPosition += itemWidth;
+                slider.style.transform = `translateX(${currentPosition}px)`;
+            }
+        });
+    });
 </script>
+
 {% endblock %}
