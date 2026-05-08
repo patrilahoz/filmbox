@@ -6,18 +6,22 @@ from django.views.decorators.cache import never_cache
 
 from peliculas.forms import PeliculaForm
 from .models import Pelicula, Genero, LikeReseña, Reseña
-from django.db.models import Max
+from django.db.models import Max, Count
 
 # VISTA HOME
 @login_required
 def home(request):
-    # Obtener las 10 películas más actuales (año más alto → más bajo)
     peliculas_recientes = (
         Pelicula.objects
         .order_by('-año', '-id')[:10]
     )
 
-    # Película destacada (id=36)
+    tendencias = (
+        Pelicula.objects
+        .annotate(num_resenas=Count("reseña"))
+        .order_by('-num_resenas')[:10]
+    )
+
     try:
         destacada = Pelicula.objects.get(id=36)
     except Pelicula.DoesNotExist:
@@ -25,8 +29,10 @@ def home(request):
 
     return render(request, "peliculas/home.html", {
         "peliculas": peliculas_recientes,
+        "tendencias": tendencias,
         "destacada": destacada
     })
+
 
 
 
