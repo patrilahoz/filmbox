@@ -27,6 +27,9 @@ urlpatterns = [
 
     # Rutas principales de la app
     path('', include('peliculas.urls')),
+
+    # Listas personalizadas
+    path('listas/', include('listas.urls')),
 ]
 
 if settings.DEBUG:

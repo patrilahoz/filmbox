@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from .forms import ProfileForm
-from peliculas.models import Reseña
+from peliculas.models import Reseña, Pelicula
+from listas.models import Lista
 
 User = get_user_model()
 
@@ -77,42 +78,64 @@ def logout_view(request):
 # PERFIL
 @login_required
 def perfil(request):
+    qs = (Lista.objects
+          .filter(usuario=request.user)
+          .prefetch_related('items__pelicula')
+          .order_by('-fecha_creacion'))
+    mis_listas = []
+    for lista in qs:
+        all_items = list(lista.items.all())
+        mis_listas.append({
+            'lista': lista,
+            'preview': all_items[:3],
+            'count': len(all_items),
+        })
+    ctx = {'mis_listas': mis_listas}
     if request.user.is_staff:
-        return render(request, "usuarios/perfil_admin.html")
-    return render(request, "usuarios/perfil_user.html")
+        return render(request, "usuarios/perfil_admin.html", ctx)
+    return render(request, "usuarios/perfil_user.html", ctx)
 
 
 # EDITAR PERFIL
 @login_required
 def edit_profile(request):
     profile = request.user.profile
+    peliculas = Pelicula.objects.all().order_by('titulo')
 
     if request.method == 'POST':
         name = request.POST.get('name')
         description = request.POST.get('description')
         image = request.FILES.get('profile_image')
 
-        # Validación básica (ya la haces en JS, pero por si acaso)
         if not name or not description:
             return render(request, 'usuarios/edit_profile.html', {
                 'form': ProfileForm(instance=profile),
+                'peliculas': peliculas,
                 'error': 'Debes rellenar todos los campos.'
             })
 
-        # Guardar datos
         profile.name = name
         profile.description = description
 
         if image:
             profile.profile_image = image
 
-        profile.save()
+        for i in range(1, 5):
+            slot = f'fav{i}'
+            val = request.POST.get(slot, '').strip()
+            if val:
+                try:
+                    setattr(profile, slot, Pelicula.objects.get(pk=int(val)))
+                except (Pelicula.DoesNotExist, ValueError):
+                    setattr(profile, slot, None)
+            else:
+                setattr(profile, slot, None)
 
+        profile.save()
         return redirect('perfil')
 
-    # GET
     form = ProfileForm(instance=profile)
-    return render(request, 'usuarios/edit_profile.html', {'form': form})
+    return render(request, 'usuarios/edit_profile.html', {'form': form, 'peliculas': peliculas})
 
 
 # DIARIO

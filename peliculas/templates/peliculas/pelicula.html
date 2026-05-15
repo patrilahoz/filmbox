@@ -125,73 +125,219 @@
 
     .editar-pelicula-btn {
         flex: 1;
-        background: #D9BDFE;
-        color: black;
-        padding: 12px 18px;
-        border-radius: 8px;
+        background: #7c3aed;
+        color: #fff;
         border: 0;
+        padding: 11px 18px;
+        border-radius: 8px;
         font-family: 'Exo 2';
         font-weight: 600;
-        font-size: 16px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
+        font-size: 15px;
         cursor: pointer;
-        text-align: center;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        gap: 8px;
         text-decoration: none;
-        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
     }
 
     .eliminar-pelicula-btn {
         flex: 1;
-        background: #d33333;
-        color: white;
-        padding: 12px 18px;
-        border-radius: 8px;
+        background: #c0392b;
+        color: #fff;
         border: 0;
+        padding: 11px 18px;
+        border-radius: 8px;
         font-family: 'Exo 2';
         font-weight: 600;
-        font-size: 16px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
+        font-size: 15px;
         cursor: pointer;
-        text-align: center;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        gap: 8px;
         text-decoration: none;
-        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
     }
 
-    .editar-pelicula-btn:hover, .eliminar-pelicula-btn:hover {
-        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+    .editar-pelicula-btn:hover {
+        background: linear-gradient(100deg, #7c3aed 0%, #6E32D5 100%);
         color: white;
-        transform: translateY(-1px) scale(1.05);
+        transform: translateY(-1px);
     }
 
     .eliminar-pelicula-btn:hover {
-        background: linear-gradient(100deg, #d33333 0%, #a00000 100%);
+        background: linear-gradient(100deg, #c0392b 0%, #8b0000 100%);
         color: white;
-        transform: translateY(-1px) scale(1.05);
+        transform: translateY(-1px);
     }
 
+
+    /* AÑADIR A LISTA */
+    .anadir-lista-btn {
+        width: 100%;
+        margin-top: 12px;
+        background: rgba(110, 50, 213, 0.1);
+        color: #D9BDFE;
+        border: 1px solid rgba(110, 50, 213, 0.35);
+        padding: 11px 18px;
+        border-radius: 8px;
+        font-family: 'Exo 2';
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .anadir-lista-btn:hover {
+        background: rgba(110, 50, 213, 0.22);
+        border-color: rgba(110, 50, 213, 0.65);
+        color: #D9BDFE;
+        transform: translateY(-1px);
+    }
+
+    /* MODAL LISTAS */
+    #modalAnadirLista .modal-content {
+        background: #242424 !important;
+        border: 1px solid rgba(110, 50, 213, 0.45) !important;
+        border-radius: 16px !important;
+        color: #fafafa;
+    }
+
+    #modalAnadirLista .modal-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding: 18px 24px !important;
+    }
+
+    #modalAnadirLista .modal-title {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    #modalAnadirLista .btn-close {
+        filter: invert(1) opacity(0.6);
+    }
+
+    #modalAnadirLista .btn-close:hover {
+        filter: invert(1) opacity(1);
+    }
+
+    #modalAnadirLista .modal-body {
+        padding: 10px 12px 16px !important;
+        max-height: 420px;
+        overflow-y: auto;
+    }
+
+    .lista-option {
+        all: unset;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        width: 100%;
+        cursor: pointer;
+        border-radius: 9px;
+        font-family: 'Gantari';
+        font-size: 15px;
+        color: #ccc;
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .lista-option:hover {
+        background: rgba(110, 50, 213, 0.18);
+        color: #fff;
+    }
+
+    .lista-option.en-lista {
+        color: #b39ddb;
+    }
+
+    .lista-option.en-lista i {
+        color: #7c3aed;
+    }
+
+    .lista-option i {
+        font-size: 17px;
+        flex-shrink: 0;
+    }
+
+    .lista-option-desc {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .lista-option-name {
+        font-weight: 600;
+    }
+
+    .lista-option-count {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.35);
+    }
+
+    .no-listas-msg {
+        padding: 32px 16px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.35);
+        font-family: 'Gantari';
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .no-listas-msg i {
+        font-size: 36px;
+        display: block;
+        margin-bottom: 10px;
+        opacity: 0.3;
+    }
+
+    .no-listas-msg a {
+        color: #b39ddb;
+        text-decoration: none;
+    }
+
+    .no-listas-msg a:hover {
+        text-decoration: underline;
+    }
+
+
     /* BOTÓN CANCELAR EDICIÓN */
+    .review-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
     .cancel-edit-btn {
-        padding: 8px 14px;
-        background-color: #999;
-        color: white;
-        border-radius: 6px;
+        height: 36px;
+        padding: 0 14px;
+        background: rgba(211, 51, 51, 0.1);
+        color: #e57373;
+        border: 1px solid rgba(211, 51, 51, 0.35);
+        border-radius: 8px;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
-
+        gap: 7px;
+        font-family: 'Exo 2';
+        font-weight: 600;
+        font-size: 13px;
+        transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
     }
 
     .cancel-edit-btn:hover {
-        background-color: #777;
-        transform: translateY(-2px) scale(1.05);
+        background: rgba(211, 51, 51, 0.22);
+        border-color: rgba(211, 51, 51, 0.65);
+        color: #ef9a9a;
+        transform: translateY(-1px);
     }
 
     /* ESTRELLAS DE PUNTUACIÓN */
@@ -393,6 +539,8 @@
         -webkit-text-stroke-color: #6E32D5;
     }
 
+
+
     /* Estilos para SweetAlert2 */
     .swal-title {
         font-family: 'Gantari', sans-serif !important;
@@ -415,9 +563,6 @@
     .swal-icon .swal2-success-line-long {
         background-color: #6E32D5 !important;
     }
-
-
-
 </style>
 {% endblock %}
 
@@ -440,6 +585,12 @@
                 </a>
             </div>
             {% endif %}
+
+            <!-- AÑADIR A LISTA -->
+            <button type="button" class="anadir-lista-btn" data-bs-toggle="modal" data-bs-target="#modalAnadirLista">
+                <i class="bi bi-bookmark-plus"></i> Añadir a lista
+            </button>
+
         </div>
 
 
@@ -499,21 +650,17 @@
                         </div>
 
 
-                        {% if reseña_editando %}
-                        <a href="{% url 'cancelar_edicion_reseña' pelicula.id %}" class="cancel-edit-btn">
-                            <i class="bi bi-x-lg"></i>CANCELAR
-                        </a>
-                        {% endif %}
-
-
-
-
-                        <button class="save-btn" type="submit">
-                            <i class="bi bi-save" style="font-size: 1.25rem; margin-right: 8px;"></i>
-                            {% if reseña_editando %}ACTUALIZAR{% else %}GUARDAR{% endif %}
-
-
-                        </button>
+                        <div class="review-actions">
+                            {% if reseña_editando %}
+                            <a href="{% url 'cancelar_edicion_reseña' pelicula.id %}" class="cancel-edit-btn">
+                                <i class="bi bi-x-lg"></i>CANCELAR
+                            </a>
+                            {% endif %}
+                            <button class="save-btn" type="submit">
+                                <i class="bi bi-save" style="font-size: 1.25rem; margin-right: 8px;"></i>
+                                {% if reseña_editando %}ACTUALIZAR{% else %}GUARDAR{% endif %}
+                            </button>
+                        </div>
 
                     </div>
 
@@ -538,7 +685,7 @@
             <div class="reviews-section">
                 {% if reseñas %}
                 {% for r in reseñas %}
-                <div class="review-card {% if r.usuario == request.user %}my-review{% endif %}">
+                <div class="review-card {% if r.usuario == request.user %}my-review{% endif %}" {% if r.usuario == request.user %}id="my-review"{% endif %}>
                     <!-- Header: estrellas, usuario, avatar -->
                     <div class="review-card-header">
                         <div class="review-card-stars">
@@ -754,5 +901,50 @@
     });
 
 </script>
+
+<!-- Modal: añadir a lista -->
+<div class="modal fade" id="modalAnadirLista" tabindex="-1" aria-labelledby="modalAnadirListaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAnadirListaLabel">
+                    <i class="bi bi-bookmark-plus" style="margin-right:8px;color:#9d6fe8;"></i>Añadir a lista
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                {% if mis_listas %}
+                {% for lista in mis_listas %}
+                <form method="post"
+                    action="{% if lista.id in listas_con_pelicula %}{% url 'quitar_pelicula' lista.id pelicula.id %}{% else %}{% url 'anadir_pelicula' lista.id pelicula.id %}{% endif %}"
+                    style="margin:0">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'pelicula' pelicula.id %}">
+                    <button type="submit"
+                        class="lista-option {% if lista.id in listas_con_pelicula %}en-lista{% endif %}">
+                        {% if lista.id in listas_con_pelicula %}
+                        <i class="bi bi-check-circle-fill"></i>
+                        {% else %}
+                        <i class="bi bi-circle"></i>
+                        {% endif %}
+                        <div class="lista-option-desc">
+                            <span class="lista-option-name">{{ lista.nombre_lista }}</span>
+                            <span class="lista-option-count">{{ lista.items.count }} película{{
+                                lista.items.count|pluralize:"s" }}</span>
+                        </div>
+                    </button>
+                </form>
+                {% endfor %}
+                {% else %}
+                <div class="no-listas-msg">
+                    <i class="bi bi-collection-play"></i>
+                    No tienes ninguna lista creada.<br>
+                    <a href="{% url 'listas' %}">Crear mi primera lista</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

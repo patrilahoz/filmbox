@@ -13,7 +13,7 @@
     <nav class="main-menu">
         <a href="{% url 'home' %}">INICIO</a>
         <a href="{% url 'catalogo' %}">PELÍCULAS</a>
-        <a href="#">LISTAS</a>
+        <a href="{% url 'listas' %}">LISTAS</a>
     </nav>
 
     <div class="right-section">
@@ -21,7 +21,11 @@
         <!-- FOTO DE PERFIL -->
         <div class="profile-container">
             <a href="{% url 'perfil' %}">
-                <img src="{% static 'usuarios/img/avatar.png' %}" alt="Avatar" class="avatar-img">
+                {% if request.user.is_authenticated and request.user.profile.profile_image %}
+                    <img src="{{ request.user.profile.profile_image.url }}" alt="Avatar" class="avatar-img">
+                {% else %}
+                    <img src="{% static 'usuarios/img/avatar.png' %}" alt="Avatar" class="avatar-img">
+                {% endif %}
             </a>
         </div>
 

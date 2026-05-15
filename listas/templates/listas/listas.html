@@ -1,0 +1,584 @@
+{% extends "base/base.html" %}
+{% block title %}Listas{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --bg: #191919;
+        --panel: #262626;
+        --accent: #7c3aed;
+        --accent-2: #6E32D5;
+        --accent-3: #6C00FA;
+        --white: #fafafa;
+        --muted: #bdbdbd;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: 'Gantari', sans-serif;
+        background: var(--bg);
+        color: var(--white);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .listas-page {
+        padding: 40px 60px 80px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* SECTION HEADER */
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+    }
+
+    .section-title {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 26px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin: 0;
+    }
+
+    .section-divider {
+        width: 100%;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.08);
+        margin-bottom: 28px;
+    }
+
+    /* NUEVA LISTA BTN */
+    .nueva-lista-btn {
+        background: var(--accent-2);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-family: 'Gantari', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    }
+
+    .nueva-lista-btn:hover {
+        background: linear-gradient(100deg, var(--accent-2) 0%, var(--accent-3) 100%);
+        transform: translateY(-1px) scale(1.04);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+
+    /* LISTAS GRID */
+    .listas-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+        margin-bottom: 56px;
+    }
+
+    @media (max-width: 1100px) { .listas-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 680px)  { .listas-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 680px)  { .listas-page { padding: 24px 20px 60px; } }
+
+    /* LISTA CARD */
+    .lista-card {
+        background: var(--panel);
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .lista-card:hover {
+        border-color: rgba(208, 179, 255, 0.5);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 28px rgba(110, 50, 213, 0.18);
+    }
+
+    /* POSTER STRIP */
+    .poster-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        height: 118px;
+        background: #141414;
+        overflow: hidden;
+    }
+
+    .poster-strip img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .poster-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.1);
+        font-size: 26px;
+    }
+
+    .poster-strip-empty {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.08);
+        font-size: 38px;
+    }
+
+    /* CARD BODY */
+    .card-body-lista {
+        padding: 16px 18px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+    }
+
+    .lista-nombre {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--white);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .lista-descripcion {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 39px;
+    }
+
+    .lista-meta {
+        margin-top: auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        padding-top: 6px;
+    }
+
+    .meta-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.38);
+    }
+
+    .meta-chip .highlight {
+        color: #b39ddb;
+        font-weight: 600;
+    }
+
+    /* CARD ACTIONS */
+    .card-actions {
+        padding: 0 18px 16px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .btn-ver {
+        flex: 1;
+        background: var(--accent-2);
+        color: #fff;
+        border: none;
+        padding: 9px 0;
+        border-radius: 8px;
+        font-family: 'Gantari', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+        transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-ver:hover {
+        background: var(--accent-3);
+        color: #fff;
+        transform: translateY(-1px);
+        text-decoration: none;
+    }
+
+    .btn-eliminar {
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 8px 13px;
+        border-radius: 8px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+        line-height: 1;
+    }
+
+    .btn-eliminar:hover {
+        background: rgba(239, 68, 68, 0.15);
+        border-color: rgba(239, 68, 68, 0.4);
+        color: #f87171;
+        transform: translateY(-1px);
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+        background: var(--panel);
+        border: 1.5px dashed rgba(255, 255, 255, 0.09);
+        border-radius: 14px;
+        padding: 50px 40px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.28);
+        font-size: 15px;
+        margin-bottom: 56px;
+        line-height: 1.6;
+    }
+
+    .empty-state i {
+        font-size: 40px;
+        display: block;
+        margin-bottom: 14px;
+        opacity: 0.3;
+    }
+
+    /* MODAL */
+    .modal-content {
+        background: #242424 !important;
+        border: 1px solid rgba(110, 50, 213, 0.45) !important;
+        border-radius: 16px !important;
+        color: var(--white);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding: 18px 24px !important;
+    }
+
+    .modal-header .modal-title {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .modal-header .btn-close {
+        filter: invert(1) opacity(0.6);
+    }
+
+    .modal-header .btn-close:hover {
+        filter: invert(1) opacity(1);
+    }
+
+    .modal-body {
+        padding: 22px 24px !important;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .field-label {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .field-input {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: var(--white);
+        font-family: 'Gantari', sans-serif;
+        font-size: 15px;
+        padding: 10px 14px;
+        width: 100%;
+        outline: none;
+        transition: border-color 0.25s, background 0.25s;
+        resize: none;
+    }
+
+    .field-input:focus {
+        border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.07);
+    }
+
+    .field-input::placeholder {
+        color: rgba(255, 255, 255, 0.28);
+    }
+
+    .modal-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding: 14px 24px !important;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .btn-cancelar {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 9px 18px;
+        border-radius: 8px;
+        font-family: 'Gantari', sans-serif;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-cancelar:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--white);
+    }
+
+    .btn-crear {
+        background: var(--accent-2);
+        color: #fff;
+        border: none;
+        padding: 9px 24px;
+        border-radius: 8px;
+        font-family: 'Gantari', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-crear:hover {
+        background: var(--accent-3);
+        transform: translateY(-1px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+<div class="listas-page">
+
+    <!-- MIS LISTAS -->
+    <div class="section-header">
+        <h2 class="section-title">Mis listas</h2>
+        <button class="nueva-lista-btn" data-bs-toggle="modal" data-bs-target="#modalCrearLista">
+            <i class="bi bi-plus-lg"></i> Nueva lista
+        </button>
+    </div>
+    <div class="section-divider"></div>
+
+    {% if mis_listas %}
+    <div class="listas-grid">
+        {% for d in mis_listas %}
+        <div class="lista-card">
+
+            <div class="poster-strip">
+                {% if d.preview %}
+                    {% for item in d.preview %}
+                        {% if item.pelicula.poster %}
+                        <img src="{{ item.pelicula.poster.url }}" alt="{{ item.pelicula.titulo }}">
+                        {% else %}
+                        <div class="poster-placeholder"><i class="bi bi-film"></i></div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <div class="poster-strip-empty"><i class="bi bi-collection-play"></i></div>
+                {% endif %}
+            </div>
+
+            <div class="card-body-lista">
+                <p class="lista-nombre">{{ d.lista.nombre_lista }}</p>
+                <p class="lista-descripcion">{{ d.lista.descripcion|default:"Sin descripción." }}</p>
+                <div class="lista-meta">
+                    <span class="meta-chip">
+                        <i class="bi bi-film"></i>
+                        <span class="highlight">{{ d.count }}</span> película{{ d.count|pluralize:"s" }}
+                    </span>
+                    <span class="meta-chip">
+                        <i class="bi bi-calendar3"></i>
+                        {{ d.lista.fecha_creacion|date:"d M Y" }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="card-actions">
+                <a href="{% url 'ver_lista' d.lista.id %}" class="btn-ver">Ver lista</a>
+                <form method="post" action="{% url 'eliminar_lista' d.lista.id %}" style="margin:0">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-eliminar"
+                            onclick="return confirm('¿Eliminar la lista «{{ d.lista.nombre_lista }}»? Esta acción no se puede deshacer.')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="bi bi-collection-play"></i>
+        Todavía no has creado ninguna lista.<br>¡Pulsa <strong>Nueva lista</strong> para empezar!
+    </div>
+    {% endif %}
+
+    <!-- COMUNIDAD -->
+    <div class="section-header" style="margin-top: 10px;">
+        <h2 class="section-title">Listas de la comunidad</h2>
+    </div>
+    <div class="section-divider"></div>
+
+    {% if comunidad %}
+    <div class="listas-grid">
+        {% for d in comunidad %}
+        <div class="lista-card">
+
+            <div class="poster-strip">
+                {% if d.preview %}
+                    {% for item in d.preview %}
+                        {% if item.pelicula.poster %}
+                        <img src="{{ item.pelicula.poster.url }}" alt="{{ item.pelicula.titulo }}">
+                        {% else %}
+                        <div class="poster-placeholder"><i class="bi bi-film"></i></div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <div class="poster-strip-empty"><i class="bi bi-collection-play"></i></div>
+                {% endif %}
+            </div>
+
+            <div class="card-body-lista">
+                <p class="lista-nombre">{{ d.lista.nombre_lista }}</p>
+                <p class="lista-descripcion">{{ d.lista.descripcion|default:"Sin descripción." }}</p>
+                <div class="lista-meta">
+                    <span class="meta-chip">
+                        <i class="bi bi-film"></i>
+                        <span class="highlight">{{ d.count }}</span> película{{ d.count|pluralize:"s" }}
+                    </span>
+                    <span class="meta-chip">
+                        <i class="bi bi-person"></i>
+                        <span class="highlight">@{{ d.lista.usuario.username }}</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="card-actions">
+                <a href="{% url 'ver_lista' d.lista.id %}" class="btn-ver">Ver lista</a>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="bi bi-people"></i>
+        Aún no hay listas de otros usuarios.
+    </div>
+    {% endif %}
+
+</div>
+</main>
+
+<!-- Modal: crear nueva lista -->
+<div class="modal fade" id="modalCrearLista" tabindex="-1" aria-labelledby="modalCrearListaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="{% url 'crear_lista' %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCrearListaLabel">Nueva lista</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="field-group">
+                        <label class="field-label">Nombre *</label>
+                        <input type="text" name="nombre_lista" class="field-input"
+                               placeholder="Ej: Mis favoritas de los 90" required maxlength="100" autofocus>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Descripción (opcional)</label>
+                        <textarea name="descripcion" class="field-input" rows="3"
+                                  placeholder="Describe tu lista..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn-crear">Crear lista</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+        // ===== MODAL DE ELIMINAR LISTA =====
+    document.querySelectorAll('.btn-eliminar').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const url = this.getAttribute('href');
+
+            Swal.fire({
+                title: "¿Estás segur@ de que quieres eliminar la lista?",
+                text: "No podrás revertir esto",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33333",
+                cancelButtonColor: "#999999",
+                cancelButtonText: "Cancelar",
+                confirmButtonText: "Eliminar lista",
+                customClass: {
+                    title: 'swal-title',
+                    confirmButton: 'swal-confirm',
+                    icon: 'swal-icon'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Lista eliminada correctamente",
+                        icon: "success",
+                        confirmButtonText: "Aceptar",
+                        customClass: {
+                            title: 'swal-title',
+                            confirmButton: 'swal-confirm',
+                            icon: 'swal-icon'
+                        }
+                    }).then(() => {
+                        if (url) {
+                            window.location.href = url;
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

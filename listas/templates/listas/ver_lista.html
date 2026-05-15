@@ -1,0 +1,647 @@
+{% extends "base/base.html" %}
+{% block title %}{{ lista.nombre_lista }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --bg: #191919;
+        --panel: #262626;
+        --accent: #7c3aed;
+        --accent-2: #6E32D5;
+        --accent-3: #6C00FA;
+        --white: #fafafa;
+        --muted: #bdbdbd;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: 'Gantari', sans-serif;
+        background: var(--bg);
+        color: var(--white);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* HEADER DE LA LISTA */
+    .lista-header {
+        padding: 32px 60px 0;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(255, 255, 255, 0.45);
+        text-decoration: none;
+        font-size: 14px;
+        margin-bottom: 22px;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover {
+        color: var(--white);
+        text-decoration: none;
+    }
+
+    .lista-title-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    .lista-title {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 34px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .lista-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        margin: 10px 0 16px;
+    }
+
+    .meta-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .meta-chip .accent { color: #b39ddb; font-weight: 600; }
+
+    .lista-descripcion-full {
+        color: var(--muted);
+        font-size: 15px;
+        margin: 0 0 24px;
+        max-width: 640px;
+        line-height: 1.65;
+    }
+
+    .section-divider {
+        width: 100%;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.08);
+        margin-bottom: 32px;
+    }
+
+    /* BOTÓN AÑADIR */
+    .anadir-btn {
+        background: var(--accent-2);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-family: 'Gantari', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-left: 5px;
+        white-space: nowrap;
+        transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    }
+
+    .anadir-btn:hover {
+        background: linear-gradient(100deg, var(--accent-2), var(--accent-3));
+        transform: translateY(-1px) scale(1.04);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+
+    .editar-btn {
+        background: rgba(110, 50, 213, 0.1);
+        color: #D9BDFE;
+        border: 1px solid rgba(110, 50, 213, 0.35);
+        padding: 11px 18px;
+        border-radius: 10px;
+        font-family: 'Exo 2';
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
+        text-decoration: none;
+    }
+
+    .editar-btn:hover {
+        background: rgba(110, 50, 213, 0.22);
+        border-color: rgba(110, 50, 213, 0.65);
+        color: #D9BDFE;
+        transform: translateY(-1px) scale(1.04);
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    /* Modal editar */
+    .edit-modal-body label {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .edit-modal-body input,
+    .edit-modal-body textarea {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        color: var(--white);
+        font-family: 'Gantari', sans-serif;
+        font-size: 14px;
+        padding: 10px 14px;
+        outline: none;
+        resize: vertical;
+        transition: border-color 0.25s;
+    }
+
+    .edit-modal-body input:focus,
+    .edit-modal-body textarea:focus {
+        border-color: var(--accent);
+    }
+
+    .edit-modal-body input::placeholder,
+    .edit-modal-body textarea::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+    }
+
+    .edit-save-btn {
+        background: var(--accent-2);
+        color: #fff;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 10px;
+        font-family: 'Gantari', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.25s, transform 0.2s;
+    }
+
+    .edit-save-btn:hover {
+        background: var(--accent-3);
+        transform: translateY(-1px);
+    }
+
+    /* GRID PELÍCULAS */
+    .peliculas-content {
+        padding: 0 60px 70px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .lista-grid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 18px;
+    }
+
+    @media (max-width: 1400px) { .lista-grid { grid-template-columns: repeat(6, 1fr); } }
+    @media (max-width: 1100px) { .lista-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 700px)  { .lista-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px)  { .lista-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    @media (max-width: 700px) {
+        .lista-header, .peliculas-content { padding-left: 20px; padding-right: 20px; }
+        .lista-title { font-size: 26px; }
+    }
+
+    /* PELÍCULA CARD */
+    .pelicula-item {
+        position: relative;
+        aspect-ratio: 2 / 3;
+        background: #111;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .pelicula-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        border: 2px solid #d0b3ff;
+    }
+
+    .pelicula-link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+    }
+
+    .pelicula-link img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* Overlay con título */
+    .pelicula-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.82));
+        padding: 20px 8px 8px;
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+    }
+
+    .pelicula-item:hover .pelicula-overlay { opacity: 1; }
+
+    .pelicula-titulo-overlay {
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+
+    /* Botón quitar */
+    .quitar-form {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        z-index: 3;
+        margin: 0;
+    }
+
+    .quitar-btn {
+        background: rgba(0, 0, 0, 0.65);
+        color: rgba(255, 255, 255, 0.7);
+        border: none;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        font-size: 13px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        opacity: 0;
+        transition: opacity 0.2s, background 0.2s, color 0.2s;
+    }
+
+    .pelicula-item:hover .quitar-btn { opacity: 1; }
+
+    .quitar-btn:hover {
+        background: rgba(220, 38, 38, 0.85);
+        color: #fff;
+    }
+
+    /* EMPTY STATE */
+    .empty-state-lista {
+        background: var(--panel);
+        border: 1.5px dashed rgba(255, 255, 255, 0.09);
+        border-radius: 14px;
+        padding: 70px 40px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.28);
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .empty-state-lista i {
+        font-size: 48px;
+        display: block;
+        margin-bottom: 16px;
+        opacity: 0.25;
+    }
+
+    /* MODAL AÑADIR PELÍCULA */
+    .modal-content {
+        background: #222 !important;
+        border: 1px solid rgba(110, 50, 213, 0.45) !important;
+        border-radius: 16px !important;
+        color: var(--white);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding: 18px 24px !important;
+    }
+
+    .modal-header .modal-title {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .modal-header .btn-close {
+        filter: invert(1) opacity(0.6);
+    }
+
+    .modal-header .btn-close:hover { filter: invert(1) opacity(1); }
+
+    .modal-body {
+        padding: 20px 24px !important;
+    }
+
+    .search-add {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 16px;
+        height: 44px;
+        margin-bottom: 18px;
+        transition: border-color 0.25s;
+    }
+
+    .search-add:focus-within { border-color: var(--accent); }
+
+    .search-add input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--white);
+        font-family: 'Gantari', sans-serif;
+        font-size: 14px;
+    }
+
+    .search-add input::placeholder { color: rgba(255, 255, 255, 0.3); }
+    .search-add i { color: rgba(255, 255, 255, 0.3); }
+
+    .add-movies-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        max-height: 360px;
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+
+    @media (max-width: 600px) { .add-movies-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .add-movie-form { margin: 0; }
+
+    .add-movie-btn {
+        all: unset;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+    }
+
+    .add-poster {
+        width: 100%;
+        aspect-ratio: 2 / 3;
+        background: #2a2a2a;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: border-color 0.2s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.15);
+    }
+
+    .add-poster img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .add-movie-btn:hover .add-poster {
+        border-color: var(--accent);
+        transform: scale(1.04);
+    }
+
+    .add-movie-title {
+        font-size: 11px;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .no-results-msg {
+        display: none;
+        grid-column: 1 / -1;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.3);
+        padding: 40px 0;
+        font-size: 14px;
+    }
+
+    .sin-peliculas-msg {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.3);
+        padding: 40px 0;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+<div class="lista-header">
+
+    <a href="{% url 'listas' %}" class="back-link">
+        <i class="bi bi-arrow-left"></i> Mis listas
+    </a>
+
+    <div class="lista-title-row">
+        <h1 class="lista-title">{{ lista.nombre_lista }}</h1>
+        {% if es_mia %}
+        <div class="header-actions">
+            <button class="editar-btn" data-bs-toggle="modal" data-bs-target="#modalEditarLista">
+                <i class="bi bi-pencil"></i> Editar lista
+            </button>
+            <button class="anadir-btn" data-bs-toggle="modal" data-bs-target="#modalAnadirPelicula">
+                <i class="bi bi-plus-lg"></i> Añadir película
+            </button>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="lista-meta-row">
+        {% if not es_mia %}
+        <span class="meta-chip">
+            <i class="bi bi-person"></i>
+            Por: <span class="accent">@{{ lista.usuario.username }}</span>
+        </span>
+        {% endif %}
+        <span class="meta-chip">
+            <i class="bi bi-film"></i>
+            <span class="accent">{{ items|length }}</span>&nbsp;película{{ items|length|pluralize:"s" }}
+        </span>
+        <span class="meta-chip">
+            <i class="bi bi-calendar3"></i>
+            {{ lista.fecha_creacion|date:"d M Y" }}
+        </span>
+    </div>
+
+    {% if lista.descripcion %}
+    <p class="lista-descripcion-full">{{ lista.descripcion }}</p>
+    {% endif %}
+
+    <div class="section-divider"></div>
+</div>
+
+<div class="peliculas-content">
+    {% if items %}
+    <div class="lista-grid">
+        {% for item in items %}
+        <div class="pelicula-item">
+            <a href="{% url 'pelicula' item.pelicula.id %}" class="pelicula-link">
+                {% if item.pelicula.poster %}
+                <img src="{{ item.pelicula.poster.url }}" alt="{{ item.pelicula.titulo }}">
+                {% else %}
+                <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.1);font-size:32px;">
+                    <i class="bi bi-film"></i>
+                </div>
+                {% endif %}
+                <div class="pelicula-overlay">
+                    <p class="pelicula-titulo-overlay">{{ item.pelicula.titulo }}</p>
+                </div>
+            </a>
+            {% if es_mia %}
+            <form method="post" action="{% url 'quitar_pelicula' lista.id item.pelicula.id %}" class="quitar-form">
+                {% csrf_token %}
+                <button type="submit" class="quitar-btn" title="Quitar de la lista">
+                    <i class="bi bi-x"></i>
+                </button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state-lista">
+        <i class="bi bi-collection-play"></i>
+        {% if es_mia %}
+        Esta lista está vacía.<br>¡Pulsa <strong>Añadir película</strong> para empezar!
+        {% else %}
+        Esta lista no tiene películas aún.
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+</main>
+
+{% if es_mia %}
+<!-- Modal: editar lista -->
+<div class="modal fade" id="modalEditarLista" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarLabel">Editar lista</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form method="post" action="{% url 'editar_lista' lista.id %}">
+                {% csrf_token %}
+                <div class="modal-body edit-modal-body" style="display:flex;flex-direction:column;gap:16px;">
+                    <div>
+                        <label for="editNombre">Nombre de la lista</label>
+                        <input type="text" id="editNombre" name="nombre_lista"
+                               value="{{ lista.nombre_lista }}" placeholder="Nombre de la lista" maxlength="100" required>
+                    </div>
+                    <div>
+                        <label for="editDescripcion">Descripción (opcional)</label>
+                        <textarea id="editDescripcion" name="descripcion" rows="3"
+                                  placeholder="Añade una descripción...">{{ lista.descripcion }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.08);padding:16px 24px;">
+                    <button type="submit" class="edit-save-btn">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: añadir película -->
+<div class="modal fade" id="modalAnadirPelicula" tabindex="-1" aria-labelledby="modalAnadirLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAnadirLabel">Añadir película a la lista</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                {% if todas_peliculas %}
+                <div class="search-add">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="searchAddInput" placeholder="Buscar película...">
+                </div>
+                <div class="add-movies-grid" id="addMoviesGrid">
+                    {% for p in todas_peliculas %}
+                    <form method="post" action="{% url 'anadir_pelicula' lista.id p.id %}"
+                          class="add-movie-form" data-title="{{ p.titulo|lower }}">
+                        {% csrf_token %}
+                        <button type="submit" class="add-movie-btn">
+                            <div class="add-poster">
+                                {% if p.poster %}
+                                <img src="{{ p.poster.url }}" alt="{{ p.titulo }}">
+                                {% else %}
+                                <i class="bi bi-film" style="font-size:24px;"></i>
+                                {% endif %}
+                            </div>
+                            <span class="add-movie-title">{{ p.titulo }}</span>
+                        </button>
+                    </form>
+                    {% endfor %}
+                    <p class="no-results-msg" id="noResultsMsg">No se encontraron películas.</p>
+                </div>
+                {% else %}
+                <p class="sin-peliculas-msg">Todas las películas del catálogo ya están en esta lista.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchInput = document.getElementById('searchAddInput');
+    if (searchInput) {
+        const forms = document.querySelectorAll('#addMoviesGrid .add-movie-form');
+        const noResults = document.getElementById('noResultsMsg');
+
+        searchInput.addEventListener('input', () => {
+            const q = searchInput.value.trim().toLowerCase();
+            let visible = 0;
+            forms.forEach(f => {
+                const matches = f.dataset.title.includes(q);
+                f.style.display = matches ? '' : 'none';
+                if (matches) visible++;
+            });
+            noResults.style.display = visible === 0 ? 'block' : 'none';
+        });
+    }
+</script>
+{% endif %}
+{% endblock %}

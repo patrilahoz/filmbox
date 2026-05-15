@@ -265,8 +265,8 @@
   }
 
   .fav-card {
-    width: 160px;
-    height: 230px;
+    width: 100%;
+    aspect-ratio: 2 / 3;
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: #222;
     display: flex;
@@ -308,30 +308,181 @@
     font-size: 13px
   }
 
-  /* Lists area */
-  .lists {
-    display: flex;
-    gap: 24px
-  }
-
-  .list-card {
-    flex: 1;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 12px;
-    background: transparent
-  }
-
-  .grid {
+  /* LISTAS GRID */
+  .listas-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-    margin-top: 8px
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
   }
 
-  .grid .item {
-    height: 56px;
+  .lista-card {
+    background: #262626;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+
+  .lista-card:hover {
+    border-color: rgba(208, 179, 255, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(110, 50, 213, 0.18);
+  }
+
+  .poster-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 100px;
+    background: #141414;
+    overflow: hidden;
+  }
+
+  .poster-strip img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .poster-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.1);
+    font-size: 22px;
+  }
+
+  .poster-strip-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 32px;
+  }
+
+  .card-body-lista {
+    padding: 14px 16px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+  }
+
+  .lista-nombre {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fafafa;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lista-descripcion {
+    font-size: 12px;
+    color: #bdbdbd;
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 36px;
+  }
+
+  .lista-meta {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding-top: 5px;
+  }
+
+  .meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.38);
+  }
+
+  .meta-chip .highlight {
+    color: #b39ddb;
+    font-weight: 600;
+  }
+
+  .card-actions {
+    padding: 0 16px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .btn-ver {
+    flex: 1;
+    background: #6E32D5;
+    color: #fff;
+    border: none;
+    padding: 8px 0;
+    border-radius: 8px;
+    font-family: 'Gantari', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-ver:hover {
+    background: #6C00FA;
+    color: #fff;
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+
+  .btn-eliminar-lista {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    background: #222
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+    line-height: 1;
+  }
+
+  .btn-eliminar-lista:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #f87171;
+    transform: translateY(-1px);
+  }
+
+  .listas-empty {
+    background: #262626;
+    border: 1.5px dashed rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 40px 30px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.28);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .listas-empty i {
+    font-size: 34px;
+    display: block;
+    margin-bottom: 12px;
+    opacity: 0.3;
   }
 
   @media (max-width:900px) {
@@ -341,6 +492,10 @@
 
     .favorites {
       flex-wrap: wrap
+    }
+
+    .listas-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>
@@ -417,78 +572,102 @@
 
     <section class="right">
       <div>
+
+        <!-- FAVORITAS -->
         <h2 class="section">FAVORITAS</h2>
+        <hr style="border-color: white; margin-bottom: 20px;">
         <div class="favorites">
-          <!-- Four favorite slots; each clickable to attach an image -->
+          {% with fav=request.user.profile.fav1 %}
           <div class="fav-card">
-            <img alt="Película favorita 1" style="display:none">
-            <div class="fav-actions">
-            </div>
-            <!-- <input id="fav1" type="file" accept="image/*">-->
+            {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}
+            {% else %}<div class="fav-placeholder"></div>{% endif %}
           </div>
+          {% endwith %}
 
+          {% with fav=request.user.profile.fav2 %}
           <div class="fav-card">
-            <img alt="Película favorita 2" style="display:none">
-            <div class="fav-actions">
-            </div>
-            <!-- <input id="fav2" type="file" accept="image/*">-->
+            {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}
+            {% else %}<div class="fav-placeholder"></div>{% endif %}
           </div>
+          {% endwith %}
 
+          {% with fav=request.user.profile.fav3 %}
           <div class="fav-card">
-            <img alt="Película favorita 3" style="display:none">
-            <div class="fav-actions">
-            </div>
-            <!--<input id="fav3" type="file" accept="image/*">-->
+            {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}
+            {% else %}<div class="fav-placeholder"></div>{% endif %}
           </div>
+          {% endwith %}
 
+          {% with fav=request.user.profile.fav4 %}
           <div class="fav-card">
-            <img alt="Película favorita 4" style="display:none">
-            <div class="fav-actions"></div>
-            <!--<input id="fav4" type="file" accept="image/*">-->
+            {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}
+            {% else %}<div class="fav-placeholder"></div>{% endif %}
           </div>
+          {% endwith %}
         </div>
       </div>
 
+
+      <!-- LISTAS -->
       <div>
         <h2 class="section">LISTAS</h2>
-        <div class="lists">
-          <div class="list-card">
-            <div style="font-size:12px;color:var(--muted);font-weight:700">Vistas en 2025</div>
-            <div class="grid">
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-            </div>
-          </div>
+        <hr style="border-color: white; margin-bottom: 16px;">
 
-          <div class="list-card">
-            <div style="font-size:12px;color:var(--muted);font-weight:700">Watchlist</div>
-            <div class="grid">
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
+        {% if mis_listas %}
+        <div class="listas-grid">
+          {% for d in mis_listas %}
+          <div class="lista-card">
+            <div class="poster-strip">
+              {% if d.preview %}
+                {% for item in d.preview %}
+                  {% if item.pelicula.poster %}
+                  <img src="{{ item.pelicula.poster.url }}" alt="{{ item.pelicula.titulo }}">
+                  {% else %}
+                  <div class="poster-placeholder"><i class="bi bi-film"></i></div>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+              <div class="poster-strip-empty"><i class="bi bi-collection-play"></i></div>
+              {% endif %}
+            </div>
+            <div class="card-body-lista">
+              <p class="lista-nombre">{{ d.lista.nombre_lista }}</p>
+              <p class="lista-descripcion">{{ d.lista.descripcion|default:"Sin descripción." }}</p>
+              <div class="lista-meta">
+                <span class="meta-chip">
+                  <i class="bi bi-film"></i>
+                  <span class="highlight">{{ d.count }}</span> película{{ d.count|pluralize:"s" }}
+                </span>
+                <span class="meta-chip">
+                  <i class="bi bi-calendar3"></i>
+                  {{ d.lista.fecha_creacion|date:"d M Y" }}
+                </span>
+              </div>
+            </div>
+            <div class="card-actions">
+              <a href="{% url 'ver_lista' d.lista.id %}" class="btn-ver">Ver lista</a>
+              <form method="post" action="{% url 'eliminar_lista' d.lista.id %}" style="margin:0">
+                {% csrf_token %}
+                <button type="submit" class="btn-eliminar-lista">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
             </div>
           </div>
+          {% endfor %}
         </div>
+        {% else %}
+        <div class="listas-empty">
+          <i class="bi bi-collection-play"></i>
+          Todavía no has creado ninguna lista.
+        </div>
+        {% endif %}
       </div>
+
     </section>
   </div>
 </main>

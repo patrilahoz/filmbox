@@ -133,7 +133,7 @@
     }
 
     .diary-title-text {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 600;
         color: var(--white);
         margin: 0;
@@ -190,7 +190,7 @@
         background-color: currentColor;
         height: 0.15rem;
         margin: 0;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         opacity: 0.2;
     }
 
@@ -317,14 +317,14 @@
 
                     <!-- Icono Ver reseña -->
                     <div class="diary-icon-cell">
-                        <a href="{% url 'pelicula' r.pelicula.id %}" class="diary-icon-link" title="Ver reseña">
+                        <a href="{% url 'pelicula' r.pelicula.id %}#my-review" class="diary-icon-link" title="Ver reseña">
                             <i class="bi bi-justify-left" style="color: white; font-size: 1.5rem;"></i>
                         </a>
                     </div>
 
                     <!-- Icono Editar -->
                     <div class="diary-icon-cell">
-                        <a href="#" class="diary-icon-link" style="color: white; font-size: 1.5rem;" title="Editar reseña">
+                        <a href="{% url 'editar_reseña' r.id %}" class="diary-icon-link" style="color: white; font-size: 1.5rem;" title="Editar reseña">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                     </div>
@@ -348,20 +348,4 @@
     </div>
 </main>
 
-<script>
-    // Funcionalidad para cambiar color de iconos al hacer click
-    document.querySelectorAll('.diary-icon-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            this.classList.toggle('active');
-            
-            // Si es el icono de reseña (bi-justify-left), navegar a la página
-            if (this.querySelector('i').classList.contains('bi-justify-left')) {
-                setTimeout(() => {
-                    window.location.href = this.href;
-                }, 200);
-            }
-        });
-    });
-</script>
 {% endblock %}

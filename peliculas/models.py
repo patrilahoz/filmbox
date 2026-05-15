@@ -77,6 +77,7 @@ class Reseña(models.Model):
     class Meta:
         ordering = ['-fecha']
         unique_together = ('usuario', 'pelicula')
+        
 
 
 

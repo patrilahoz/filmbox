@@ -431,6 +431,222 @@
             flex-wrap: wrap
         }
     }
+
+    .fav-card {
+        cursor: pointer;
+    }
+
+    .fav-card img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+    }
+
+    .fav-title-fallback {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        text-align: center;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.85);
+        font-family: 'Gantari';
+    }
+
+    .fav-remove-btn {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        background: rgba(0, 0, 0, 0.75);
+        border: none;
+        color: white;
+        border-radius: 50%;
+        width: 26px;
+        height: 26px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 15px;
+        z-index: 3;
+    }
+
+    .fav-remove-btn:hover {
+        background: rgba(239, 68, 68, 0.85);
+    }
+
+    .fav-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 2000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .fav-modal-inner {
+        background: #222;
+        border: 1px solid rgba(110, 50, 213, 0.45);
+        border-radius: 16px;
+        width: 100%;
+        max-width: 700px;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .fav-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        flex-shrink: 0;
+    }
+
+    .fav-modal-header h2 {
+        font-family: 'Exo 2';
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+    }
+
+    .fav-modal-close {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 18px;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+    }
+
+    .fav-modal-close:hover {
+        color: white;
+    }
+
+    .fav-modal-body {
+        padding: 20px 24px;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .fav-search-wrap {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 16px;
+        height: 44px;
+        margin-bottom: 18px;
+        transition: border-color 0.25s;
+    }
+
+    .fav-search-wrap:focus-within {
+        border-color: #7c3aed;
+    }
+
+    .fav-search-wrap i {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .fav-search {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: white;
+        font-family: 'Gantari';
+        font-size: 14px;
+    }
+
+    .fav-search::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .fav-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        max-height: 360px;
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+
+    @media (max-width: 600px) {
+        .fav-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .fav-movie-item {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+        background: none;
+        border: none;
+        padding: 0;
+        text-align: left;
+    }
+
+    .fav-movie-poster {
+        width: 100%;
+        aspect-ratio: 2/3;
+        background: #2a2a2a;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: border-color 0.2s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.15);
+    }
+
+    .fav-movie-poster img {
+        position: static;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: unset;
+        object-fit: cover;
+        display: block;
+    }
+
+    .fav-movie-item:hover .fav-movie-poster {
+        border-color: #7c3aed;
+        transform: scale(1.04);
+    }
+
+    .fav-movie-title {
+        font-size: 11px;
+        color: #bdbdbd;
+        text-align: center;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .fav-no-results {
+        display: none;
+        grid-column: 1 / -1;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.3);
+        padding: 40px 0;
+        font-size: 14px;
+        margin: 0;
+    }
 </style>
 {% endblock %}
 
@@ -472,35 +688,54 @@
                             <!-- FAVORITAS -->
                             <div class="favorites-section">
                                 <h2 class="section">FAVORITAS</h2>
+
+                                <div id="fav-init-data" style="display:none"
+                                    data-fav1-id="{{ request.user.profile.fav1.id|default:'' }}"
+                                    data-fav1-poster="{% if request.user.profile.fav1 and request.user.profile.fav1.poster %}{{ request.user.profile.fav1.poster.url }}{% endif %}"
+                                    data-fav1-titulo="{{ request.user.profile.fav1.titulo|default:'' }}"
+                                    data-fav2-id="{{ request.user.profile.fav2.id|default:'' }}"
+                                    data-fav2-poster="{% if request.user.profile.fav2 and request.user.profile.fav2.poster %}{{ request.user.profile.fav2.poster.url }}{% endif %}"
+                                    data-fav2-titulo="{{ request.user.profile.fav2.titulo|default:'' }}"
+                                    data-fav3-id="{{ request.user.profile.fav3.id|default:'' }}"
+                                    data-fav3-poster="{% if request.user.profile.fav3 and request.user.profile.fav3.poster %}{{ request.user.profile.fav3.poster.url }}{% endif %}"
+                                    data-fav3-titulo="{{ request.user.profile.fav3.titulo|default:'' }}"
+                                    data-fav4-id="{{ request.user.profile.fav4.id|default:'' }}"
+                                    data-fav4-poster="{% if request.user.profile.fav4 and request.user.profile.fav4.poster %}{{ request.user.profile.fav4.poster.url }}{% endif %}"
+                                    data-fav4-titulo="{{ request.user.profile.fav4.titulo|default:'' }}"
+                                ></div>
+
                                 <div class="favorites">
-                                    <!-- FAVORITA 1 -->
-                                    <a href="{% url 'select_movie' %}?slot=1" class="fav-card">
-                                        <img alt="Película favorita 1" style="display:none">
-                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
-                                        <div class="fav-actions"></div>
-                                    </a>
+                                    <div class="fav-card" data-slot="1">
+                                        <img id="fav1Img" alt="Favorita 1">
+                                        <div id="fav1Title" class="fav-title-fallback"></div>
+                                        <i id="fav1Plus" class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <button type="button" id="fav1Remove" class="fav-remove-btn"><i class="bi bi-x"></i></button>
+                                    </div>
+                                    <input type="hidden" name="fav1" id="fav1Input">
 
-                                    <!-- FAVORITA 2 -->
-                                    <a href="{% url 'select_movie' %}?slot=2" class="fav-card">
-                                        <img alt="Película favorita 2" style="display:none">
-                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
-                                        <div class="fav-actions"></div>
-                                    </a>
+                                    <div class="fav-card" data-slot="2">
+                                        <img id="fav2Img" alt="Favorita 2">
+                                        <div id="fav2Title" class="fav-title-fallback"></div>
+                                        <i id="fav2Plus" class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <button type="button" id="fav2Remove" class="fav-remove-btn"><i class="bi bi-x"></i></button>
+                                    </div>
+                                    <input type="hidden" name="fav2" id="fav2Input">
 
-                                    <!-- FAVORITA 3 -->
-                                    <a href="{% url 'select_movie' %}?slot=3" class="fav-card">
-                                        <img alt="Película favorita 3" style="display:none">
-                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
-                                        <div class="fav-actions"></div>
-                                    </a>
+                                    <div class="fav-card" data-slot="3">
+                                        <img id="fav3Img" alt="Favorita 3">
+                                        <div id="fav3Title" class="fav-title-fallback"></div>
+                                        <i id="fav3Plus" class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <button type="button" id="fav3Remove" class="fav-remove-btn"><i class="bi bi-x"></i></button>
+                                    </div>
+                                    <input type="hidden" name="fav3" id="fav3Input">
 
-                                    <!-- FAVORITA 4 -->
-                                    <a href="{% url 'select_movie' %}?slot=4" class="fav-card">
-                                        <img alt="Película favorita 4" style="display:none">
-                                        <i class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
-                                        <div class="fav-actions"></div>
-                                    </a>
-
+                                    <div class="fav-card" data-slot="4">
+                                        <img id="fav4Img" alt="Favorita 4">
+                                        <div id="fav4Title" class="fav-title-fallback"></div>
+                                        <i id="fav4Plus" class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <button type="button" id="fav4Remove" class="fav-remove-btn"><i class="bi bi-x"></i></button>
+                                    </div>
+                                    <input type="hidden" name="fav4" id="fav4Input">
                                 </div>
                             </div>
 
@@ -509,7 +744,7 @@
                                 <label for="nombre">NOMBRE</label>
 
                                 <div class="field-wrapper">
-                                    <input type="text" id="nombre" name="name" placeholder="Añadir nombre">
+                                    <input type="text" id="nombre" name="name" placeholder="Añadir nombre" value="{{ request.user.profile.name|default:'' }}">
                                     <div class="error-msg" id="error-nombre"></div>
                                 </div>
                             </div>
@@ -520,7 +755,7 @@
 
                                 <div class="field-wrapper">
                                     <textarea id="descripcion" name="description"
-                                        placeholder="Añadir descripción"></textarea>
+                                        placeholder="Añadir descripción">{{ request.user.profile.description|default:'' }}</textarea>
                                     <div class="error-msg" id="error-descripcion"></div>
                                 </div>
                             </div>
@@ -539,6 +774,42 @@
         </div>
     </div>
 </main>
+
+<div id="fav-modal" class="fav-modal-overlay">
+    <div class="fav-modal-inner">
+        <div class="fav-modal-header">
+            <h2>Añadir película favorita</h2>
+            <button class="fav-modal-close" type="button" id="fav-modal-close">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="fav-modal-body">
+            <div class="fav-search-wrap">
+                <i class="bi bi-search"></i>
+                <input class="fav-search" id="fav-search" type="text" placeholder="Buscar película..." autocomplete="off">
+            </div>
+            <div class="fav-grid" id="fav-grid">
+                {% for pelicula in peliculas %}
+                <div class="fav-movie-item"
+                     data-titulo="{{ pelicula.titulo|lower }}"
+                     data-id="{{ pelicula.id }}"
+                     data-poster="{% if pelicula.poster %}{{ pelicula.poster.url }}{% endif %}"
+                     data-titulo-display="{{ pelicula.titulo }}">
+                    <div class="fav-movie-poster">
+                        {% if pelicula.poster %}
+                        <img src="{{ pelicula.poster.url }}" alt="{{ pelicula.titulo }}">
+                        {% else %}
+                        <i class="bi bi-film" style="font-size:24px;"></i>
+                        {% endif %}
+                    </div>
+                    <span class="fav-movie-title">{{ pelicula.titulo }}</span>
+                </div>
+                {% endfor %}
+                <p class="fav-no-results" id="fav-no-results">No se encontraron películas.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     // ============================
@@ -589,6 +860,118 @@
     });
 
     clearPreview();
+
+    // ============================
+    // PELÍCULAS FAVORITAS
+    // ============================
+    (function () {
+        var d = document.getElementById('fav-init-data').dataset;
+        var initialFavs = {
+            1: { id: d.fav1Id || null, posterUrl: d.fav1Poster || '', titulo: d.fav1Titulo || '' },
+            2: { id: d.fav2Id || null, posterUrl: d.fav2Poster || '', titulo: d.fav2Titulo || '' },
+            3: { id: d.fav3Id || null, posterUrl: d.fav3Poster || '', titulo: d.fav3Titulo || '' },
+            4: { id: d.fav4Id || null, posterUrl: d.fav4Poster || '', titulo: d.fav4Titulo || '' }
+        };
+
+        var currentSlot = null;
+        var modal = document.getElementById('fav-modal');
+
+        function updateFavCard(slot, data) {
+            var img = document.getElementById('fav' + slot + 'Img');
+            var titleEl = document.getElementById('fav' + slot + 'Title');
+            var plus = document.getElementById('fav' + slot + 'Plus');
+            var removeBtn = document.getElementById('fav' + slot + 'Remove');
+            var input = document.getElementById('fav' + slot + 'Input');
+
+            if (data && data.id) {
+                input.value = data.id;
+                if (data.posterUrl) {
+                    img.src = data.posterUrl;
+                    img.style.display = 'block';
+                    titleEl.style.display = 'none';
+                } else {
+                    img.style.display = 'none';
+                    titleEl.textContent = data.titulo;
+                    titleEl.style.display = 'flex';
+                }
+                plus.style.display = 'none';
+                removeBtn.style.display = 'flex';
+            } else {
+                input.value = '';
+                img.src = '';
+                img.style.display = 'none';
+                titleEl.style.display = 'none';
+                plus.style.display = 'block';
+                removeBtn.style.display = 'none';
+            }
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            currentSlot = null;
+        }
+
+        function filterMovies(q) {
+            var visible = 0;
+            document.querySelectorAll('.fav-movie-item').forEach(function (item) {
+                var matches = item.dataset.titulo.includes(q);
+                item.style.display = matches ? '' : 'none';
+                if (matches) visible++;
+            });
+            var noResults = document.getElementById('fav-no-results');
+            if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
+        }
+
+        // Inicializar con favoritas guardadas
+        for (var s = 1; s <= 4; s++) {
+            updateFavCard(s, initialFavs[s]);
+        }
+
+        // Abrir modal al clicar una tarjeta
+        document.querySelectorAll('.fav-card[data-slot]').forEach(function (card) {
+            card.addEventListener('click', function () {
+                currentSlot = parseInt(card.dataset.slot);
+                modal.style.display = 'flex';
+                var search = document.getElementById('fav-search');
+                search.value = '';
+                filterMovies('');
+                search.focus();
+            });
+        });
+
+        // Botones de quitar favorita
+        document.querySelectorAll('.fav-remove-btn').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var slot = parseInt(btn.closest('.fav-card').dataset.slot);
+                updateFavCard(slot, null);
+            });
+        });
+
+        // Cerrar modal
+        document.getElementById('fav-modal-close').addEventListener('click', closeModal);
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeModal();
+        });
+
+        // Búsqueda en tiempo real
+        document.getElementById('fav-search').addEventListener('input', function () {
+            filterMovies(this.value.toLowerCase());
+        });
+
+        // Seleccionar película del catálogo
+        document.querySelectorAll('.fav-movie-item').forEach(function (item) {
+            item.addEventListener('click', function () {
+                if (!currentSlot) return;
+                updateFavCard(currentSlot, {
+                    id: item.dataset.id,
+                    posterUrl: item.dataset.poster || '',
+                    titulo: item.dataset.tituloDisplay || ''
+                });
+                closeModal();
+            });
+        });
+    })();
 
     // ============================
     // VALIDACIÓN DEL FORMULARIO

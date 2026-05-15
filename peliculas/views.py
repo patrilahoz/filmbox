@@ -6,6 +6,7 @@ from django.views.decorators.cache import never_cache
 
 from peliculas.forms import PeliculaForm
 from .models import Pelicula, Genero, LikeReseña, Reseña
+from listas.models import Lista, PeliculaEnLista
 from django.db.models import Max, Count
 
 # VISTA HOME
@@ -103,10 +104,20 @@ def pelicula(request, pelicula_id):
     if edit_id:
         reseña_editando = Reseña.objects.filter(id=edit_id, usuario=request.user).first()
 
+    mis_listas = Lista.objects.filter(usuario=request.user).order_by('nombre_lista')
+    listas_con_pelicula = set(
+        PeliculaEnLista.objects.filter(
+            lista__usuario=request.user,
+            pelicula=pelicula
+        ).values_list('lista_id', flat=True)
+    )
+
     return render(request, "peliculas/pelicula.html", {
         "pelicula": pelicula,
         "reseñas": reseñas,
         "reseña_editando": reseña_editando,
+        "mis_listas": mis_listas,
+        "listas_con_pelicula": listas_con_pelicula,
     })
 
 
