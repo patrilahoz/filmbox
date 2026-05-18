@@ -108,22 +108,21 @@
     /* POSTER STRIP */
     .poster-strip {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        height: 118px;
+        grid-template-columns: repeat(5, 1fr);
         background: #141414;
         overflow: hidden;
     }
 
     .poster-strip img {
         width: 100%;
-        height: 100%;
+        aspect-ratio: 2 / 3;
         object-fit: cover;
         display: block;
     }
 
     .poster-placeholder {
         width: 100%;
-        height: 100%;
+        aspect-ratio: 2 / 3;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -193,6 +192,9 @@
         font-weight: 600;
     }
 
+    .meta-chip a.highlight { transition: color 0.2s; }
+    .meta-chip a.highlight:hover { color: #6E32D5; }
+
     /* CARD ACTIONS */
     .card-actions {
         padding: 0 18px 16px;
@@ -206,9 +208,9 @@
         background: var(--accent-2);
         color: #fff;
         border: none;
-        padding: 9px 0;
+        padding: 7px 0;
         border-radius: 8px;
-        font-family: 'Gantari', sans-serif;
+        font-family: 'Gantari';
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
@@ -485,7 +487,7 @@
                     </span>
                     <span class="meta-chip">
                         <i class="bi bi-person"></i>
-                        <span class="highlight">@{{ d.lista.usuario.username }}</span>
+                        <a href="{% url 'ver_perfil' d.lista.usuario.username %}" class="highlight" style="text-decoration:none;">@{{ d.lista.usuario.username }}</a>
                     </span>
                 </div>
             </div>

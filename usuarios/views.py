@@ -88,7 +88,7 @@ def perfil(request):
         all_items = list(lista.items.all())
         mis_listas.append({
             'lista': lista,
-            'preview': all_items[:3],
+            'preview': all_items[:5],
             'count': len(all_items),
         })
     ctx = {'mis_listas': mis_listas}
@@ -158,7 +158,7 @@ def ver_perfil(request, username):
         all_items = list(lista.items.all())
         mis_listas.append({
             'lista': lista,
-            'preview': all_items[:3],
+            'preview': all_items[:5],
             'count': len(all_items),
         })
     ya_sigue = Seguimiento.objects.filter(seguidor=request.user, seguido=usuario).exists()
@@ -166,6 +166,25 @@ def ver_perfil(request, username):
         'perfil_usuario': usuario,
         'mis_listas': mis_listas,
         'ya_sigue': ya_sigue,
+    })
+
+
+# SEGUIMIENTOS (lista de seguidos y seguidores)
+@login_required
+def seguimientos(request, username):
+    usuario = get_object_or_404(User, username=username)
+    tab = request.GET.get('tab', 'siguiendo')
+    siguiendo = User.objects.filter(seguidores__seguidor=usuario)
+    seguidores = User.objects.filter(seguidos__seguido=usuario)
+    ids_seguidos = set(Seguimiento.objects.filter(seguidor=request.user).values_list('seguido_id', flat=True))
+    ids_que_te_siguen = set(Seguimiento.objects.filter(seguido=request.user).values_list('seguidor_id', flat=True))
+    return render(request, 'usuarios/seguimientos.html', {
+        'perfil_usuario': usuario,
+        'tab': tab,
+        'siguiendo': siguiendo,
+        'seguidores': seguidores,
+        'ids_seguidos': ids_seguidos,
+        'ids_que_te_siguen': ids_que_te_siguen,
     })
 
 
@@ -180,6 +199,9 @@ def seguir(request, username):
         )
         if not created:
             seguimiento.delete()
+    next_url = request.POST.get('next') or request.GET.get('next')
+    if next_url:
+        return redirect(next_url)
     return redirect('ver_perfil', username=username)
 
 

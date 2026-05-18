@@ -1,0 +1,305 @@
+{% extends "base/base.html" %}
+
+{% block title %}Seguimientos de {{ perfil_usuario.username }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --bg: #191919;
+    --panel: #262626;
+    --accent: #6E32D5;
+    --muted: #bdbdbd;
+    --white: #f6f6f6;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Gantari', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+  }
+
+  .main {
+    max-width: 700px;
+    margin: 36px auto;
+    padding: 0 24px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--white); text-decoration: none; }
+
+  h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0 0 24px;
+  }
+
+  /* PESTAÑAS */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 24px;
+  }
+
+  .tab-link {
+    padding: 10px 24px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tab-link:hover { color: var(--white); text-decoration: none; }
+
+  .tab-link.active {
+    color: var(--white);
+    border-bottom-color: var(--accent);
+  }
+
+  /* LISTA DE USUARIOS */
+  .user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .user-card {
+    background: var(--panel);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .user-card:hover { border-color: rgba(208,179,255,0.35); }
+
+  .user-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(110,50,213,0.4);
+    flex-shrink: 0;
+  }
+
+  .user-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .user-name {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-username {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .user-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+  .btn-ver-perfil {
+    background: rgba(110,50,213,0.1);
+    color: #D9BDFE;
+    border: 1px solid rgba(110,50,213,0.35);
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-family: 'Gantari', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-ver-perfil:hover {
+    background: rgba(110,50,213,0.22);
+    border-color: rgba(110,50,213,0.65);
+    color: #D9BDFE;
+    text-decoration: none;
+  }
+
+  .btn-seguir {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-family: 'Gantari', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-seguir:hover { background: #6C00FA; transform: translateY(-1px); }
+
+  .btn-siguiendo {
+    background: rgba(110,50,213,0.1);
+    color: #D9BDFE;
+    border: 1px solid rgba(110,50,213,0.35);
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-family: 'Gantari', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-siguiendo:hover {
+    background: rgba(211,51,51,0.15);
+    border-color: rgba(211,51,51,0.5);
+    color: #f87171;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 0;
+    color: rgba(255,255,255,0.25);
+    font-size: 14px;
+  }
+
+  .empty-state i { font-size: 36px; display: block; margin-bottom: 12px; opacity: 0.3; }
+
+  .te-sigue-badge {
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Gantari', sans-serif;
+    color: #4ade80;
+    background: rgba(74,222,128,0.1);
+    border: 1px solid rgba(74,222,128,0.35);
+    border-radius: 999px;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="main">
+
+  {% if perfil_usuario == request.user %}
+  <a href="{% url 'perfil' %}" class="back-link">
+    <i class="bi bi-arrow-left"></i> Volver al perfil
+  </a>
+  {% else %}
+  <a href="{% url 'ver_perfil' perfil_usuario.username %}" class="back-link">
+    <i class="bi bi-arrow-left"></i> Volver al perfil
+  </a>
+  {% endif %}
+
+  <h1>@{{ perfil_usuario.username }}</h1>
+
+  <div class="tabs">
+    <a href="?tab=siguiendo"
+       class="tab-link {% if tab == 'siguiendo' %}active{% endif %}">
+      Siguiendo <strong>{{ siguiendo.count }}</strong>
+    </a>
+    <a href="?tab=seguidores"
+       class="tab-link {% if tab == 'seguidores' %}active{% endif %}">
+      Seguidores <strong>{{ seguidores.count }}</strong>
+    </a>
+  </div>
+
+  {% if tab == 'siguiendo' %}
+  <div class="user-list">
+    {% for u in siguiendo %}
+    <div class="user-card">
+      <img class="user-avatar" src="{{ u.profile.profile_image_url }}" alt="{{ u.username }}">
+      <div class="user-info">
+        <div class="user-name">{{ u.profile.name|default:u.username }}</div>
+        <div class="user-username">@{{ u.username }}</div>
+      </div>
+      <div class="user-actions">
+        {% if u == request.user %}
+        <a href="{% url 'perfil' %}" class="btn-ver-perfil">Ver perfil</a>
+        {% else %}
+        {% if u.id in ids_que_te_siguen %}<span class="te-sigue-badge">Te sigue</span>{% endif %}
+        <a href="{% url 'ver_perfil' u.username %}" class="btn-ver-perfil">Ver perfil</a>
+        <form method="post" action="{% url 'seguir' u.username %}" style="margin:0">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          {% if u.id in ids_seguidos %}
+          <button type="submit" class="btn-siguiendo">Siguiendo</button>
+          {% else %}
+          <button type="submit" class="btn-seguir">Seguir</button>
+          {% endif %}
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+      <i class="bi bi-person-plus"></i>
+      Este usuario no sigue a nadie aún.
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="user-list">
+    {% for u in seguidores %}
+    <div class="user-card">
+      <img class="user-avatar" src="{{ u.profile.profile_image_url }}" alt="{{ u.username }}">
+      <div class="user-info">
+        <div class="user-name">{{ u.profile.name|default:u.username }}</div>
+        <div class="user-username">@{{ u.username }}</div>
+      </div>
+      <div class="user-actions">
+        {% if u == request.user %}
+        <a href="{% url 'perfil' %}" class="btn-ver-perfil">Ver perfil</a>
+        {% else %}
+        {% if u.id in ids_que_te_siguen %}<span class="te-sigue-badge">Te sigue</span>{% endif %}
+        <a href="{% url 'ver_perfil' u.username %}" class="btn-ver-perfil">Ver perfil</a>
+        <form method="post" action="{% url 'seguir' u.username %}" style="margin:0">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          {% if u.id in ids_seguidos %}
+          <button type="submit" class="btn-siguiendo">Siguiendo</button>
+          {% else %}
+          <button type="submit" class="btn-seguir">Seguir</button>
+          {% endif %}
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+      <i class="bi bi-people"></i>
+      Este usuario no tiene seguidores aún.
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+</main>
+{% endblock %}

@@ -18,7 +18,7 @@ def mis_listas(request):
         all_items = list(lista.items.all())
         mis_listas_data.append({
             'lista': lista,
-            'preview': all_items[:3],
+            'preview': all_items[:5],
             'count': len(all_items),
         })
 
@@ -33,7 +33,7 @@ def mis_listas(request):
         all_items = list(lista.items.all())
         comunidad_data.append({
             'lista': lista,
-            'preview': all_items[:3],
+            'preview': all_items[:5],
             'count': len(all_items),
         })
 

@@ -80,6 +80,8 @@
     }
 
     .meta-chip .accent { color: #b39ddb; font-weight: 600; }
+    .meta-chip a.accent { transition: color 0.2s; }
+    .meta-chip a.accent:hover { color: #6E32D5; }
 
     .lista-descripcion-full {
         color: var(--muted);
@@ -496,7 +498,7 @@
         {% if not es_mia %}
         <span class="meta-chip">
             <i class="bi bi-person"></i>
-            Por: <span class="accent">@{{ lista.usuario.username }}</span>
+            Por: <a href="{% url 'ver_perfil' lista.usuario.username %}" class="accent" style="text-decoration:none;">@{{ lista.usuario.username }}</a>
         </span>
         {% endif %}
         <span class="meta-chip">

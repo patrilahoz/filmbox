@@ -19,6 +19,7 @@ urlpatterns = [
     path('editar-perfil/', views.edit_profile, name='edit_profile'),
     path('perfil/<str:username>/', views.ver_perfil, name='ver_perfil'),
     path('perfil/<str:username>/seguir/', views.seguir, name='seguir'),
+    path('perfil/<str:username>/seguimientos/', views.seguimientos, name='seguimientos'),
 
 ]
 

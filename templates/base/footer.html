@@ -1,0 +1,59 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-copy">© 2026 FILMBOX. Todos los derechos reservados.</span>
+    <nav class="footer-nav">
+      <a href="{% url 'home' %}" class="footer-link">Inicio</a>
+      <a href="{% url 'catalogo' %}" class="footer-link">Películas</a>
+      <a href="{% url 'listas' %}" class="footer-link">Listas</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: #262626;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 22px 40px;
+    margin-top: 60px;
+  }
+
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .footer-copy {
+    font-family: 'Gantari', sans-serif;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 28px;
+  }
+
+  .footer-link {
+    font-family: 'Gantari', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-link:hover {
+    color: #D9BDFE;
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .site-footer { padding: 20px 24px; }
+  }
+</style>

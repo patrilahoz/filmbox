@@ -529,6 +529,245 @@
         }
 
     }
+
+    /* ── RESEÑAS RECIENTES ── */
+    .resenas-recientes {
+        margin: 50px;
+        text-align: center;
+    }
+
+    .resenas-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 24px;
+        padding: 0 130px;
+        text-align: left;
+    }
+
+    .resena-card {
+        background: #262626;
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 12px;
+        padding: 14px;
+        display: flex;
+        gap: 12px;
+        transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .resena-card:hover {
+        border-color: rgba(208,179,255,0.4);
+        transform: translateY(-2px);
+    }
+
+    .resena-poster-link { flex-shrink: 0; }
+
+    .resena-poster {
+        width: 60px;
+        aspect-ratio: 2/3;
+        object-fit: cover;
+        border-radius: 6px;
+        display: block;
+    }
+
+    .resena-body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .resena-pelicula-nombre {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        line-height: 1.3;
+    }
+
+    .resena-pelicula-nombre:hover { color: #D9BDFE; text-decoration: none; }
+
+    .resena-stars { display: flex; gap: 2px; }
+    .resena-stars i { color: #6E32D5; font-size: 11px; }
+
+    .resena-texto {
+        font-size: 12px;
+        color: rgba(255,255,255,0.6);
+        line-height: 1.5;
+        margin: 0;
+        flex: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .resena-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .resena-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .resena-avatar {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .resena-username {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255,255,255,0.45);
+        text-decoration: none;
+    }
+
+    .resena-username:hover { color: #D9BDFE; text-decoration: none; }
+
+    .resenas-empty {
+        color: rgba(255,255,255,0.25);
+        font-size: 14px;
+        margin-top: 24px;
+    }
+
+    /* ── MEJOR VALORADAS ── */
+    .mejor-item { position: relative; }
+
+    .rating-badge {
+        position: absolute;
+        bottom: 7px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.78);
+        color: #f5c518;
+        font-size: 11px;
+        font-weight: 700;
+        font-family: 'Gantari', sans-serif;
+        padding: 2px 8px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+
+    /* ── ACTIVIDAD DE SEGUIDOS ── */
+    .actividad-seguidos {
+        margin: 50px 60px;
+        text-align: center;
+    }
+
+    .actividad-card {
+        background: linear-gradient(100deg, #2e2e2e 0%, #262626 100%);
+        padding: 36px 40px;
+        border-radius: 12px;
+        max-width: 900px;
+        margin: 0 auto;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .actividad-feed {
+        max-width: 100%;
+        margin: 20px auto 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-align: left;
+    }
+
+    .actividad-item {
+        background: #262626;
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 12px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: border-color 0.2s;
+    }
+
+    .actividad-item:hover { border-color: rgba(208,179,255,0.35); }
+
+    .actividad-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .actividad-info { flex: 1; min-width: 0; }
+
+    .actividad-texto {
+        font-size: 13px;
+        color: rgba(255,255,255,0.75);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .actividad-user-link {
+        font-weight: 700;
+        color: #D9BDFE;
+        text-decoration: none;
+    }
+
+    .actividad-user-link:hover { color: #6E32D5; text-decoration: none; }
+
+    .actividad-pelicula-link {
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+    }
+
+    .actividad-pelicula-link:hover { color: #D9BDFE; text-decoration: none; }
+
+    .actividad-stars { color: #6E32D5; font-size: 10px; }
+
+    .actividad-fecha {
+        font-size: 11px;
+        color: rgba(255,255,255,0.3);
+        display: block;
+        margin-top: 2px;
+    }
+
+    .actividad-poster {
+        width: 44px;
+        aspect-ratio: 2/3;
+        object-fit: cover;
+        border-radius: 5px;
+        flex-shrink: 0;
+        display: block;
+    }
+
+    .actividad-empty {
+        color: rgba(255,255,255,0.25);
+        font-size: 14px;
+        margin-top: 24px;
+    }
+
+    @media (max-width: 1024px) {
+        .resenas-grid { padding: 0 60px; }
+    }
+
+    @media (max-width: 900px) {
+        .resenas-grid { grid-template-columns: repeat(2, 1fr); padding: 0 20px; }
+        .resenas-recientes, .actividad-seguidos { margin: 40px 24px; }
+    }
+
+    @media (max-width: 600px) {
+        .resenas-grid { grid-template-columns: 1fr; }
+    }
 </style>
 {% endblock %}
 
@@ -656,6 +895,92 @@
     </section>
 
 
+    <!-- SECCIÓN RESEÑAS RECIENTES -->
+    <section class="resenas-recientes">
+        <h3>RESEÑAS RECIENTES</h3>
+        {% if resenas_recientes %}
+        <div class="resenas-grid">
+            {% for r in resenas_recientes %}
+            <div class="resena-card">
+                <a href="{% url 'pelicula' r.pelicula.id %}" class="resena-poster-link">
+                    {% if r.pelicula.poster %}
+                    <img src="{{ r.pelicula.poster.url }}" alt="{{ r.pelicula.titulo }}" class="resena-poster">
+                    {% endif %}
+                </a>
+                <div class="resena-body">
+                    <div class="resena-top">
+                        <a href="{% url 'pelicula' r.pelicula.id %}" class="resena-pelicula-nombre">{{ r.pelicula.titulo }}</a>
+                        <div class="resena-user">
+                            {% if r.usuario == request.user %}
+                            <a href="{% url 'perfil' %}" class="resena-username">@{{ r.usuario.username }}</a>
+                            {% else %}
+                            <a href="{% url 'ver_perfil' r.usuario.username %}" class="resena-username">@{{ r.usuario.username }}</a>
+                            {% endif %}
+                            <img src="{{ r.usuario.profile.profile_image_url }}" alt="{{ r.usuario.username }}" class="resena-avatar">
+                        </div>
+                    </div>
+                    {% if r.puntuacion %}
+                    <div class="resena-stars">{% for i in "12345" %}{% if forloop.counter <= r.puntuacion %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}{% endfor %}</div>
+                    {% endif %}
+                    <p class="resena-texto">{{ r.texto }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="resenas-empty">Aún no hay reseñas en la comunidad.</p>
+        {% endif %}
+    </section>
+
+
+    <!-- SECCIÓN PELÍCULAS MEJOR VALORADAS -->
+    <section class="lo-ultimo">
+        <h3>MEJOR VALORADAS</h3>
+        <div class="slider-container">
+            <button class="slider-btn left" id="best-left">❮</button>
+            <div class="slider" id="best-slider">
+                {% for p in mejores_peliculas %}
+                <a href="{% url 'pelicula' p.id %}" class="lo-ultimo-item mejor-item">
+                    {% if p.poster %}<img src="{{ p.poster.url }}" alt="{{ p.titulo }}">{% endif %}
+                </a>
+                {% endfor %}
+            </div>
+            <button class="slider-btn right" id="best-right">❯</button>
+        </div>
+    </section>
+
+
+    <!-- SECCIÓN ACTIVIDAD DE SEGUIDOS -->
+    <section class="actividad-seguidos">
+        <h3>TUS SEGUIDOS</h3>
+        <div class="actividad-card">
+            {% if actividad_seguidos %}
+            <div class="actividad-feed">
+                {% for r in actividad_seguidos %}
+                <div class="actividad-item">
+                    <img src="{{ r.usuario.profile.profile_image_url }}" alt="{{ r.usuario.username }}" class="actividad-avatar">
+                    <div class="actividad-info">
+                        <p class="actividad-texto">
+                            <a href="{% url 'ver_perfil' r.usuario.username %}" class="actividad-user-link">@{{ r.usuario.username }}</a>
+                            puntuó
+                            {% if r.puntuacion %}{% for i in "12345" %}{% if forloop.counter <= r.puntuacion %}<i class="bi bi-star-fill actividad-stars"></i>{% else %}<i class="bi bi-star actividad-stars"></i>{% endif %}{% endfor %}{% endif %}
+                            <a href="{% url 'pelicula' r.pelicula.id %}" class="actividad-pelicula-link">{{ r.pelicula.titulo }}</a>
+                        </p>
+                        <span class="actividad-fecha">{{ r.fecha|timesince }}</span>
+                    </div>
+                    {% if r.pelicula.poster %}
+                    <a href="{% url 'pelicula' r.pelicula.id %}">
+                        <img src="{{ r.pelicula.poster.url }}" alt="{{ r.pelicula.titulo }}" class="actividad-poster">
+                    </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="actividad-empty">Sigue a otros usuarios para ver su actividad aquí.</p>
+            {% endif %}
+        </div>
+    </section>
 
 
 </main>
@@ -696,6 +1021,9 @@
 
         // Inicializar TENDENCIAS
         initSlider("tend-slider", "tend-left", "tend-right");
+
+        // Inicializar MEJOR VALORADAS
+        initSlider("best-slider", "best-left", "best-right");
 
     });
 </script>

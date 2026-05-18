@@ -8,7 +8,8 @@ from django.views.decorators.cache import never_cache
 from peliculas.forms import PeliculaForm
 from .models import Pelicula, Genero, LikeReseña, Reseña, ReseñaEliminada
 from listas.models import Lista, PeliculaEnLista
-from django.db.models import Max, Count
+from django.db.models import Max, Count, Avg
+from usuarios.models import Seguimiento
 
 # VISTA HOME
 @login_required
@@ -29,10 +30,39 @@ def home(request):
     except Pelicula.DoesNotExist:
         destacada = None
 
+    resenas_recientes = (
+        Reseña.objects
+        .exclude(texto__isnull=True)
+        .exclude(texto='')
+        .select_related('usuario', 'pelicula', 'usuario__profile')
+        .order_by('-fecha')[:6]
+    )
+
+    mejores_peliculas = (
+        Pelicula.objects
+        .annotate(avg_rating=Avg('reseña__puntuacion'), num_resenas=Count('reseña'))
+        .filter(num_resenas__gte=1)
+        .order_by('-avg_rating', '-num_resenas')[:10]
+    )
+
+    ids_seguidos = Seguimiento.objects.filter(
+        seguidor=request.user
+    ).values_list('seguido_id', flat=True)
+
+    actividad_seguidos = (
+        Reseña.objects
+        .filter(usuario_id__in=ids_seguidos)
+        .select_related('usuario', 'pelicula', 'usuario__profile')
+        .order_by('-fecha')[:8]
+    )
+
     return render(request, "peliculas/home.html", {
         "peliculas": peliculas_recientes,
         "tendencias": tendencias,
-        "destacada": destacada
+        "destacada": destacada,
+        "resenas_recientes": resenas_recientes,
+        "mejores_peliculas": mejores_peliculas,
+        "actividad_seguidos": actividad_seguidos,
     })
 
 

@@ -127,6 +127,14 @@
     justify-content: center;
   }
 
+  .follow-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .follow-link:hover { color: #D9BDFE; text-decoration: none; }
+
   .follows {
     display: flex;
     gap: 28px;
@@ -168,6 +176,7 @@
 
   .fav-card {
     width: 100%;
+    min-width: 0;
     aspect-ratio: 2 / 3;
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: #222;
@@ -186,6 +195,12 @@
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  .fav-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
   }
 
   /* LISTAS */
@@ -213,22 +228,21 @@
 
   .poster-strip {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    height: 100px;
+    grid-template-columns: repeat(5, 1fr);
     background: #141414;
     overflow: hidden;
   }
 
   .poster-strip img {
     width: 100%;
-    height: 100%;
+    aspect-ratio: 2 / 3;
     object-fit: cover;
     display: block;
   }
 
   .poster-placeholder {
     width: 100%;
-    height: 100%;
+    aspect-ratio: 2 / 3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -343,7 +357,6 @@
   @media (max-width: 900px) {
     .columns { grid-template-columns: 1fr; }
     .listas-grid { grid-template-columns: 1fr; }
-    .favorites { flex-wrap: wrap; }
   }
 </style>
 {% endblock %}
@@ -368,8 +381,8 @@
       {% endif %}
 
       <div class="follows">
-        <div><strong>{{ perfil_usuario.seguidos.count }}</strong> siguiendo</div>
-        <div><strong>{{ perfil_usuario.seguidores.count }}</strong> seguidores</div>
+        <a href="{% url 'seguimientos' perfil_usuario.username %}?tab=siguiendo" class="follow-link"><strong>{{ perfil_usuario.seguidos.count }}</strong> siguiendo</a>
+        <a href="{% url 'seguimientos' perfil_usuario.username %}?tab=seguidores" class="follow-link"><strong>{{ perfil_usuario.seguidores.count }}</strong> seguidores</a>
       </div>
 
       <div class="desc">{{ perfil_usuario.profile.description }}</div>
@@ -398,6 +411,7 @@
         <div class="favorites">
           {% with fav=perfil_usuario.profile.fav1 %}
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
+            {% if fav %}<a href="{% url 'pelicula' fav.id %}" class="fav-link"></a>{% endif %}
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
             {% else %}<span style="padding:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
@@ -405,6 +419,7 @@
 
           {% with fav=perfil_usuario.profile.fav2 %}
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
+            {% if fav %}<a href="{% url 'pelicula' fav.id %}" class="fav-link"></a>{% endif %}
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
             {% else %}<span style="padding:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
@@ -412,6 +427,7 @@
 
           {% with fav=perfil_usuario.profile.fav3 %}
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
+            {% if fav %}<a href="{% url 'pelicula' fav.id %}" class="fav-link"></a>{% endif %}
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
             {% else %}<span style="padding:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
@@ -419,6 +435,7 @@
 
           {% with fav=perfil_usuario.profile.fav4 %}
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
+            {% if fav %}<a href="{% url 'pelicula' fav.id %}" class="fav-link"></a>{% endif %}
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
             {% else %}<span style="padding:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
