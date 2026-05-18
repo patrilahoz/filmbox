@@ -1,83 +1,54 @@
 {% extends "base/base.html" %}
 
-{% block title %}Perfil de {{ request.user.username }}{% endblock %}
-{% block extra_css %}
+{% block title %}Perfil de {{ perfil_usuario.username }}{% endblock %}
 
+{% block extra_css %}
 <style>
   :root {
     --bg: #191919;
     --panel: #262626;
-    --accent: #e9dff0;
     --muted: #bdbdbd;
-    --accent: #eadbff;
     --accent-dark: #7b3eb5;
     --white: #f6f6f6;
   }
 
-  * {
-    box-sizing: border-box
-  }
+  * { box-sizing: border-box }
 
   body {
     margin: 0;
-    font-family: Inter, 'Segoe UI', Roboto, Arial;
+    font-family: 'Gantari', sans-serif;
     background: var(--bg);
     color: var(--white);
-    font-family: 'Gantari';
-    color: white;
-
   }
 
-  /* Main layout */
   .main {
     max-width: 1200px;
     margin: 28px auto;
-    padding: 0 24px
+    padding: 0 24px;
   }
 
   .columns {
     display: grid;
     grid-template-columns: 320px 1fr;
     gap: 40px;
-    align-items: start
+    align-items: start;
   }
 
-  /* Left column */
   .left {
     display: flex;
     flex-direction: column;
-    gap: 18px
-  }
-
-  .profile-photo-wrap {
-    width: 160px;
-    height: 160px;
-    border-radius: 999px;
-    background: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    cursor: pointer;
-    border: 6px solid rgba(123, 62, 181, 0.08);
+    gap: 18px;
   }
 
   .profile-photo-icon {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    background: transparent;
+    border: 6px solid rgba(123, 62, 181, 0.08);
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent-dark);
-    font-weight: 700;
-    font-size: 40px;
-    margin-top: 40px;
-  }
-
-  .profile-photo-input {
-    display: none
   }
 
   .profile-photo-img {
@@ -87,11 +58,10 @@
     object-fit: cover;
   }
 
-
   .name {
     font-size: 30px;
     font-weight: 700;
-    font-family: 'Exo 2';
+    font-family: 'Exo 2', sans-serif;
     color: white;
     margin-bottom: -15px;
   }
@@ -99,28 +69,11 @@
   .username {
     font-size: 16px;
     color: var(--muted);
-    font-family: 'Exo 2';
+    font-family: 'Exo 2', sans-serif;
     margin-bottom: -20px;
   }
 
-  .follows {
-    display: flex;
-    gap: 28px;
-    font-family: 'Gantari';
-    color: var(--muted);
-    margin-top: 6px
-  }
-
-  .desc {
-    color: white;
-    margin-top: 12px;
-    max-width: 260px;
-    font-family: 'Gantari';
-    text-align: justify;
-  }
-
-
-  .diary-btn {
+  .seguir-btn {
     background: #6E32D5;
     color: var(--white);
     width: 260px;
@@ -128,90 +81,86 @@
     padding: 12px 18px;
     border-radius: 8px;
     border: 0;
-    font-family: 'Exo 2';
+    font-family: 'Exo 2', sans-serif;
     font-weight: 700;
     font-size: 20px;
     display: inline-flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    text-align: center;
     justify-content: center;
     transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .diary-btn:hover {
-    background: #D9BDFE;
-    color: black;
-    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-
-    transform: translateY(-2px) scale(1.05);
-  }
-
-  .diary-btn .hover-icon {
-    display: none;
-  }
-
-
-  .edit-btn {
-    background: #D9BDFE;
-    color: black;
-    width: 260px;
-    height: 50px;
-    padding: 12px 18px;
-    border-radius: 8px;
-    border: 0;
-    font-family: 'Exo 2';
-    font-weight: 700;
-    font-size: 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    text-align: center;
-    justify-content: center;
-
-    transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
-
-  }
-
-  .edit-btn:hover {
+  .seguir-btn:hover {
     background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
-    color: white;
+    color: var(--white);
     box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-
     transform: translateY(-2px) scale(1.05);
   }
 
+  .seguir-btn.siguiendo {
+    background: rgba(110, 50, 213, 0.12);
+    color: #D9BDFE;
+    border: 1px solid rgba(110, 50, 213, 0.4);
+  }
 
-  .edit-btn .hover-icon {
-    display: none;
+  .seguir-btn.siguiendo:hover {
+    background: rgba(211, 51, 51, 0.15);
+    border-color: rgba(211, 51, 51, 0.5);
+    color: #f87171;
+    box-shadow: none;
   }
 
 
-  /* Right column */
+  .admin-card {
+    background: #D9BDFE;
+    color: #7b3eb5;
+    width: 150px;
+    height: 30px;
+    border-radius: 8px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .follows {
+    display: flex;
+    gap: 28px;
+    font-family: 'Gantari', sans-serif;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .desc {
+    color: white;
+    margin-top: 12px;
+    max-width: 260px;
+    font-family: 'Gantari', sans-serif;
+    text-align: justify;
+  }
+
   .right {
     display: flex;
     flex-direction: column;
-    gap: 28px
+    gap: 28px;
   }
 
   h2.section {
-    margin: 0 0 12px 0;
-    color: var(--white);
+    margin: 0 0 8px 0;
+    color: white;
     font-size: 20px;
     font-weight: 700;
-    font-family: 'Gantari';
-    color: white;
-    margin-bottom: 8px;
+    font-family: 'Gantari', sans-serif;
     letter-spacing: 2px;
   }
 
-  /* Favorites layout */
+  /* FAVORITAS */
   .favorites {
     display: flex;
-    gap: 28px;
-    justify-content: space-between;
     gap: 18px;
     width: 100%;
     margin-bottom: 20px;
@@ -227,50 +176,19 @@
     justify-content: center;
     position: relative;
     border-radius: 2px;
-    overflow: hidden
+    overflow: hidden;
   }
 
-  .fav-card input[type=file] {
-    display: none
-  }
-
-  .fav-placeholder {
-    color: rgba(255, 255, 255, 0.12)
-  }
-
-  .fav-card--empty {
-    visibility: hidden;
-  }
+  .fav-card--empty { visibility: hidden; }
 
   .fav-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block
+    display: block;
   }
 
-  .fav-actions {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
-    display: flex;
-    justify-content: space-between;
-    gap: 8px
-  }
-
-  .fav-btn {
-    background: transparent;
-    border: 1px dashed rgba(255, 255, 255, 0.06);
-    color: var(--muted);
-    padding: 6px 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px
-  }
-
-
-  /* LISTAS GRID */
+  /* LISTAS */
   .listas-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -374,20 +292,15 @@
     color: rgba(255, 255, 255, 0.38);
   }
 
-  .meta-chip .highlight {
-    color: #b39ddb;
-    font-weight: 600;
-  }
+  .meta-chip .highlight { color: #b39ddb; font-weight: 600; }
 
   .card-actions {
     padding: 0 16px 14px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
   }
 
   .btn-ver {
-    flex: 1;
+    display: inline-block;
+    width: 100%;
     background: #6E32D5;
     color: #fff;
     border: none;
@@ -399,7 +312,6 @@
     cursor: pointer;
     text-decoration: none;
     text-align: center;
-    display: inline-block;
     transition: background 0.2s, transform 0.15s;
   }
 
@@ -408,25 +320,6 @@
     color: #fff;
     transform: translateY(-1px);
     text-decoration: none;
-  }
-
-  .btn-eliminar-lista {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 7px 12px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
-    line-height: 1;
-  }
-
-  .btn-eliminar-lista:hover {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: rgba(239, 68, 68, 0.4);
-    color: #f87171;
-    transform: translateY(-1px);
   }
 
   .listas-empty {
@@ -447,105 +340,87 @@
     opacity: 0.3;
   }
 
-  @media (max-width:900px) {
-    .columns {
-      grid-template-columns: 1fr;
-    }
-
-    .favorites {
-      flex-wrap: wrap
-    }
-
-    .listas-grid {
-      grid-template-columns: 1fr;
-    }
+  @media (max-width: 900px) {
+    .columns { grid-template-columns: 1fr; }
+    .listas-grid { grid-template-columns: 1fr; }
+    .favorites { flex-wrap: wrap; }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-
-
 <main class="main">
   <div class="columns">
     <aside class="left">
-      <!-- FOTO DE PERFIL -->
-      <label class="avatar-wrap" for="avatarInput" title="Añadir foto de perfil">
-        <div class="profile-photo-icon" id="profilePhotoPreview" aria-hidden>
-          <img src="{{ request.user.profile.profile_image_url }}" class="profile-photo-img">
-        </div>
-      </label>
-      <input id="profilePhotoInput" class="profile-photo-input" type="file" accept="image/*">
 
-      <!-- NOMBRE -->
-      <div class="name">{{ request.user.profile.name }}</div>
+      <div class="profile-photo-icon">
+        <img src="{{ perfil_usuario.profile.profile_image_url }}" class="profile-photo-img" alt="Foto de perfil">
+      </div>
 
-      <!-- USERNAME -->
+      <div class="name">{{ perfil_usuario.profile.name }}</div>
+
       <div class="username">
-        <p>@{{ request.user.username }}</p>
+        <p>@{{ perfil_usuario.username }}</p>
       </div>
 
-      <!-- SEGUIDORES Y SEGUIDOS -->
+      {% if perfil_usuario.is_staff %}
+      <div class="admin-card">ADMINISTRADOR</div>
+      {% endif %}
+
       <div class="follows">
-        <div><strong>{{ request.user.seguidos.count }}</strong> siguiendo</div>
-        <div><strong>{{ request.user.seguidores.count }}</strong> seguidores</div>
+        <div><strong>{{ perfil_usuario.seguidos.count }}</strong> siguiendo</div>
+        <div><strong>{{ perfil_usuario.seguidores.count }}</strong> seguidores</div>
       </div>
 
+      <div class="desc">{{ perfil_usuario.profile.description }}</div>
 
-      <!-- DESCRIPCIÓN -->
-      <div class="desc">{{ request.user.profile.description }}</div>
-
-
-      <a href="{% url 'diario' %}">
-        <button class="diary-btn" id="diaryBtn">
-          <i class="bi bi-journal" style="font-size: 1.3rem;"></i>
-          MI DIARIO
+      {% if perfil_usuario != request.user %}
+      <form method="post" action="{% url 'seguir' perfil_usuario.username %}">
+        {% csrf_token %}
+        <button type="submit" class="seguir-btn {% if ya_sigue %}siguiendo{% endif %}">
+          {% if ya_sigue %}
+          <i class="bi bi-person-check" style="font-size:1.3rem;"></i> SIGUIENDO
+          {% else %}
+          <i class="bi bi-person-plus" style="font-size:1.3rem;"></i> SEGUIR
+          {% endif %}
         </button>
-      </a>
-
-      <a href="{% url 'edit_profile' %}">
-        <button class="edit-btn" id="editProfileBtn">
-          <i class="bi bi-pencil-square" style="font-size: 1.3rem;"></i>
-          EDITAR PERFIL
-        </button>
-      </a>
+      </form>
+      {% endif %}
 
     </aside>
 
-
-
     <section class="right">
-      <div>
 
-        <!-- FAVORITAS -->
+      <!-- FAVORITAS -->
+      <div>
         <h2 class="section">FAVORITAS</h2>
         <hr style="border-color: white; margin-bottom: 20px;">
         <div class="favorites">
-          {% with fav=request.user.profile.fav1 %}
+          {% with fav=perfil_usuario.profile.fav1 %}
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
+            {% else %}<span style="padding:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
 
-          {% with fav=request.user.profile.fav2 %}
+          {% with fav=perfil_usuario.profile.fav2 %}
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
+            {% else %}<span style="padding:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
 
-          {% with fav=request.user.profile.fav3 %}
+          {% with fav=perfil_usuario.profile.fav3 %}
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
+            {% else %}<span style="padding:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
 
-          {% with fav=request.user.profile.fav4 %}
+          {% with fav=perfil_usuario.profile.fav4 %}
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
+            {% else %}<span style="padding:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
         </div>
@@ -589,12 +464,6 @@
             </div>
             <div class="card-actions">
               <a href="{% url 'ver_lista' d.lista.id %}" class="btn-ver">Ver lista</a>
-              <form method="post" action="{% url 'eliminar_lista' d.lista.id %}" style="margin:0">
-                {% csrf_token %}
-                <button type="submit" class="btn-eliminar-lista">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </form>
             </div>
           </div>
           {% endfor %}
@@ -602,7 +471,7 @@
         {% else %}
         <div class="listas-empty">
           <i class="bi bi-collection-play"></i>
-          Todavía no has creado ninguna lista.
+          Este usuario no tiene listas aún.
         </div>
         {% endif %}
       </div>
@@ -610,12 +479,4 @@
     </section>
   </div>
 </main>
-
-<script>
-  // Edit profile button placeholder
-  document.getElementById('editProfileBtn').addEventListener('click', () => {
-    // alert('Editar perfil (implementar acción)');
-  });
-</script>
-
 {% endblock %}

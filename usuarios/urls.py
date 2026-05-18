@@ -17,7 +17,9 @@ urlpatterns = [
     # PÁGINAS DE DIARIO Y EDICIÓN DE PERFIL
     path("diario/", views.diario, name="diario"),
     path('editar-perfil/', views.edit_profile, name='edit_profile'),
-    
+    path('perfil/<str:username>/', views.ver_perfil, name='ver_perfil'),
+    path('perfil/<str:username>/seguir/', views.seguir, name='seguir'),
+
 ]
 
 

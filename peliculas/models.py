@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 
-#GÉNEROS
+# GÉNEROS
 class Genero(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
 
@@ -9,7 +9,7 @@ class Genero(models.Model):
         return self.nombre
 
 
-#PELÍCULAS
+# PELÍCULAS
 class Pelicula(models.Model):
     titulo = models.CharField(max_length=200)
     año = models.IntegerField()
@@ -43,7 +43,7 @@ class PeliculaGenero(models.Model):
     #    unique_together = ('pelicula', 'genero')
 
 
-#REPARTO
+# REPARTO
 class Reparto(models.Model):
     ROLES = [
         ('actor', 'Actor'),
@@ -54,7 +54,7 @@ class Reparto(models.Model):
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='reparto')
 
 
-#PUNTUACIONES
+# PUNTUACIONES
 class Puntuacion(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
@@ -66,7 +66,7 @@ class Puntuacion(models.Model):
 
 
 
-#RESEÑAS
+# RESEÑAS
 class Reseña(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
@@ -77,11 +77,14 @@ class Reseña(models.Model):
     class Meta:
         ordering = ['-fecha']
         unique_together = ('usuario', 'pelicula')
+        permissions = [
+        ("puede_eliminar_reseñas", "Puede eliminar reseñas de otros usuarios"),
+    ]
         
 
 
 
-#LIKES RESEÑA
+# LIKES RESEÑA
 class LikeReseña(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     reseña = models.ForeignKey(Reseña, on_delete=models.CASCADE)
@@ -92,7 +95,7 @@ class LikeReseña(models.Model):
 
 
 
-#FAVORITOS
+# FAVORITOS
 class Favorito(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
@@ -100,3 +103,22 @@ class Favorito(models.Model):
 
     class Meta:
         unique_together = ('usuario', 'pelicula')
+
+
+# LOG DE RESEÑAS ELIMINADAS POR MODERADORES
+class ReseñaEliminada(models.Model):
+    pelicula_titulo = models.CharField(max_length=200)
+    autor_username = models.CharField(max_length=150)
+    eliminada_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='resenas_eliminadas'
+    )
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha']
+
+    def __str__(self):
+        return f"{self.autor_username} / {self.pelicula_titulo} — {self.fecha:%d/%m/%Y}"

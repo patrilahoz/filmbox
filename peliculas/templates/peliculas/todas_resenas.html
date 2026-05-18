@@ -1,0 +1,266 @@
+{% extends "base/base.html" %}
+
+{% block title %}Todas las reseñas{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --bg: #191919;
+    --panel: #262626;
+    --muted: #bdbdbd;
+    --white: #fafafa;
+  }
+
+  * { box-sizing: border-box }
+
+  body {
+    margin: 0;
+    font-family: 'Gantari', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+  }
+
+  .main {
+    max-width: 1100px;
+    margin: 32px auto;
+    padding: 0 24px;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+  }
+
+  .search-wrap {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    height: 42px;
+    width: 280px;
+    transition: border-color 0.25s;
+  }
+
+  .search-wrap:focus-within { border-color: #7c3aed; }
+
+  .search-wrap i { color: rgba(255,255,255,0.3); font-size: 14px; }
+
+  .search-wrap input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-family: 'Gantari', sans-serif;
+    font-size: 14px;
+  }
+
+  .search-wrap input::placeholder { color: rgba(255,255,255,0.3); }
+
+  .count-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .count-label span { color: #b39ddb; font-weight: 600; }
+
+  .reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .review-card {
+    background: var(--panel);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 16px;
+    align-items: start;
+    transition: border-color 0.2s;
+  }
+
+  .review-card:hover { border-color: rgba(208,179,255,0.35); }
+
+  .poster-thumb {
+    width: 48px;
+    height: 70px;
+    border-radius: 4px;
+    object-fit: cover;
+    background: #333;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .poster-thumb-placeholder {
+    width: 48px;
+    height: 70px;
+    border-radius: 4px;
+    background: #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.15);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .review-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+
+  .review-movie {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .review-movie:hover { color: #D9BDFE; }
+
+  .review-meta {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .review-meta .author { color: #b39ddb; font-weight: 600; }
+
+  .stars { display: flex; gap: 2px; }
+  .stars i { color: #6E32D5; font-size: 0.8rem; }
+
+  .review-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 2px;
+    text-align: justify;
+  }
+
+  .review-actions { display: flex; align-items: flex-start; padding-top: 2px; }
+
+  .btn-delete {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.25);
+    color: #f87171;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-delete:hover {
+    background: rgba(239,68,68,0.25);
+    border-color: rgba(239,68,68,0.6);
+    transform: translateY(-1px);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 0;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .empty-state i { font-size: 40px; display: block; margin-bottom: 14px; opacity: 0.4; }
+
+  @media (max-width: 640px) {
+    .review-card { grid-template-columns: 40px 1fr; }
+    .review-actions { grid-column: 1 / -1; justify-content: flex-end; }
+    h1 { font-size: 24px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="main">
+
+  <div class="page-header">
+    <h1>Todas las reseñas</h1>
+    <form method="get" style="margin:0">
+      <div class="search-wrap">
+        <i class="bi bi-search"></i>
+        <input type="text" name="q" value="{{ q }}" placeholder="Buscar por película...">
+      </div>
+    </form>
+  </div>
+
+  <p class="count-label"><span>{{ reseñas|length }}</span> reseña{{ reseñas|length|pluralize:"s" }} encontrada{{ reseñas|length|pluralize:"s" }}</p>
+
+  {% if reseñas %}
+  <div class="reviews-list">
+    {% for r in reseñas %}
+    <div class="review-card">
+
+      {% if r.pelicula.poster %}
+        <img class="poster-thumb" src="{{ r.pelicula.poster.url }}" alt="{{ r.pelicula.titulo }}">
+      {% else %}
+        <div class="poster-thumb-placeholder"><i class="bi bi-film"></i></div>
+      {% endif %}
+
+      <div class="review-body">
+        <a class="review-movie" href="{% url 'pelicula' r.pelicula.id %}">{{ r.pelicula.titulo }}</a>
+        <div class="review-meta">
+          <span class="author">@{{ r.usuario.username }}</span>
+          <span>{{ r.fecha|date:"d M Y" }}</span>
+          {% if r.puntuacion %}
+          <span class="stars">
+            {% for i in "12345" %}{% if forloop.counter <= r.puntuacion %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}{% endfor %}
+          </span>
+          {% endif %}
+        </div>
+        {% if r.texto %}
+        <p class="review-text">{{ r.texto }}</p>
+        {% endif %}
+      </div>
+
+      <div class="review-actions">
+        <form method="post" action="{% url 'eliminar_reseña' r.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn-delete">
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </form>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-chat-square-text"></i>
+    {% if q %}No hay reseñas que coincidan con "{{ q }}".{% else %}Todavía no hay ninguna reseña.{% endif %}
+  </div>
+  {% endif %}
+
+</main>
+{% endblock %}

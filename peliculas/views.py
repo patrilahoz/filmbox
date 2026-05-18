@@ -1,11 +1,12 @@
 from urllib import request
 
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.cache import never_cache
 
 from peliculas.forms import PeliculaForm
-from .models import Pelicula, Genero, LikeReseña, Reseña
+from .models import Pelicula, Genero, LikeReseña, Reseña, ReseñaEliminada
 from listas.models import Lista, PeliculaEnLista
 from django.db.models import Max, Count
 
@@ -33,11 +34,6 @@ def home(request):
         "tendencias": tendencias,
         "destacada": destacada
     })
-
-
-
-
-
 
 
 
@@ -111,6 +107,12 @@ def pelicula(request, pelicula_id):
             pelicula=pelicula
         ).values_list('lista_id', flat=True)
     )
+    user_likes = set(
+        LikeReseña.objects.filter(
+            usuario=request.user,
+            reseña__pelicula=pelicula
+        ).values_list('reseña_id', flat=True)
+    )
 
     return render(request, "peliculas/pelicula.html", {
         "pelicula": pelicula,
@@ -118,6 +120,7 @@ def pelicula(request, pelicula_id):
         "reseña_editando": reseña_editando,
         "mis_listas": mis_listas,
         "listas_con_pelicula": listas_con_pelicula,
+        "user_likes": user_likes,
     })
 
 
@@ -234,15 +237,63 @@ def cancelar_edicion_reseña(request, pelicula_id):
 # VISTA ELIMINAR RESEÑA
 @login_required
 def eliminar_reseña(request, reseña_id):
-    reseña = get_object_or_404(Reseña, id=reseña_id, usuario=request.user)
+    reseña = get_object_or_404(Reseña, id=reseña_id)
+
+    # Moderador: puede eliminar cualquier reseña y se registra en el log
+    if request.user.has_perm("peliculas.puede_eliminar_reseñas"):
+        pelicula_id = reseña.pelicula.id
+        ReseñaEliminada.objects.create(
+            pelicula_titulo=reseña.pelicula.titulo,
+            autor_username=reseña.usuario.username,
+            eliminada_por=request.user,
+        )
+        reseña.delete()
+        return redirect("pelicula", pelicula_id=pelicula_id)
+
+    # Superuser: puede eliminar cualquier reseña
+    if request.user.is_superuser:
+        pelicula_id = reseña.pelicula.id
+        reseña.delete()
+        return redirect("pelicula", pelicula_id=pelicula_id)
+
+    # Usuario estándar o administrador: solo puede eliminar su propia reseña
+    if reseña.usuario != request.user:
+        return HttpResponseForbidden("No puedes eliminar reseñas de otros usuarios.")
+
     pelicula_id = reseña.pelicula.id
     reseña.delete()
     return redirect("pelicula", pelicula_id=pelicula_id)
 
 
+# VISTA TODAS LAS RESEÑAS (solo moderadores)
+@login_required
+def todas_resenas(request):
+    if not request.user.has_perm("peliculas.puede_eliminar_reseñas") and not request.user.is_superuser:
+        return HttpResponseForbidden()
+
+    reseñas = (
+        Reseña.objects
+        .select_related('usuario', 'pelicula')
+        .order_by('-fecha')
+    )
+
+    q = request.GET.get('q', '').strip()
+    if q:
+        reseñas = reseñas.filter(pelicula__titulo__icontains=q)
+
+    return render(request, "peliculas/todas_resenas.html", {
+        "reseñas": reseñas,
+        "q": q,
+    })
+
+
+
 # VISTA "ME GUSTA" A UNA RESEÑA
 @login_required
 def like_reseña(request, reseña_id):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'method not allowed'}, status=405)
+
     reseña = get_object_or_404(Reseña, id=reseña_id)
 
     like, created = LikeReseña.objects.get_or_create(
@@ -251,9 +302,12 @@ def like_reseña(request, reseña_id):
     )
 
     if not created:
-        like.delete()  # quitar me gusta
+        like.delete()
+        liked = False
+    else:
+        liked = True
 
-    return redirect("pelicula", pelicula_id=reseña.pelicula.id)
+    return JsonResponse({'liked': liked, 'count': reseña.likereseña_set.count()})
 
 
 

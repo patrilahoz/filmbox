@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from peliculas.models import Pelicula
 
+# USUARIOS
 class Usuario(AbstractUser):
     ROLES = (
         ('usuario', 'Usuario'),
@@ -15,6 +16,7 @@ class Usuario(AbstractUser):
         return self.username
 
 
+# PERFILES
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -26,6 +28,12 @@ class Profile(models.Model):
     fav2 = models.ForeignKey(Pelicula, on_delete=models.SET_NULL, null=True, blank=True, related_name='fav2_users')
     fav3 = models.ForeignKey(Pelicula, on_delete=models.SET_NULL, null=True, blank=True, related_name='fav3_users')
     fav4 = models.ForeignKey(Pelicula, on_delete=models.SET_NULL, null=True, blank=True, related_name='fav4_users')
+
+    @property
+    def profile_image_url(self):
+        if self.profile_image:
+            return self.profile_image.url
+        return '/media/profile_images/pfp-por-defecto.png'
 
     def __str__(self):
         return f"Perfil de {self.user.username}"
@@ -43,6 +51,18 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         instance.profile.save()
 
 
+# PERMISOS MODERADOR
+from django.contrib.auth.models import Permission
+
+@receiver(post_save, sender=Usuario)
+def asignar_permisos_moderador(sender, instance, created, **kwargs):
+    if instance.rol == "moderador":
+        permiso = Permission.objects.get(codename="puede_eliminar_reseñas")
+        instance.user_permissions.add(permiso)
+
+
+
+# SEGUIMIENTOS
 class Seguimiento(models.Model):
     seguidor = models.ForeignKey(
         settings.AUTH_USER_MODEL,

@@ -129,8 +129,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 AUTHENTICATION_BACKENDS = [
-    'usuarios.backends.EmailBackend',   # nuestro backend
-    'django.contrib.auth.backends.ModelBackend',  # por si acaso
+    'usuarios.backends.EmailBackend',               # para autenticación por email
+    'django.contrib.auth.backends.ModelBackend',    # para que el admin siga funcionando
 ]
 
 

@@ -21,8 +21,8 @@
         <!-- FOTO DE PERFIL -->
         <div class="profile-container">
             <a href="{% url 'perfil' %}">
-                {% if request.user.is_authenticated and request.user.profile.profile_image %}
-                    <img src="{{ request.user.profile.profile_image.url }}" alt="Avatar" class="avatar-img">
+                {% if request.user.is_authenticated %}
+                    <img src="{{ request.user.profile.profile_image_url }}" alt="Avatar" class="avatar-img">
                 {% else %}
                     <img src="{% static 'usuarios/img/avatar.png' %}" alt="Avatar" class="avatar-img">
                 {% endif %}

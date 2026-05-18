@@ -281,6 +281,10 @@
     display: none
   }
 
+  .fav-card--empty {
+    visibility: hidden;
+  }
+
   .fav-card img {
     width: 100%;
     height: 100%;
@@ -510,16 +514,7 @@
       <!-- FOTO DE PERFIL -->
       <label class="avatar-wrap" for="avatarInput" title="Añadir foto de perfil">
         <div class="profile-photo-icon" id="profilePhotoPreview" aria-hidden>
-          {% if request.user.profile.profile_image %}
-          <img src="{{ request.user.profile.profile_image.url }}" class="profile-photo-img">
-          {% else %}
-          <!-- SVG por defecto si no hay foto -->
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <circle cx="12" cy="8" r="3.2" stroke="rgba(123,62,181,1)" stroke-width="1.6" fill="rgba(237,221,255,1)" />
-            <path d="M4 20c0-3.3 3.6 6 8 6s8 2.7 8 6" stroke="rgba(123,62,181,1)" stroke-width="1.6"
-              fill="rgba(237,221,255,1)" />
-          </svg>
-          {% endif %}
+          <img src="{{ request.user.profile.profile_image_url }}" class="profile-photo-img">
         </div>
       </label>
       <input id="profilePhotoInput" class="profile-photo-input" type="file" accept="image/*">
@@ -537,8 +532,8 @@
 
       <!-- SEGUIDORES Y SEGUIDOS -->
       <div class="follows">
-        <div><strong>{{ request.user.following.count }}</strong> siguiendo</div>
-        <div><strong>{{ request.user.followers.count }}</strong> seguidores</div>
+        <div><strong>{{ request.user.seguidos.count }}</strong> siguiendo</div>
+        <div><strong>{{ request.user.seguidores.count }}</strong> seguidores</div>
       </div>
 
 
@@ -578,34 +573,30 @@
         <hr style="border-color: white; margin-bottom: 20px;">
         <div class="favorites">
           {% with fav=request.user.profile.fav1 %}
-          <div class="fav-card">
+          <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}
-            {% else %}<div class="fav-placeholder"></div>{% endif %}
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
 
           {% with fav=request.user.profile.fav2 %}
-          <div class="fav-card">
+          <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}
-            {% else %}<div class="fav-placeholder"></div>{% endif %}
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
 
           {% with fav=request.user.profile.fav3 %}
-          <div class="fav-card">
+          <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}
-            {% else %}<div class="fav-placeholder"></div>{% endif %}
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
 
           {% with fav=request.user.profile.fav4 %}
-          <div class="fav-card">
+          <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}
-            {% else %}<div class="fav-placeholder"></div>{% endif %}
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
         </div>

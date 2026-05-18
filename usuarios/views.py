@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import ProfileForm
-from peliculas.models import Reseña, Pelicula
+from .models import Seguimiento
+from peliculas.models import Reseña, Pelicula, ReseñaEliminada
 from listas.models import Lista
 
 User = get_user_model()
@@ -93,6 +94,12 @@ def perfil(request):
     ctx = {'mis_listas': mis_listas}
     if request.user.is_staff:
         return render(request, "usuarios/perfil_admin.html", ctx)
+    if request.user.rol == 'moderador':
+        eliminadas = ReseñaEliminada.objects.filter(eliminada_por=request.user)
+        return render(request, "usuarios/perfil_moderador.html", {
+            "resenas_eliminadas": eliminadas[:8],
+            "total_eliminadas": eliminadas.count(),
+        })
     return render(request, "usuarios/perfil_user.html", ctx)
 
 
@@ -136,6 +143,44 @@ def edit_profile(request):
 
     form = ProfileForm(instance=profile)
     return render(request, 'usuarios/edit_profile.html', {'form': form, 'peliculas': peliculas})
+
+
+# VER PERFIL DE OTRO USUARIO
+@login_required
+def ver_perfil(request, username):
+    usuario = get_object_or_404(User, username=username)
+    qs = (Lista.objects
+          .filter(usuario=usuario)
+          .prefetch_related('items__pelicula')
+          .order_by('-fecha_creacion'))
+    mis_listas = []
+    for lista in qs:
+        all_items = list(lista.items.all())
+        mis_listas.append({
+            'lista': lista,
+            'preview': all_items[:3],
+            'count': len(all_items),
+        })
+    ya_sigue = Seguimiento.objects.filter(seguidor=request.user, seguido=usuario).exists()
+    return render(request, 'usuarios/ver_perfil.html', {
+        'perfil_usuario': usuario,
+        'mis_listas': mis_listas,
+        'ya_sigue': ya_sigue,
+    })
+
+
+# SEGUIR / DEJAR DE SEGUIR
+@login_required
+def seguir(request, username):
+    usuario_a_seguir = get_object_or_404(User, username=username)
+    if request.user != usuario_a_seguir:
+        seguimiento, created = Seguimiento.objects.get_or_create(
+            seguidor=request.user,
+            seguido=usuario_a_seguir
+        )
+        if not created:
+            seguimiento.delete()
+    return redirect('ver_perfil', username=username)
 
 
 # DIARIO

@@ -1,0 +1,334 @@
+{% extends "base/base.html" %}
+
+{% block title %}Perfil de {{ request.user.username }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --bg: #191919;
+    --panel: #262626;
+    --muted: #bdbdbd;
+    --accent-dark: #7b3eb5;
+    --white: #f6f6f6;
+  }
+
+  * { box-sizing: border-box }
+
+  body {
+    margin: 0;
+    font-family: 'Gantari', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+  }
+
+  .main {
+    max-width: 1200px;
+    margin: 28px auto;
+    padding: 0 24px;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  /* ── LEFT COLUMN ── */
+  .left {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .profile-photo-wrap {
+    width: 160px;
+    height: 160px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 6px solid rgba(123, 62, 181, 0.08);
+    margin-top: 20px;
+  }
+
+  .profile-photo-img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .name {
+    font-size: 30px;
+    font-weight: 700;
+    font-family: 'Exo 2', sans-serif;
+    color: white;
+    margin-bottom: -15px;
+  }
+
+  .username {
+    font-size: 16px;
+    color: var(--muted);
+    font-family: 'Exo 2', sans-serif;
+    margin-bottom: -20px;
+  }
+
+  .mod-card {
+    background: #bdfee0;
+    color: #1a7a4a;
+    width: 150px;
+    height: 30px;
+    border-radius: 8px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
+
+  .desc {
+    color: white;
+    margin-top: 12px;
+    max-width: 260px;
+    font-family: 'Gantari', sans-serif;
+    text-align: justify;
+  }
+
+  .edit-btn {
+    background: #D9BDFE;
+    color: black;
+    width: 260px;
+    height: 50px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 0;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    justify-content: center;
+    transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .edit-btn:hover {
+    background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    transform: translateY(-2px) scale(1.05);
+  }
+
+  /* ── RIGHT COLUMN ── */
+  .right {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  h2.section {
+    margin: 0 0 8px 0;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Gantari', sans-serif;
+    letter-spacing: 2px;
+  }
+
+  /* Ver todas las reseñas */
+  .reviews-btn {
+    background: #6E32D5;
+    color: white;
+    width: 100%;
+    height: 54px;
+    border-radius: 10px;
+    border: 0;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.4s ease, background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .reviews-btn:hover {
+    background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+    color: white;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.45);
+    transform: translateY(-2px) scale(1.02);
+    text-decoration: none;
+  }
+
+  /* Panel actividad */
+  .activity-panel {
+    background: var(--panel);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .panel-header h2 { margin: 0; font-size: 16px; letter-spacing: 2px; }
+
+  .counter-badge {
+    background: rgba(123,62,181,0.18);
+    border: 1px solid rgba(123,62,181,0.35);
+    color: #D9BDFE;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .log-list { list-style: none; margin: 0; padding: 0; }
+
+  .log-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 13px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+  }
+
+  .log-item:last-child { border-bottom: none; }
+  .log-item:hover { background: rgba(255,255,255,0.03); }
+
+  .log-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+
+  .log-movie {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .log-author {
+    font-size: 12px;
+    color: #b39ddb;
+    font-weight: 600;
+  }
+
+  .log-author span { color: var(--muted); font-weight: 400; }
+
+  .log-date {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    white-space: nowrap;
+  }
+
+  .log-empty {
+    padding: 36px 22px;
+    text-align: center;
+    color: rgba(255,255,255,0.22);
+    font-size: 14px;
+  }
+
+  .log-empty i { display: block; font-size: 28px; margin-bottom: 8px; opacity: 0.3; }
+
+  @media (max-width: 900px) {
+    .columns { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="main">
+  <div class="columns">
+
+    <!-- ── IZQUIERDA ── -->
+    <aside class="left">
+
+      <div class="profile-photo-wrap">
+        <img src="{{ request.user.profile.profile_image_url }}" class="profile-photo-img" alt="Foto de perfil">
+      </div>
+
+      <div class="name">{{ request.user.profile.name }}</div>
+
+      <div class="username">
+        <p>@{{ request.user.username }}</p>
+      </div>
+
+      <div class="mod-card">MODERADOR</div>
+
+      <div class="desc">{{ request.user.profile.description }}</div>
+
+      <a href="{% url 'edit_profile' %}">
+        <button class="edit-btn">
+          <i class="bi bi-pencil-square" style="font-size: 1.3rem;"></i>
+          EDITAR PERFIL
+        </button>
+      </a>
+
+    </aside>
+
+    <!-- ── DERECHA ── -->
+    <section class="right">
+
+      <!-- BOTÓN VER TODAS LAS RESEÑAS -->
+      <div>
+        <h2 class="section">MODERACIÓN</h2>
+        <hr style="border-color: white; margin-bottom: 20px;">
+        <a href="{% url 'todas_resenas' %}" class="reviews-btn">
+          <i class="bi bi-chat-square-text" style="font-size: 1.3rem;"></i>
+          VER TODAS LAS RESEÑAS
+        </a>
+      </div>
+
+      <!-- PANEL ACTIVIDAD -->
+      <div>
+        <h2 class="section">ACTIVIDAD</h2>
+        <hr style="border-color: white; margin-bottom: 20px;">
+
+        <div class="activity-panel">
+          <div class="panel-header">
+            <h2 class="section" style="letter-spacing:1px; font-size:14px;">RESEÑAS ELIMINADAS</h2>
+            <span class="counter-badge">{{ total_eliminadas }} en total</span>
+          </div>
+
+          {% if resenas_eliminadas %}
+          <ul class="log-list">
+            {% for entry in resenas_eliminadas %}
+            <li class="log-item">
+              <div class="log-info">
+                <span class="log-movie">{{ entry.pelicula_titulo }}</span>
+                <span class="log-author">@{{ entry.autor_username }} <span>· autor eliminado</span></span>
+              </div>
+              <span class="log-date">{{ entry.fecha|date:"d M Y" }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <div class="log-empty">
+            <i class="bi bi-shield-check"></i>
+            Todavía no has eliminado ninguna reseña.
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </section>
+  </div>
+</main>
+{% endblock %}

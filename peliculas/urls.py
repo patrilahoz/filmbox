@@ -12,6 +12,7 @@ urlpatterns = [
     path("reseña/<int:reseña_id>/editar/", views.editar_reseña, name="editar_reseña"),
     path("pelicula/<int:pelicula_id>/cancelar-edicion/", views.cancelar_edicion_reseña, name="cancelar_edicion_reseña"),
     path("reseña/<int:reseña_id>/eliminar/", views.eliminar_reseña, name="eliminar_reseña"),
+    path("reseña/<int:reseña_id>/like/", views.like_reseña, name="like_reseña"),
 
     path("pelicula/<int:pelicula_id>/editar/", views.editar_pelicula, name="editar_pelicula"),
     path("pelicula/<int:pelicula_id>/eliminar/", views.eliminar_pelicula, name="eliminar_pelicula"),
@@ -19,4 +20,6 @@ urlpatterns = [
 
     path("select/", views.select_movie, name="select_movie"),
     path("add/", views.add_movie, name="add_movie"),
+
+    path("resenas/", views.todas_resenas, name="todas_resenas"),
 ]

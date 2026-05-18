@@ -440,6 +440,13 @@
     .review-username {
         font-size: 16px;
         font-weight: 600;
+        color: white;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .review-username:hover {
+        color: #D9BDFE;
     }
 
     .review-avatar {
@@ -471,6 +478,11 @@
         gap: 6px;
         color: var(--muted);
         cursor: pointer;
+    }
+
+    .like-disabled {
+        cursor: default;
+        opacity: 0.6;
     }
 
     .review-likes i {
@@ -518,6 +530,33 @@
     .edit-review-btn:hover,
     .delete-review-btn:hover {
         transform: scale(1.08);
+    }
+
+    .mod-delete-btn {
+        width: auto;
+        height: auto;
+        padding: 6px 12px;
+        background: rgba(239, 68, 68, 0.1);
+        background-color: unset;
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        border-radius: 8px;
+        font-size: 14px;
+        gap: 6px;
+        white-space: nowrap;
+        vertical-align: middle;
+        line-height: 1;
+        margin-left: 10px;
+        text-decoration: none;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .mod-delete-btn:hover {
+        background: rgba(239, 68, 68, 0.25);
+        border-color: rgba(239, 68, 68, 0.6);
+        color: #f87171;
+        transform: translateY(-1px);
+        text-decoration: none;
     }
 
     .my-review {
@@ -587,9 +626,11 @@
             {% endif %}
 
             <!-- AÑADIR A LISTA -->
+            {% if request.user.rol != 'moderador' %}
             <button type="button" class="anadir-lista-btn" data-bs-toggle="modal" data-bs-target="#modalAnadirLista">
                 <i class="bi bi-bookmark-plus"></i> Añadir a lista
             </button>
+            {% endif %}
 
         </div>
 
@@ -637,6 +678,7 @@
 
             <!-- CAJA PUNTUACIÓN + RESEÑA -->
 
+            {% if request.user.rol != 'moderador' %}
             <form method="POST" action="{% url 'guardar_reseña' pelicula.id %}" id="reviewForm">
                 {% csrf_token %}
                 <div class="card-surface mt-4 review-box">
@@ -674,6 +716,7 @@
                         placeholder="Escribe tu reseña...">{{ reseña_editando.texto|default:'' }}</textarea>
                 </div>
             </form>
+            {% endif %}
 
 
 
@@ -697,7 +740,11 @@
                                 {% endfor %}
                         </div>
                         <div class="review-header-user">
-                            <span class="review-username">{{ r.usuario.profile.name }}</span>
+                            {% if r.usuario == request.user %}
+                            <a href="{% url 'perfil' %}" class="review-username">{{ r.usuario.profile.name }}</a>
+                            {% else %}
+                            <a href="{% url 'ver_perfil' r.usuario.username %}" class="review-username">{{ r.usuario.profile.name }}</a>
+                            {% endif %}
                             {% if r.usuario.profile.profile_image %}
                             <img src="{{ r.usuario.profile.profile_image.url }}" class="review-avatar">
                             {% else %}
@@ -713,11 +760,17 @@
 
                     <!-- Footer: likes, fecha -->
                     <div class="review-card-footer">
-                        <div class="review-likes like-btn" data-review-id="{{ r.id }}">
-                            <i class="bi bi-heart" style="color: #6E32D5;"></i>
-                            <span class="like-count"><span class="like-number">{{ r.likereseña_set.count }}</span> me
-                                gusta</span>
+                        {% if request.user.rol == 'moderador' %}
+                        <div class="review-likes like-disabled">
+                            <i class="bi bi-heart-fill" style="color: #6E32D5;"></i>
+                            <span class="like-count"><span class="like-number">{{ r.likereseña_set.count }}</span> me gusta</span>
                         </div>
+                        {% else %}
+                        <div class="review-likes like-btn" data-review-id="{{ r.id }}" data-url="{% url 'like_reseña' r.id %}">
+                            <i class="bi {% if r.id in user_likes %}bi-heart-fill{% else %}bi-heart{% endif %}" style="color: #6E32D5;"></i>
+                            <span class="like-count"><span class="like-number">{{ r.likereseña_set.count }}</span> me gusta</span>
+                        </div>
+                        {% endif %}
                         <div class="review-date">
                             {{ r.fecha|date:"d/m/Y H:i" }}
 
@@ -725,11 +778,14 @@
                             <a href="{% url 'editar_reseña' r.id %}" class="edit-review-btn" title="Editar reseña">
                                 <i class="bi bi-pencil-square" style="font-size: 1rem;"></i>
                             </a>
-
-                            <a href="{% url 'eliminar_reseña' r.id %}" class="delete-review-btn"
-                                title="Eliminar reseña">
+                            {% if request.user.rol != 'moderador' %}
+                            <a href="{% url 'eliminar_reseña' r.id %}" class="delete-review-btn" title="Eliminar reseña">
                                 <i class="bi bi-trash" style="font-size: 1rem;"></i>
                             </a>
+                            {% endif %}
+                            {% endif %}
+                            {% if request.user.rol == 'moderador' %}
+                            <a href="{% url 'eliminar_reseña' r.id %}" class="delete-review-btn mod-delete-btn"><i class="bi bi-trash"></i> Eliminar reseña</a>
                             {% endif %}
 
                         </div>
@@ -782,22 +838,24 @@
     })();
 
     // ===== FUNCIONALIDAD DE LIKES EN RESEÑAS =====
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
     document.querySelectorAll('.like-btn').forEach(btn => {
         btn.addEventListener('click', function () {
             const heart = this.querySelector('i');
             const likeNumber = this.querySelector('.like-number');
+            const url = this.dataset.url;
 
-            heart.classList.toggle('bi-heart');
-            heart.classList.toggle('bi-heart-fill');
-
-            // Cambiar solo el contador
-            let count = parseInt(likeNumber.textContent);
-            if (heart.classList.contains('bi-heart-fill')) {
-                count += 1;
-            } else {
-                count -= 1;
-            }
-            likeNumber.textContent = count;
+            fetch(url, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrfToken },
+            })
+            .then(res => res.json())
+            .then(data => {
+                heart.classList.toggle('bi-heart', !data.liked);
+                heart.classList.toggle('bi-heart-fill', data.liked);
+                likeNumber.textContent = data.count;
+            });
         });
     });
 
@@ -903,6 +961,7 @@
 </script>
 
 <!-- Modal: añadir a lista -->
+{% if request.user.rol != 'moderador' %}
 <div class="modal fade" id="modalAnadirLista" tabindex="-1" aria-labelledby="modalAnadirListaLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -946,5 +1005,6 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 {% endblock %}

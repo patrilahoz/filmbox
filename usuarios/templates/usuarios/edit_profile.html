@@ -48,7 +48,7 @@
     }
 
     .card {
-        background: var(--card);
+        background: linear-gradient(100deg, #2e2e2e 0%, #262626 100%);
         padding: 36px;
         border-radius: 15px;
         max-width: 1200px;
@@ -496,7 +496,7 @@
         border: 1px solid rgba(110, 50, 213, 0.45);
         border-radius: 16px;
         width: 100%;
-        max-width: 700px;
+        max-width: 1000px;
         max-height: 90vh;
         display: flex;
         flex-direction: column;
@@ -535,7 +535,7 @@
     }
 
     .fav-modal-body {
-        padding: 20px 24px;
+        padding: 20px 24px 24px;
         overflow-y: auto;
         flex: 1;
     }
@@ -577,14 +577,16 @@
 
     .fav-grid {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 12px;
-        max-height: 360px;
-        overflow-y: auto;
-        padding-right: 4px;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 14px;
+        padding: 4px 2px 8px;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
+        .fav-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 500px) {
         .fav-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
@@ -607,7 +609,7 @@
         border-radius: 6px;
         overflow: hidden;
         border: 2px solid transparent;
-        transition: border-color 0.2s, transform 0.2s;
+        transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -625,7 +627,8 @@
 
     .fav-movie-item:hover .fav-movie-poster {
         border-color: #7c3aed;
-        transform: scale(1.04);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(110, 50, 213, 0.45);
     }
 
     .fav-movie-title {
@@ -665,7 +668,7 @@
                         <div>
                             <div class="thumb-wrap" id="thumbWrap">
                                 <div class="thumb-inner" id="thumbInner">
-                                    <span style="color:rgba(255,255,255,0.12)"></span>
+                                    <img src="{{ request.user.profile.profile_image_url }}" alt="Profile Image">
                                 </div>
                                 <div class="thumb-overlay"></div>
                                 <div class="thumb-actions">
@@ -686,6 +689,7 @@
                         <div class="row">
 
                             <!-- FAVORITAS -->
+                            {% if request.user.rol != 'moderador' %}
                             <div class="favorites-section">
                                 <h2 class="section">FAVORITAS</h2>
 
@@ -708,7 +712,7 @@
                                     <div class="fav-card" data-slot="1">
                                         <img id="fav1Img" alt="Favorita 1">
                                         <div id="fav1Title" class="fav-title-fallback"></div>
-                                        <i id="fav1Plus" class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <i id="fav1Plus" class="bi bi-plus" aria-hidden style="font-size: 4rem; color:#999;"></i>
                                         <button type="button" id="fav1Remove" class="fav-remove-btn"><i class="bi bi-x"></i></button>
                                     </div>
                                     <input type="hidden" name="fav1" id="fav1Input">
@@ -716,7 +720,7 @@
                                     <div class="fav-card" data-slot="2">
                                         <img id="fav2Img" alt="Favorita 2">
                                         <div id="fav2Title" class="fav-title-fallback"></div>
-                                        <i id="fav2Plus" class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <i id="fav2Plus" class="bi bi-plus" aria-hidden style="font-size: 4rem; color:#999;"></i>
                                         <button type="button" id="fav2Remove" class="fav-remove-btn"><i class="bi bi-x"></i></button>
                                     </div>
                                     <input type="hidden" name="fav2" id="fav2Input">
@@ -724,7 +728,7 @@
                                     <div class="fav-card" data-slot="3">
                                         <img id="fav3Img" alt="Favorita 3">
                                         <div id="fav3Title" class="fav-title-fallback"></div>
-                                        <i id="fav3Plus" class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <i id="fav3Plus" class="bi bi-plus" aria-hidden style="font-size: 4rem; color:#999;"></i>
                                         <button type="button" id="fav3Remove" class="fav-remove-btn"><i class="bi bi-x"></i></button>
                                     </div>
                                     <input type="hidden" name="fav3" id="fav3Input">
@@ -732,12 +736,13 @@
                                     <div class="fav-card" data-slot="4">
                                         <img id="fav4Img" alt="Favorita 4">
                                         <div id="fav4Title" class="fav-title-fallback"></div>
-                                        <i id="fav4Plus" class="bi bi-plus" aria-hidden style="font-size: 5rem; color:#999;"></i>
+                                        <i id="fav4Plus" class="bi bi-plus" aria-hidden style="font-size: 4rem; color:#999;"></i>
                                         <button type="button" id="fav4Remove" class="fav-remove-btn"><i class="bi bi-x"></i></button>
                                     </div>
                                     <input type="hidden" name="fav4" id="fav4Input">
                                 </div>
                             </div>
+                            {% endif %}
 
                             <!-- NOMBRE -->
                             <div class="form-group">
@@ -775,6 +780,7 @@
     </div>
 </main>
 
+{% if request.user.rol != 'moderador' %}
 <div id="fav-modal" class="fav-modal-overlay">
     <div class="fav-modal-inner">
         <div class="fav-modal-header">
@@ -810,6 +816,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <script>
     // ============================
@@ -819,12 +826,10 @@
     const thumbInner = document.getElementById('thumbInner');
     const removeBtn = document.getElementById('removeBtn');
     const uploadLabel = document.getElementById('uploadLabel');
+    const defaultPreviewUrl = "{{ request.user.profile.profile_image_url|escapejs }}";
 
     function clearPreview() {
-        thumbInner.innerHTML = '';
-        thumbInner.style.justifyContent = 'center';
-        thumbInner.style.alignItems = 'center';
-
+        thumbInner.innerHTML = `<img src="${defaultPreviewUrl}" alt="Profile Image">`;
         if (removeBtn) removeBtn.style.display = 'none';
         if (uploadLabel) uploadLabel.style.display = 'inline-flex';
     }
@@ -859,12 +864,10 @@
         clearPreview();
     });
 
-    clearPreview();
-
     // ============================
     // PELÍCULAS FAVORITAS
     // ============================
-    (function () {
+    if (document.getElementById('fav-init-data')) (function () {
         var d = document.getElementById('fav-init-data').dataset;
         var initialFavs = {
             1: { id: d.fav1Id || null, posterUrl: d.fav1Poster || '', titulo: d.fav1Titulo || '' },
@@ -875,6 +878,26 @@
 
         var currentSlot = null;
         var modal = document.getElementById('fav-modal');
+        var selections = { 1: null, 2: null, 3: null, 4: null };
+
+        function getSelectedIds(excludeSlot) {
+            var ids = new Set();
+            for (var s = 1; s <= 4; s++) {
+                if (s !== excludeSlot && selections[s]) ids.add(String(selections[s].id));
+            }
+            return ids;
+        }
+
+        function updateCardLockStates() {
+            for (var s = 1; s <= 4; s++) {
+                var card = document.querySelector('.fav-card[data-slot="' + s + '"]');
+                if (!card) continue;
+                var locked = s > 1 && !selections[s - 1];
+                card.dataset.locked = locked ? 'true' : '';
+                card.style.opacity = locked ? '0.35' : '1';
+                card.style.cursor = locked ? 'not-allowed' : 'pointer';
+            }
+        }
 
         function updateFavCard(slot, data) {
             var img = document.getElementById('fav' + slot + 'Img');
@@ -882,6 +905,8 @@
             var plus = document.getElementById('fav' + slot + 'Plus');
             var removeBtn = document.getElementById('fav' + slot + 'Remove');
             var input = document.getElementById('fav' + slot + 'Input');
+
+            selections[slot] = (data && data.id) ? data : null;
 
             if (data && data.id) {
                 input.value = data.id;
@@ -904,6 +929,8 @@
                 plus.style.display = 'block';
                 removeBtn.style.display = 'none';
             }
+
+            updateCardLockStates();
         }
 
         function closeModal() {
@@ -912,11 +939,14 @@
         }
 
         function filterMovies(q) {
+            var selectedIds = currentSlot ? getSelectedIds(currentSlot) : new Set();
             var visible = 0;
             document.querySelectorAll('.fav-movie-item').forEach(function (item) {
-                var matches = item.dataset.titulo.includes(q);
-                item.style.display = matches ? '' : 'none';
-                if (matches) visible++;
+                var matchesQuery = item.dataset.titulo.includes(q);
+                var alreadyPicked = selectedIds.has(String(item.dataset.id));
+                var show = matchesQuery && !alreadyPicked;
+                item.style.display = show ? '' : 'none';
+                if (show) visible++;
             });
             var noResults = document.getElementById('fav-no-results');
             if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
@@ -924,12 +954,14 @@
 
         // Inicializar con favoritas guardadas
         for (var s = 1; s <= 4; s++) {
-            updateFavCard(s, initialFavs[s]);
+            var fav = initialFavs[s];
+            updateFavCard(s, fav.id ? fav : null);
         }
 
         // Abrir modal al clicar una tarjeta
         document.querySelectorAll('.fav-card[data-slot]').forEach(function (card) {
             card.addEventListener('click', function () {
+                if (card.dataset.locked === 'true') return;
                 currentSlot = parseInt(card.dataset.slot);
                 modal.style.display = 'flex';
                 var search = document.getElementById('fav-search');
@@ -939,12 +971,14 @@
             });
         });
 
-        // Botones de quitar favorita
+        // Botones de quitar favorita: también limpia los slots siguientes para mantener el orden
         document.querySelectorAll('.fav-remove-btn').forEach(function (btn) {
             btn.addEventListener('click', function (e) {
                 e.stopPropagation();
                 var slot = parseInt(btn.closest('.fav-card').dataset.slot);
-                updateFavCard(slot, null);
+                for (var s = slot; s <= 4; s++) {
+                    updateFavCard(s, null);
+                }
             });
         });
 
