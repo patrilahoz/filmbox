@@ -434,8 +434,7 @@
                 <a href="{% url 'ver_lista' d.lista.id %}" class="btn-ver">Ver lista</a>
                 <form method="post" action="{% url 'eliminar_lista' d.lista.id %}" style="margin:0">
                     {% csrf_token %}
-                    <button type="submit" class="btn-eliminar"
-                            onclick="return confirm('¿Eliminar la lista «{{ d.lista.nombre_lista }}»? Esta acción no se puede deshacer.')">
+                    <button type="button" class="btn-eliminar">
                         <i class="bi bi-trash"></i>
                     </button>
                 </form>
@@ -543,26 +542,18 @@
 {% endif %}
 
 <script>
-        // ===== MODAL DE ELIMINAR LISTA =====
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const url = this.getAttribute('href');
+        btn.addEventListener('click', function () {
+            const form = this.closest('form');
 
             Swal.fire({
                 title: "¿Estás segur@ de que quieres eliminar la lista?",
                 text: "No podrás revertir esto",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#d33333",
-                cancelButtonColor: "#999999",
-                cancelButtonText: "Cancelar",
-                confirmButtonText: "Eliminar lista",
-                customClass: {
-                    title: 'swal-title',
-                    confirmButton: 'swal-confirm',
-                    icon: 'swal-icon'
-                }
+                confirmButtonColor: "#6E32D5",
+                cancelButtonColor: "#d33333",
+                confirmButtonText: "Eliminar lista"
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
@@ -575,9 +566,7 @@
                             icon: 'swal-icon'
                         }
                     }).then(() => {
-                        if (url) {
-                            window.location.href = url;
-                        }
+                        form.submit();
                     });
                 }
             });

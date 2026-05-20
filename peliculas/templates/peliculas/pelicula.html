@@ -804,12 +804,15 @@
     </div>
 </main>
 
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
 <script>
     // ===== FUNCIONALIDAD DE ESTRELLAS DE PUNTUACIÓN =====
     (function () {
         const stars = Array.from(document.querySelectorAll('.rating-star'));
         const ratingInput = document.getElementById('ratingInput');
         const starsContainer = document.getElementById('starsContainer');
+        if (!starsContainer) return;
         let selected = 0;
 
         function fill(upto) {
