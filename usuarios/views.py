@@ -1,6 +1,8 @@
+import re
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import ProfileForm
@@ -11,6 +13,20 @@ from listas.models import Lista
 User = get_user_model()
 
 
+# COMPROBAR DISPONIBILIDAD DE USERNAME
+def check_username(request):
+    username = request.GET.get('username', '').strip()
+    exists = User.objects.filter(username__iexact=username).exists()
+    return JsonResponse({'exists': exists})
+
+
+# COMPROBAR DISPONIBILIDAD DE EMAIL
+def check_email(request):
+    email = request.GET.get('email', '').strip()
+    exists = User.objects.filter(email__iexact=email).exists()
+    return JsonResponse({'exists': exists})
+
+
 # REGISTRO
 def register_view(request):
     if request.method == "POST":
@@ -19,14 +35,45 @@ def register_view(request):
         password = request.POST["password"]
         password2 = request.POST["password2"]
 
+        if not (3 <= len(username) <= 20):
+            return render(request, "usuarios/registrarse.html", {
+                "error": "El nombre de usuario debe tener entre 3 y 20 caracteres"
+            })
+
+        if not re.fullmatch(r'[a-zA-Z0-9]+', username):
+            return render(request, "usuarios/registrarse.html", {
+                "error": "El nombre de usuario solo puede contener letras y números"
+            })
+
         if password != password2:
             return render(request, "usuarios/registrarse.html", {
                 "error": "Las contraseñas no coinciden"
             })
 
+        password_errors = []
+        if len(password) < 12:
+            password_errors.append("al menos 12 caracteres")
+        if not re.search(r'[A-Z]', password):
+            password_errors.append("al menos una mayúscula")
+        if not re.search(r'[a-z]', password):
+            password_errors.append("al menos una minúscula")
+        if not re.search(r'[0-9]', password):
+            password_errors.append("al menos un número")
+        if not re.search(r'[^a-zA-Z0-9]', password):
+            password_errors.append("al menos un símbolo")
+        if password_errors:
+            return render(request, "usuarios/registrarse.html", {
+                "error": "La contraseña debe tener: " + ", ".join(password_errors) + "."
+            })
+
         if User.objects.filter(username=username).exists():
             return render(request, "usuarios/registrarse.html", {
                 "error": "El usuario ya existe"
+            })
+
+        if not re.fullmatch(r'[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}', email):
+            return render(request, "usuarios/registrarse.html", {
+                "error": "Introduce un correo válido con dominio (.com, .es, .net…)"
             })
 
         if User.objects.filter(email=email).exists():

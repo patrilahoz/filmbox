@@ -173,6 +173,19 @@
             border-color: rgba(110,50,213,0.65);
         }
 
+        /* Campos deshabilitados */
+        input:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .sign-in-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         /* Requisitos de contraseña */
         #password-requirements {
             margin-top: 8px;
@@ -268,12 +281,35 @@
 
             <div class="form-group">
                 <label for="username">Usuario</label>
-                <input type="text" id="username" name="username" placeholder="Nombre de usuario" required>
+                <input type="text" id="username" name="username" placeholder="Nombre de usuario"
+                    pattern="[a-zA-Z0-9]+"
+                    minlength="3"
+                    maxlength="20"
+                    title="Entre 3 y 20 caracteres. Solo letras y números."
+                    required>
+                <p id="username-length-error" style="display:none; color:#f87171; font-size:12px; margin-top:6px;">
+                    El nombre de usuario debe tener entre 3 y 20 caracteres.
+                </p>
+                <p id="username-format-error" style="display:none; color:#f87171; font-size:12px; margin-top:4px;">
+                    Solo se permiten letras y números, sin símbolos.
+                </p>
+                <p id="username-error" style="display:none; color:#f87171; font-size:12px; margin-top:4px;">
+                    Este nombre de usuario ya está en uso.
+                </p>
             </div>
 
             <div class="form-group">
                 <label for="email">Correo electrónico</label>
-                <input type="email" id="email" name="email" placeholder="tu@correo.com" required>
+                <input type="email" id="email" name="email" placeholder="tu@correo.com"
+                    pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                    title="Introduce un correo válido con dominio (ejemplo: usuario@correo.com)"
+                    required>
+                <p id="email-error" style="display:none; color:#f87171; font-size:12px; margin-top:6px;">
+                    El correo debe tener un dominio válido (.com, .es, .net…)
+                </p>
+                <p id="email-taken-error" style="display:none; color:#f87171; font-size:12px; margin-top:4px;">
+                    Este correo ya está registrado.
+                </p>
             </div>
 
             <div class="form-group">
@@ -289,6 +325,9 @@
                     <li id="req-symbol">⦁ Al menos un símbolo.</li>
                 </ul>
             </div>
+            <p id="password-error" style="display:none; color:#f87171; font-size:12px; margin-top:6px;">
+                La contraseña no cumple todos los requisitos.
+            </p>
 
             <div class="form-group">
                 <label for="password2">Repetir contraseña</label>
@@ -308,7 +347,160 @@
         </form>
     </div>
 
-    <script></script>
+    <script>
+        // Referencias compartidas
+        const submitBtn = document.querySelector('.sign-in-btn');
+        const passInput = document.getElementById('password');
+        const pass2Input = document.getElementById('password2');
+
+        // Validación de contraseña en tiempo real
+        const reqLength = document.getElementById('req-length');
+        const reqCase   = document.getElementById('req-case');
+        const reqNumber = document.getElementById('req-number');
+        const reqSymbol = document.getElementById('req-symbol');
+        const passwordReqs = document.getElementById('password-requirements');
+        const passwordError = document.getElementById('password-error');
+
+        function checkPassword(val) {
+            const ok = {
+                length: val.length >= 12,
+                upper:  /[A-Z]/.test(val),
+                lower:  /[a-z]/.test(val),
+                number: /[0-9]/.test(val),
+                symbol: /[^a-zA-Z0-9]/.test(val),
+            };
+            reqLength.classList.toggle('valid', ok.length);
+            reqCase.classList.toggle('valid', ok.upper && ok.lower);
+            reqNumber.classList.toggle('valid', ok.number);
+            reqSymbol.classList.toggle('valid', ok.symbol);
+            return ok.length && ok.upper && ok.lower && ok.number && ok.symbol;
+        }
+
+        passInput.addEventListener('focus', () => {
+            passwordReqs.style.display = 'block';
+        });
+
+        passInput.addEventListener('input', () => {
+            const valid = checkPassword(passInput.value);
+            passwordError.style.display = 'none';
+        });
+
+        passInput.addEventListener('blur', () => {
+            if (passInput.value) {
+                const valid = checkPassword(passInput.value);
+                passwordError.style.display = valid ? 'none' : 'block';
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const valid = checkPassword(passInput.value);
+            if (!valid) {
+                e.preventDefault();
+                passwordReqs.style.display = 'block';
+                passwordError.style.display = 'block';
+                passInput.focus();
+            }
+        });
+
+        // Validación email
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('email-error');
+        const emailTakenError = document.getElementById('email-taken-error');
+        const emailPattern = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+        let emailTimer = null;
+
+        function setEmailLocked(locked) {
+            passInput.disabled = locked;
+            pass2Input.disabled = locked;
+            submitBtn.disabled = locked;
+        }
+
+        function validateEmail() {
+            emailTakenError.style.display = 'none';
+            clearTimeout(emailTimer);
+            const val = emailInput.value;
+
+            if (!val) {
+                emailError.style.display = 'none';
+                setEmailLocked(false);
+                return;
+            }
+
+            const valid = emailPattern.test(val);
+            emailError.style.display = valid ? 'none' : 'block';
+            if (!valid) {
+                setEmailLocked(true);
+                return;
+            }
+
+            setEmailLocked(false);
+            emailTimer = setTimeout(() => {
+                fetch(`/check-email/?email=${encodeURIComponent(val)}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        emailTakenError.style.display = data.exists ? 'block' : 'none';
+                        setEmailLocked(data.exists);
+                    })
+                    .catch(() => {});
+            }, 400);
+        }
+
+        emailInput.addEventListener('input', validateEmail);
+        emailInput.addEventListener('blur', validateEmail);
+
+        // Validación de username
+        const usernameInput = document.getElementById('username');
+        const usernameError = document.getElementById('username-error');
+        const usernameFormatError = document.getElementById('username-format-error');
+        const usernameLengthError = document.getElementById('username-length-error');
+        const usernamePattern = /^[a-zA-Z0-9]+$/;
+        const formFields = [emailInput, passInput, pass2Input];
+        let usernameTimer = null;
+
+        function setFormLocked(locked) {
+            formFields.forEach(f => { f.disabled = locked; });
+            submitBtn.disabled = locked;
+        }
+
+        usernameInput.addEventListener('input', () => {
+            usernameError.style.display = 'none';
+            clearTimeout(usernameTimer);
+            const val = usernameInput.value.trim();
+
+            if (!val) {
+                usernameLengthError.style.display = 'none';
+                usernameFormatError.style.display = 'none';
+                setFormLocked(false);
+                return;
+            }
+
+            const validFormat = usernamePattern.test(val);
+            usernameFormatError.style.display = validFormat ? 'none' : 'block';
+            if (!validFormat) {
+                usernameLengthError.style.display = 'none';
+                setFormLocked(true);
+                return;
+            }
+
+            const validLength = val.length >= 3 && val.length <= 20;
+            usernameLengthError.style.display = validLength ? 'none' : 'block';
+            if (!validLength) {
+                setFormLocked(true);
+                return;
+            }
+
+            setFormLocked(false);
+            usernameTimer = setTimeout(() => {
+                fetch(`/check-username/?username=${encodeURIComponent(val)}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        usernameError.style.display = data.exists ? 'block' : 'none';
+                        setFormLocked(data.exists);
+                    })
+                    .catch(() => {});
+            }, 400);
+        });
+    </script>
 </body>
 
 </html>

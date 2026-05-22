@@ -20,6 +20,8 @@ urlpatterns = [
     path('perfil/<str:username>/', views.ver_perfil, name='ver_perfil'),
     path('perfil/<str:username>/seguir/', views.seguir, name='seguir'),
     path('perfil/<str:username>/seguimientos/', views.seguimientos, name='seguimientos'),
+    path('check-username/', views.check_username, name='check_username'),
+    path('check-email/', views.check_email, name='check_email'),
 
 ]
 

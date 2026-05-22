@@ -159,62 +159,57 @@
 
     /* Modal editar */
     .edit-modal-body label {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.55);
-        margin-bottom: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: white;
         display: block;
+        margin-bottom: 6px;
     }
 
     .edit-modal-body input,
     .edit-modal-body textarea {
-        width: 100%;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
         color: var(--white);
-        font-family: 'Gantari', sans-serif;
-        font-size: 14px;
+        font-family: 'Gantari';
+        font-size: 15px;
         padding: 10px 14px;
+        width: 100%;
         outline: none;
-        resize: vertical;
-        transition: border-color 0.25s;
+        transition: border-color 0.25s, background 0.25s;
+        resize: none;
     }
 
     .edit-modal-body input:focus,
     .edit-modal-body textarea:focus {
         border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.07);
     }
 
     .edit-modal-body input::placeholder,
     .edit-modal-body textarea::placeholder {
-        color: rgba(255, 255, 255, 0.25);
+        color: rgba(255, 255, 255, 0.28);
     }
 
     .edit-save-btn {
-        background: #6E32D5;
-        color: var(--white);
-        width: 240px;
-        height: 40px;
-        padding: 12px 18px;
+        background: var(--accent-2);
+        color: #fff;
+        border: none;
+        padding: 9px 24px;
         border-radius: 8px;
-        border: 0;
-        font-family: 'Exo 2';
+        font-family: 'Gantari', sans-serif;
+        font-size: 14px;
         font-weight: 600;
-        font-size: 18px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
         cursor: pointer;
-        text-align: center;
-        justify-content: center;
-        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+        transition: background 0.2s, transform 0.15s;
     }
 
     .edit-save-btn:hover {
-        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
-        color: var(--white);
-        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-        transform: translateY(-2px) scale(1.05);
+        background: var(--accent-3);
+        transform: translateY(-1px);
     }
 
     /* GRID PELÍCULAS */
@@ -583,20 +578,19 @@
                 {% csrf_token %}
                 <div class="modal-body edit-modal-body" style="display:flex;flex-direction:column;gap:16px;">
                     <div>
-                        <label for="editNombre">Nombre de la lista</label>
+                        <label for="editNombre">NOMBRE DE LA LISTA</label>
                         <input type="text" id="editNombre" name="nombre_lista"
                                value="{{ lista.nombre_lista }}" placeholder="Nombre de la lista" maxlength="100" required>
                     </div>
                     <div>
-                        <label for="editDescripcion">Descripción (opcional)</label>
+                        <label for="editDescripcion">DESCRIPCIÓN (OPCIONAL)</label>
                         <textarea id="editDescripcion" name="descripcion" rows="3"
                                   placeholder="Añade una descripción...">{{ lista.descripcion }}</textarea>
                     </div>
                 </div>
                 <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.08);padding:16px 24px;">
                     <button type="submit" class="edit-save-btn">
-                        <i class="bi bi-save" style="margin-right: 5px;"></i>
-                        GUARDAR CAMBIOS
+                        Guardar cambios
                     </button>
                 </div>
             </form>

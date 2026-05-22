@@ -5,7 +5,7 @@
 
 {% block extra_css %}
 
-<link rel="stylesheet" href="{% static 'peliculas/pelicula.css' %}">
+<link rel="stylesheet" href="{% static 'peliculas/css/pelicula.css' %}">
 
 {% endblock %}
 
@@ -28,6 +28,7 @@
             </div>
             {% endif %}
 
+
             <!-- AÑADIR A LISTA -->
             {% if request.user.rol != 'moderador' %}
             <button type="button" class="anadir-lista-btn" data-bs-toggle="modal" data-bs-target="#modalAnadirLista">
@@ -35,12 +36,13 @@
             </button>
             {% endif %}
 
+
             <!-- CAJA MEDIA DE PUNTUACIONES -->
             {% if total_puntuaciones %}
             <div class="rating-chart">
                 <div class="rating-chart-header">
                     <span class="rating-avg">{{ avg_puntuacion }}</span>
-                    <span class="rating-avg-label">/ 5 &nbsp;·&nbsp; {{ total_puntuaciones }} puntuación{{ total_puntuaciones|pluralize:"es" }}</span>
+                    <span class="rating-avg-label">/ 5 &nbsp;·&nbsp; {{ total_puntuaciones }} {% if total_puntuaciones == 1 %}puntuación{% else %}puntuaciones{% endif %}</span>
                 </div>
                 {% for d in distribucion %}
                 <div class="chart-row">
@@ -100,7 +102,6 @@
 
 
             <!-- CAJA PUNTUACIÓN + RESEÑA -->
-
             {% if request.user.rol != 'moderador' %}
             <form method="POST" action="{% url 'guardar_reseña' pelicula.id %}" id="reviewForm">
                 {% csrf_token %}
@@ -113,7 +114,6 @@
                             <span class="rating-star" data-value="4"><i class="bi bi-star"></i></span>
                             <span class="rating-star" data-value="5"><i class="bi bi-star"></i></span>
                         </div>
-
 
                         <div class="review-actions">
                             <button class="save-btn" type="submit">
@@ -162,6 +162,9 @@
                                 {% endfor %}
                         </div>
                         <div class="review-header-user">
+                            {% if r.usuario.is_staff %}
+                            <span class="admin-badge"><i class="bi bi-shield-fill"></i> ADMIN</span>
+                            {% endif %}
                             {% if r.usuario == request.user %}
                             <a href="{% url 'perfil' %}" class="review-username">{{ r.usuario.profile.name }}</a>
                             {% else %}
@@ -286,6 +289,6 @@
 </div>
 {% endif %}
 
-<script src="{% static 'peliculas/pelicula.js' %}"></script>
+<script src="{% static 'peliculas/js/pelicula.js' %}"></script>
 
 {% endblock %}

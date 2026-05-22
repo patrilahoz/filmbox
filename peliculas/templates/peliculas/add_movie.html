@@ -50,16 +50,24 @@
         background: var(--card);
         padding: 36px;
         border-radius: 15px;
+        border: transparent;
         max-width: 1200px;
         margin: 0 auto;
         box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
     }
 
     .card h1 {
-        margin: 0 0 24px 0;
+        margin: 0 0 16px 0;
         font-size: 32px;
         font-weight: 700;
         color: var(--white);
+    }
+
+    .title-divider {
+        width: 100%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.08);
+        margin-bottom: 28px;
     }
 
     .content {
@@ -200,48 +208,27 @@
         gap: 14px;
     }
 
-
-
-
-
-
-    /* Mantiene tu diseño: label a la izquierda, campo a la derecha */
     .form-group {
         display: flex;
         align-items: flex-start;
         gap: 10px;
     }
 
-    /* NUEVO: contenedor para input + error debajo */
     .field-wrapper {
         display: flex;
         flex-direction: column;
         flex: 1;
     }
 
-    /* Input en error */
     .input-error {
         border: 2px solid red !important;
     }
 
-    /* Mensaje de error debajo del input */
     .error-msg {
         color: red;
         font-size: 0.85rem;
         margin-top: 4px;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     .form-group label {
@@ -358,22 +345,19 @@
         transform: translateY(0);
     }
 
-
-
     .select-dropdown .option {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
         width: 100%;
         gap: 10px;
         padding: 6px 4px;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 500;
         font-family: 'Gantari';
-        color: var(--white);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
-
-
 
     /* Seleccionar opciones */
     .multi-select .option input[type="checkbox"] {
@@ -489,6 +473,12 @@
 
 
     /** Pantallas más pequeñas */
+    @media (max-width: 1100px) {
+        .card h1 {
+            text-align: center;
+        }
+    }
+
     @media (max-width:980px) {
         .content {
             flex-direction: column;
@@ -519,6 +509,40 @@
             width: 140px
         }
     }
+
+    @media (max-width: 640px) {
+        .form-group {
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            width: auto;
+            padding-top: 0;
+            font-size: 15px;
+        }
+
+        .field-wrapper {
+            width: 100%;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group .multi-select {
+            width: 100%;
+            flex: unset;
+        }
+
+        .add-btn {
+            width: 100%;
+            font-size: 17px;
+        }
+
+        .actions {
+            display: block;
+            margin-top: 12px;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -527,6 +551,7 @@
     <div class="card-wrap">
         <div class="card">
             <h1>{% if is_editing %}EDITAR PELÍCULA{% else %}AÑADIR PELÍCULA{% endif %}</h1>
+            <div class="title-divider"></div>
 
             <div class="content">
 
