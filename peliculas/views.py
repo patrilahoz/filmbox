@@ -53,7 +53,7 @@ def home(request):
         Reseña.objects
         .filter(usuario_id__in=ids_seguidos)
         .select_related('usuario', 'pelicula', 'usuario__profile')
-        .order_by('-fecha')[:8]
+        .order_by('-fecha')[:5]
     )
 
     return render(request, "peliculas/home.html", {
@@ -144,6 +144,28 @@ def pelicula(request, pelicula_id):
         ).values_list('reseña_id', flat=True)
     )
 
+    # Distribución de puntuaciones (1-5)
+    dist_raw = {
+        row['puntuacion']: row['count']
+        for row in Reseña.objects
+                         .filter(pelicula=pelicula, puntuacion__isnull=False)
+                         .values('puntuacion')
+                         .annotate(count=Count('id'))
+    }
+    total_puntuaciones = sum(dist_raw.values())
+    distribucion = [
+        {
+            'estrellas': s,
+            'count': dist_raw.get(s, 0),
+            'pct': round(dist_raw.get(s, 0) / total_puntuaciones * 100) if total_puntuaciones else 0,
+        }
+        for s in range(5, 0, -1)
+    ]
+    avg_puntuacion = (
+        round(sum(d['estrellas'] * d['count'] for d in distribucion) / total_puntuaciones, 1)
+        if total_puntuaciones else None
+    )
+
     return render(request, "peliculas/pelicula.html", {
         "pelicula": pelicula,
         "reseñas": reseñas,
@@ -151,6 +173,9 @@ def pelicula(request, pelicula_id):
         "mis_listas": mis_listas,
         "listas_con_pelicula": listas_con_pelicula,
         "user_likes": user_likes,
+        "distribucion": distribucion,
+        "total_puntuaciones": total_puntuaciones,
+        "avg_puntuacion": avg_puntuacion,
     })
 
 
@@ -369,7 +394,7 @@ def catalogo(request):
         "generos": generos,
         "generos_seleccionados": generos_seleccionados,
         "q": q,
-        "genero_nombre": genero_nombre,  # opcional para mostrar en el catálogo
+        "genero_nombre": genero_nombre,
     })
 
 

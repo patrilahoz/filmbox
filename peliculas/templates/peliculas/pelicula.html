@@ -4,610 +4,13 @@
 {% block title %}{{ pelicula.titulo }}{% endblock %}
 
 {% block extra_css %}
-<style>
-    :root {
-        --bg: #191919;
-        --panel: #262626;
-        --muted: #bdbdbd;
-        --accent: #6E32D5;
-    }
 
-    body {
-        background: var(--bg);
-        color: #fff;
-        font-family: 'Gantari';
-    }
+<link rel="stylesheet" href="{% static 'peliculas/pelicula.css' %}">
 
-    .poster {
-        width: 100%;
-        border-radius: 6px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .page-title {
-        font-family: 'Exo 2', sans-serif;
-        font-weight: 800;
-        font-size: 48px;
-        margin-bottom: 10px;
-    }
-
-    .meta-row strong {
-        color: var(--accent);
-        font-family: "Exo 2";
-    }
-
-    .meta-value {
-        color: var(--muted);
-        font-size: 1rem;
-    }
-
-
-    /* POSTER */
-    .col-md-4 {
-        padding-right: 40px;
-    }
-
-
-    /* CONTENEDOR DE LA CAJA */
-    .card-surface {
-        background: #262626;
-        border-radius: 10px;
-        padding: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        width: 100%;
-        margin-top: auto;
-    }
-
-
-    .pelicula-right {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-
-    /* ESTRELLAS */
-    .stars {
-        display: flex;
-        gap: .5rem;
-    }
-
-    .star {
-        font-size: 2.5rem;
-        color: transparent;
-        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.45);
-        cursor: pointer;
-        transition: color .12s, -webkit-text-stroke-color .12s;
-    }
-
-    .star::before {
-        content: '\2605';
-    }
-
-    .star.filled {
-        color: #6E32D5;
-        -webkit-text-stroke-color: #6E32D5;
-    }
-
-    /* BOTÓN GUARDAR */
-    .save-btn {
-        background: #6E32D5;
-        color: var(--white);
-        width: 250px;
-        height: 50px;
-        padding: 12px 18px;
-        border-radius: 8px;
-        border: 0;
-        font-family: 'Exo 2';
-        font-weight: 700;
-        font-size: 20px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-        text-align: center;
-        justify-content: center;
-        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .save-btn:hover {
-        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
-        color: var(--white);
-        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-        transform: translateY(-2px) scale(1.05);
-    }
-
-    /* BOTONES ADMINISTRADOR EDITAR Y ELIMINAR PELÍCULA */
-    .admin-movie-actions {
-        display: flex;
-        gap: 10px;
-        width: 100%;
-    }
-
-    .editar-pelicula-btn {
-        flex: 1;
-        background: #7c3aed;
-        color: #fff;
-        border: 0;
-        padding: 11px 18px;
-        border-radius: 8px;
-        font-family: 'Exo 2';
-        font-weight: 600;
-        font-size: 15px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        text-decoration: none;
-        transition: background 0.2s, border-color 0.2s, transform 0.15s;
-    }
-
-    .eliminar-pelicula-btn {
-        flex: 1;
-        background: #c0392b;
-        color: #fff;
-        border: 0;
-        padding: 11px 18px;
-        border-radius: 8px;
-        font-family: 'Exo 2';
-        font-weight: 600;
-        font-size: 15px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        text-decoration: none;
-        transition: background 0.2s, border-color 0.2s, transform 0.15s;
-    }
-
-    .editar-pelicula-btn:hover {
-        background: linear-gradient(100deg, #7c3aed 0%, #6E32D5 100%);
-        color: white;
-        transform: translateY(-1px);
-    }
-
-    .eliminar-pelicula-btn:hover {
-        background: linear-gradient(100deg, #c0392b 0%, #8b0000 100%);
-        color: white;
-        transform: translateY(-1px);
-    }
-
-
-    /* AÑADIR A LISTA */
-    .anadir-lista-btn {
-        width: 100%;
-        margin-top: 12px;
-        background: rgba(110, 50, 213, 0.1);
-        color: #D9BDFE;
-        border: 1px solid rgba(110, 50, 213, 0.35);
-        padding: 11px 18px;
-        border-radius: 8px;
-        font-family: 'Exo 2';
-        font-weight: 600;
-        font-size: 15px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        transition: background 0.2s, border-color 0.2s, transform 0.15s;
-    }
-
-    .anadir-lista-btn:hover {
-        background: rgba(110, 50, 213, 0.22);
-        border-color: rgba(110, 50, 213, 0.65);
-        color: #D9BDFE;
-        transform: translateY(-1px);
-    }
-
-    /* MODAL LISTAS */
-    #modalAnadirLista .modal-content {
-        background: #242424 !important;
-        border: 1px solid rgba(110, 50, 213, 0.45) !important;
-        border-radius: 16px !important;
-        color: #fafafa;
-    }
-
-    #modalAnadirLista .modal-header {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-        padding: 18px 24px !important;
-    }
-
-    #modalAnadirLista .modal-title {
-        font-family: 'Exo 2', sans-serif;
-        font-size: 19px;
-        font-weight: 700;
-    }
-
-    #modalAnadirLista .btn-close {
-        filter: invert(1) opacity(0.6);
-    }
-
-    #modalAnadirLista .btn-close:hover {
-        filter: invert(1) opacity(1);
-    }
-
-    #modalAnadirLista .modal-body {
-        padding: 10px 12px 16px !important;
-        max-height: 420px;
-        overflow-y: auto;
-    }
-
-    .lista-option {
-        all: unset;
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 14px;
-        width: 100%;
-        cursor: pointer;
-        border-radius: 9px;
-        font-family: 'Gantari';
-        font-size: 15px;
-        color: #ccc;
-        transition: background 0.15s, color 0.15s;
-    }
-
-    .lista-option:hover {
-        background: rgba(110, 50, 213, 0.18);
-        color: #fff;
-    }
-
-    .lista-option.en-lista {
-        color: #b39ddb;
-    }
-
-    .lista-option.en-lista i {
-        color: #7c3aed;
-    }
-
-    .lista-option i {
-        font-size: 17px;
-        flex-shrink: 0;
-    }
-
-    .lista-option-desc {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-    }
-
-    .lista-option-name {
-        font-weight: 600;
-    }
-
-    .lista-option-count {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.35);
-    }
-
-    .no-listas-msg {
-        padding: 32px 16px;
-        text-align: center;
-        color: rgba(255, 255, 255, 0.35);
-        font-family: 'Gantari';
-        font-size: 14px;
-        line-height: 1.7;
-    }
-
-    .no-listas-msg i {
-        font-size: 36px;
-        display: block;
-        margin-bottom: 10px;
-        opacity: 0.3;
-    }
-
-    .no-listas-msg a {
-        color: #b39ddb;
-        text-decoration: none;
-    }
-
-    .no-listas-msg a:hover {
-        text-decoration: underline;
-    }
-
-
-    /* BOTÓN CANCELAR EDICIÓN */
-    .review-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .cancel-edit-btn {
-        height: 36px;
-        padding: 0 14px;
-        background: rgba(211, 51, 51, 0.1);
-        color: #e57373;
-        border: 1px solid rgba(211, 51, 51, 0.35);
-        border-radius: 8px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        font-family: 'Exo 2';
-        font-weight: 600;
-        font-size: 13px;
-        transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
-    }
-
-    .cancel-edit-btn:hover {
-        background: rgba(211, 51, 51, 0.22);
-        border-color: rgba(211, 51, 51, 0.65);
-        color: #ef9a9a;
-        transform: translateY(-1px);
-    }
-
-    /* ESTRELLAS DE PUNTUACIÓN */
-    .rating-stars {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .rating-star {
-        font-size: 2rem;
-        color: #6E32D5;
-        cursor: pointer;
-        transition: transform 0.2s ease;
-    }
-
-    .rating-star:hover {
-        transform: scale(1.1);
-    }
-
-    .rating-star i {
-        display: block;
-    }
-
-    /* TEXTAREA */
-    textarea {
-        width: 100%;
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
-        border-radius: 6px;
-        padding: 10px;
-        resize: vertical;
-    }
-
-    textarea::placeholder {
-        color: #aaa;
-    }
-
-
-    /* CAJA DE PUNTUACIÓN */
-    .review-box {
-        width: 100%;
-    }
-
-    .review-top-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-    }
-
-    .review-label {
-        display: block;
-        font-family: 'Gantari';
-        font-size: 20px;
-        font-weight: 500;
-        text-transform: uppercase;
-        color: var(--muted);
-        margin-bottom: 8px;
-    }
-
-    /* Título RESEÑAS */
-    .reviews-title {
-        font-family: 'Exo 2';
-        font-size: 28px;
-        font-weight: 700;
-    }
-
-    /* Tarjeta de reseña */
-    .review-card {
-        background: #262626;
-        border-radius: 10px;
-        padding: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        margin-bottom: 16px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Header: estrellas, usuario, avatar */
-    .review-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-    }
-
-    .review-card-stars i {
-        color: #6E32D5;
-        font-size: 1.2rem;
-    }
-
-    /* Usuario con avatar */
-    .review-header-user {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .review-username {
-        font-size: 16px;
-        font-weight: 600;
-        color: white;
-        text-decoration: none;
-        transition: color 0.2s;
-    }
-
-    .review-username:hover {
-        color: #D9BDFE;
-    }
-
-    .review-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #6E32D5;
-    }
-
-    /* Texto reseña */
-    .review-text {
-        font-size: 16px;
-        line-height: 1.5;
-        margin-bottom: 16px;
-        flex-grow: 1;
-    }
-
-    /* Footer: likes izquierda, fecha derecha */
-    .review-card-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .review-likes {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        color: var(--muted);
-        cursor: pointer;
-    }
-
-    .like-disabled {
-        cursor: default;
-        opacity: 0.6;
-    }
-
-    .review-likes i {
-        color: #6E32D5;
-        transition: color 0.2s ease;
-    }
-
-    .review-likes i.bi-heart-fill {
-        color: #6E32D5;
-    }
-
-    .review-date {
-        font-size: 14px;
-        color: var(--muted);
-    }
-
-    .edit-review-btn {
-        color: white;
-        background-color: #6E32D5;
-        margin-left: 12px;
-        width: 25px;
-        height: 25px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 0;
-        border-radius: 4px;
-        transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease;
-    }
-
-    .delete-review-btn {
-        color: var(--muted);
-        background-color: #d33333;
-        margin-left: 6px;
-        width: 25px;
-        height: 25px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 0;
-        border-radius: 4px;
-        transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease;
-    }
-
-    .edit-review-btn:hover,
-    .delete-review-btn:hover {
-        transform: scale(1.08);
-    }
-
-    .mod-delete-btn {
-        width: auto;
-        height: auto;
-        padding: 6px 12px;
-        background: rgba(239, 68, 68, 0.1);
-        background-color: unset;
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.25);
-        border-radius: 8px;
-        font-size: 14px;
-        gap: 6px;
-        white-space: nowrap;
-        vertical-align: middle;
-        line-height: 1;
-        margin-left: 10px;
-        text-decoration: none;
-        transition: background 0.2s, border-color 0.2s, transform 0.15s;
-    }
-
-    .mod-delete-btn:hover {
-        background: rgba(239, 68, 68, 0.25);
-        border-color: rgba(239, 68, 68, 0.6);
-        color: #f87171;
-        transform: translateY(-1px);
-        text-decoration: none;
-    }
-
-    .my-review {
-        margin-bottom: 2rem;
-        border: 1px solid #6E32D5;
-    }
-
-    /* Mensaje cuando no hay reseñas */
-    .no-reviews-message {
-        text-align: center;
-        color: var(--muted);
-        font-family: 'Gantari';
-        font-size: 18px;
-        padding: 40px 20px;
-    }
-
-    .star.filled {
-        color: #6E32D5;
-        -webkit-text-stroke-color: #6E32D5;
-    }
-
-
-
-    /* Estilos para SweetAlert2 */
-    .swal-title {
-        font-family: 'Gantari', sans-serif !important;
-        font-size: 1.6rem !important;
-    }
-
-    .swal-confirm {
-        font-family: 'Gantari', sans-serif !important;
-        background-color: #6E32D5 !important;
-        color: white !important;
-        border-radius: 8px !important;
-        padding: 10px 20px !important;
-    }
-
-    .swal-icon .swal2-success-ring {
-        border-color: #6E32D5 !important;
-    }
-
-    .swal-icon .swal2-success-line-tip,
-    .swal-icon .swal2-success-line-long {
-        background-color: #6E32D5 !important;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
 <main class="container my-5">
-
     <div class="row gy-4">
 
         <!-- POSTER -->
@@ -632,11 +35,29 @@
             </button>
             {% endif %}
 
+            <!-- CAJA MEDIA DE PUNTUACIONES -->
+            {% if total_puntuaciones %}
+            <div class="rating-chart">
+                <div class="rating-chart-header">
+                    <span class="rating-avg">{{ avg_puntuacion }}</span>
+                    <span class="rating-avg-label">/ 5 &nbsp;·&nbsp; {{ total_puntuaciones }} puntuación{{ total_puntuaciones|pluralize:"es" }}</span>
+                </div>
+                {% for d in distribucion %}
+                <div class="chart-row">
+                    <span class="chart-stars">{{ d.estrellas }}</span>
+                    <i class="bi bi-star-fill chart-star-icon"></i>
+                    <div class="chart-bar-wrap">
+                        <div class="chart-bar" data-pct="{{ d.pct }}"></div>
+                    </div>
+                    <span class="chart-count">{{ d.count }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
 
 
-
-        <!-- INFO -->
+        <!-- INFORMACIÓN DE LA PELÍCULA -->
         <div class="col-12 col-md-8 pelicula-right">
 
             <h1 class="page-title">{{ pelicula.titulo }}</h1>
@@ -654,7 +75,7 @@
 
                 <div class="col-4 col-md-3">
                     <strong>Duración</strong>
-                    <div class="meta-value">{{ pelicula.duracion_min }} min</div>
+                    <div class="meta-value">{{ pelicula.duracion_min }} minutos</div>
                 </div>
 
                 <div class="col-12 col-md-4 mt-3 mt-md-0">
@@ -670,10 +91,12 @@
                     <strong>Reparto</strong>
                     <div class="meta-value" style="text-align: justify;">{{ pelicula.reparto_info }}</div>
                 </div>
+
+                <div class="col-12 mt-3">
+                    <strong>Sinopsis</strong>
+                    <div class="meta-value" style="text-align: justify;">{{ pelicula.sinopsis }}</div>
+                </div>
             </div>
-
-            <p class="muted" style="text-align: justify;">{{ pelicula.sinopsis }}</p>
-
 
 
             <!-- CAJA PUNTUACIÓN + RESEÑA -->
@@ -693,15 +116,15 @@
 
 
                         <div class="review-actions">
+                            <button class="save-btn" type="submit">
+                                <i class="bi bi-save" style="font-size: 1.25rem; margin-right: 8px;"></i>
+                                {% if reseña_editando %}ACTUALIZAR{% else %}GUARDAR{% endif %}
+                            </button>
                             {% if reseña_editando %}
                             <a href="{% url 'cancelar_edicion_reseña' pelicula.id %}" class="cancel-edit-btn">
                                 <i class="bi bi-x-lg"></i>CANCELAR
                             </a>
                             {% endif %}
-                            <button class="save-btn" type="submit">
-                                <i class="bi bi-save" style="font-size: 1.25rem; margin-right: 8px;"></i>
-                                {% if reseña_editando %}ACTUALIZAR{% else %}GUARDAR{% endif %}
-                            </button>
                         </div>
 
                     </div>
@@ -719,8 +142,7 @@
             {% endif %}
 
 
-
-            <!-- RESEÑAS DE OTROS USUARIOS -->
+            <!-- SECCIÓN RESEÑAS, PROPIAS Y DE OTROS USUARIOS -->
 
             <h2 class="reviews-title mt-5">RESEÑAS</h2>
             <hr
@@ -785,7 +207,7 @@
                             {% endif %}
                             {% endif %}
                             {% if request.user.rol == 'moderador' %}
-                            <a href="{% url 'eliminar_reseña' r.id %}" class="delete-review-btn mod-delete-btn"><i class="bi bi-trash"></i> Eliminar reseña</a>
+                            <a href="{% url 'eliminar_reseña' r.id %}" class="delete-review-btn mod-delete-btn"><i class="bi bi-trash" style="margin-right: 5px;"></i>Eliminar reseña</a>
                             {% endif %}
 
                         </div>
@@ -806,175 +228,31 @@
 
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
-<script>
-    // ===== FUNCIONALIDAD DE ESTRELLAS DE PUNTUACIÓN =====
-    (function () {
-        const stars = Array.from(document.querySelectorAll('.rating-star'));
-        const ratingInput = document.getElementById('ratingInput');
-        const starsContainer = document.getElementById('starsContainer');
-        if (!starsContainer) return;
-        let selected = 0;
 
-        function fill(upto) {
-            stars.forEach((s, i) => {
-                const icon = s.querySelector('i');
-                if (i < upto) {
-                    icon.classList.remove('bi-star');
-                    icon.classList.add('bi-star-fill');
-                } else {
-                    icon.classList.add('bi-star');
-                    icon.classList.remove('bi-star-fill');
-                }
-            });
-        }
-
-        stars.forEach((s, idx) => {
-            s.addEventListener('mouseover', () => fill(idx + 1));
-            s.addEventListener('click', () => {
-                selected = idx + 1;
-                ratingInput.value = selected;
-                fill(selected);
-            });
-        });
-
-        starsContainer.addEventListener('mouseleave', () => fill(selected));
-    })();
-
-    // ===== FUNCIONALIDAD DE LIKES EN RESEÑAS =====
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-    document.querySelectorAll('.like-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const heart = this.querySelector('i');
-            const likeNumber = this.querySelector('.like-number');
-            const url = this.dataset.url;
-
-            fetch(url, {
-                method: 'POST',
-                headers: { 'X-CSRFToken': csrfToken },
-            })
-            .then(res => res.json())
-            .then(data => {
-                heart.classList.toggle('bi-heart', !data.liked);
-                heart.classList.toggle('bi-heart-fill', data.liked);
-                likeNumber.textContent = data.count;
-            });
-        });
-    });
-
-
-    // ===== MODAL DE ÉXITO AL GUARDAR RESEÑA =====
-    const reviewForm = document.getElementById('reviewForm');
-    if (reviewForm) {
-        reviewForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            Swal.fire({
-                title: "Película puntuada y reseñada correctamente",
-                icon: "success",
-                confirmButtonText: "Aceptar",
-                customClass: {
-                    title: 'swal-title',
-                    confirmButton: 'swal-confirm',
-                    icon: 'swal-icon'
-                }
-            }).then(() => {
-                reviewForm.submit();
-            });
-        });
-    }
-
-
-    // ===== MODAL DE ELIMINAR RESEÑA =====
-    document.querySelectorAll('.delete-review-btn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const url = this.getAttribute('href');
-
-            Swal.fire({
-                title: "¿Estás segur@ de que quieres eliminar la reseña?",
-                text: "No podrás revertir esto",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#6E32D5",
-                cancelButtonColor: "#d33333",
-                confirmButtonText: "Eliminar reseña"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "Reseña eliminada correctamente",
-                        icon: "success",
-                        confirmButtonText: "Aceptar",
-                        customClass: {
-                            title: 'swal-title',
-                            confirmButton: 'swal-confirm',
-                            icon: 'swal-icon'
-                        }
-                    }).then(() => {
-                        if (url) {
-                            window.location.href = url;
-                        }
-                    });
-                }
-            });
-        });
-    });
-
-    // ===== MODAL DE ELIMINAR PELÍCULA =====
-    document.querySelectorAll('.eliminar-pelicula-btn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const url = this.getAttribute('href');
-
-            Swal.fire({
-                title: "¿Estás segur@ de que quieres eliminar la película?",
-                text: "No podrás revertir esto",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33333",
-                cancelButtonColor: "#999999",
-                cancelButtonText: "Cancelar",
-                confirmButtonText: "Eliminar película",
-                customClass: {
-                    title: 'swal-title',
-                    confirmButton: 'swal-confirm',
-                    icon: 'swal-icon'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "Película eliminada correctamente",
-                        icon: "success",
-                        confirmButtonText: "Aceptar",
-                        customClass: {
-                            title: 'swal-title',
-                            confirmButton: 'swal-confirm',
-                            icon: 'swal-icon'
-                        }
-                    }).then(() => {
-                        if (url) {
-                            window.location.href = url;
-                        }
-                    });
-                }
-            });
-        });
-    });
-
-</script>
-
-<!-- Modal: añadir a lista -->
+<!-- MODAL: AÑADIR A LISTA -->
 {% if request.user.rol != 'moderador' %}
 <div class="modal fade" id="modalAnadirLista" tabindex="-1" aria-labelledby="modalAnadirListaLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalAnadirListaLabel">
-                    <i class="bi bi-bookmark-plus" style="margin-right:8px;color:#9d6fe8;"></i>Añadir a lista
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+
+            <!-- Header -->
+            <div class="lm-header">
+                <div class="lm-header-left">
+                    <div class="lm-icon">
+                        <i class="bi bi-bookmark-plus-fill"></i>
+                    </div>
+                    <div class="lm-titles">
+                        <span class="lm-title" id="modalAnadirListaLabel">Mis listas</span>
+                        <span class="lm-subtitle">{{ pelicula.titulo }}</span>
+                    </div>
+                </div>
+                <button type="button" class="lm-close" data-bs-dismiss="modal" aria-label="Cerrar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
-            <div class="modal-body">
+
+            <!-- Body -->
+            <div class="lm-body">
                 {% if mis_listas %}
                 {% for lista in mis_listas %}
                 <form method="post"
@@ -982,26 +260,24 @@
                     style="margin:0">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{% url 'pelicula' pelicula.id %}">
-                    <button type="submit"
-                        class="lista-option {% if lista.id in listas_con_pelicula %}en-lista{% endif %}">
-                        {% if lista.id in listas_con_pelicula %}
-                        <i class="bi bi-check-circle-fill"></i>
-                        {% else %}
-                        <i class="bi bi-circle"></i>
-                        {% endif %}
-                        <div class="lista-option-desc">
-                            <span class="lista-option-name">{{ lista.nombre_lista }}</span>
-                            <span class="lista-option-count">{{ lista.items.count }} película{{
-                                lista.items.count|pluralize:"s" }}</span>
+                    <button type="submit" class="lista-tile {% if lista.id in listas_con_pelicula %}en-lista{% endif %}">
+                        <div class="lista-tile-info">
+                            <span class="lista-tile-name">{{ lista.nombre_lista }}</span>
+                            <span class="lista-tile-count">{{ lista.items.count }} película{{ lista.items.count|pluralize:"s" }}</span>
+                        </div>
+                        <div class="lista-tile-check">
+                            {% if lista.id in listas_con_pelicula %}
+                            <i class="bi bi-check-lg"></i>
+                            {% endif %}
                         </div>
                     </button>
                 </form>
                 {% endfor %}
                 {% else %}
-                <div class="no-listas-msg">
-                    <i class="bi bi-collection-play"></i>
-                    No tienes ninguna lista creada.<br>
-                    <a href="{% url 'listas' %}">Crear mi primera lista</a>
+                <div class="lm-empty">
+                    <i class="bi bi-collection-play lm-empty-icon"></i>
+                    <p>No tienes ninguna lista creada.</p>
+                    <a href="{% url 'listas' %}" class="lm-empty-link">Crear mi primera lista →</a>
                 </div>
                 {% endif %}
             </div>
@@ -1009,5 +285,7 @@
     </div>
 </div>
 {% endif %}
+
+<script src="{% static 'peliculas/pelicula.js' %}"></script>
 
 {% endblock %}

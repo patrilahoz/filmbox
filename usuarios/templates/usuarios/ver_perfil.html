@@ -387,7 +387,7 @@
 
       <div class="desc">{{ perfil_usuario.profile.description }}</div>
 
-      {% if perfil_usuario != request.user %}
+      {% if perfil_usuario != request.user and request.user.rol != 'moderador' %}
       <form method="post" action="{% url 'seguir' perfil_usuario.username %}">
         {% csrf_token %}
         <button type="submit" class="seguir-btn {% if ya_sigue %}siguiendo{% endif %}">

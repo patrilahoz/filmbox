@@ -126,6 +126,9 @@ def edit_profile(request):
 
         if image:
             profile.profile_image = image
+        elif request.POST.get('remove_profile_image') == '1' and profile.profile_image:
+            profile.profile_image.delete(save=False)
+            profile.profile_image = None
 
         for i in range(1, 5):
             slot = f'fav{i}'

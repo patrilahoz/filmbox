@@ -5,7 +5,6 @@
 <!DOCTYPE html>
 <html lang="es">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,120 +14,172 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Gantari:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gantari:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #191919;
+            --panel: #262626;
+            --accent: #6E32D5;
+            --accent-light: #D9BDFE;
+            --muted: #bdbdbd;
+            --white: #fafafa;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Gantari';
-            background-color: #191919;
+            font-family: 'Gantari', sans-serif;
+            background: var(--bg);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding-top: 40px;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Logo */
-        .logo {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Blobs de fondo */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
         }
 
-
-        .logo-img {
-            width: 400px;
-            height: auto;
-            position: absolute;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
+        .blob-1 {
+            width: 560px;
+            height: 560px;
+            background: radial-gradient(circle, rgba(110,50,213,0.38) 0%, transparent 70%);
+            top: -160px;
+            right: -140px;
+            animation: blob-float 9s ease-in-out infinite;
         }
 
-        /* Contenedor de registro */
-        .container {
+        .blob-2 {
+            width: 480px;
+            height: 480px;
+            background: radial-gradient(circle, rgba(108,0,250,0.28) 0%, transparent 70%);
+            bottom: -120px;
+            left: -120px;
+            animation: blob-float 12s ease-in-out infinite reverse;
+        }
+
+        .blob-3 {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(217,189,254,0.12) 0%, transparent 70%);
+            top: 55%;
+            right: 25%;
+            animation: blob-float 16s ease-in-out infinite 4s;
+        }
+
+        @keyframes blob-float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33%       { transform: translate(24px, -32px) scale(1.06); }
+            66%       { transform: translate(-18px, 20px) scale(0.94); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Layout */
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            gap: 28px;
+            padding: 32px 20px;
+            width: 100%;
         }
 
+        .logo-img {
+            width: 300px;
+            height: auto;
+            animation: fadeInUp 0.55s ease both;
+        }
+
+        /* Card */
         .login-card {
-            background-color: #f5f5f5;
-            padding: 50px;
-            margin: 100px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            width: 450px;
-            height: 100%;
-            font-family: 'Gantari';
-            font-weight: 400;
+            animation: fadeInUp 0.6s ease 0.18s both;
+            background: rgba(38, 38, 38, 0.82);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            padding: 40px 44px;
+            border-radius: 16px;
+            border: 1px solid rgba(110, 50, 213, 0.32);
+            box-shadow: 0 8px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(110,50,213,0.08);
+            width: 440px;
         }
 
-        .form-group {
-            margin-bottom: 25px;
+        .card-title {
+            font-family: 'Exo 2';
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            text-align: center;
         }
+
+        .form-group { margin-bottom: 20px; }
 
         label {
             display: block;
-            font-size: 17px;
-            font-weight: 500;
-            color: black;
-            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 7px;
             font-family: 'Gantari';
-            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
         }
 
         input[type="email"],
         input[type="password"] {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
+            padding: 11px 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
             font-size: 14px;
-            color: #666666;
-            background-color: #ffffff;
-            transition: border-color 0.3s ease;
+            color: var(--white);
+            background: #1f1f1f;
+            transition: border-color 0.2s;
             font-family: 'Gantari';
         }
 
         input[type="email"]::placeholder,
         input[type="password"]::placeholder {
-            color: #999999;
+            color: rgba(255,255,255,0.25);
         }
 
         input[type="email"]:focus,
         input[type="password"]:focus {
             outline: none;
-            border-color: #7c3aed;
-            box-shadow: 0 0 5px rgba(124, 58, 237, 0.3);
+            border-color: rgba(110,50,213,0.65);
         }
 
+        /* Botón — estilos conservados */
         .login-btn {
             width: 100%;
             padding: 10px;
             background: linear-gradient(135deg, #6E32D5 0%, #6d28d9 100%);
             color: #ffffff;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             font-family: 'Exo 2';
             font-weight: 600;
             font-size: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
-
+            margin-top: 8px;
         }
 
         .login-btn:hover {
@@ -137,97 +188,87 @@
             transform: translateY(-2px);
         }
 
-        .login-btn:active {
-            transform: translateY(0);
-        }
+        .login-btn:active { transform: translateY(0); }
 
-        .forgot-password,
-        .register-link {
+        .forgot-password {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
-        .forgot-password a {
-            color: #333333;
-            text-decoration: underline;
-            font-size: 13px;
-            transition: color 0.3s ease;
+        .register-link { 
+            text-align: center;
+            margin-top: 12px;
         }
 
-        
+        .forgot-password a,
         .register-link a {
-            color: #333333;
+            color: var(--muted);
             text-decoration: none;
             font-size: 13px;
-            transition: color 0.3s ease;
+            transition: color 0.2s;
         }
 
         .forgot-password a:hover,
-        .register-link a:hover {
-            color: #7c3aed;
+        .register-link a:hover { color: var(--accent-light); }
+
+        .register-link a b { color: var(--accent-light); }
+
+        .error {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #f87171;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-top: 14px;
+            font-size: 13px;
         }
 
-        .error { 
-            background-color: #ff4d4d; 
-            padding: 10px; 
-            border-radius: 5px; 
-            margin-top: 15px; 
-            font-size: 14px; 
-        }
-
-        /* Responsividad */
-        @media (max-width: 600px) {
-            .logo {
-                padding: 20px 40px;
-                margin-bottom: 60px;
-            }
-
-            .login-card {
-                width: 400px;
-                padding: 30px;
-            }
-
-            .form-group {
-                margin-bottom: 20px;
-            }
+        @media (max-width: 500px) {
+            .login-card { width: 100%; padding: 28px 20px; }
+            .logo-img { width: 220px; }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
 
-        <div class="logo">
-            <img src="{% static 'img/logo_filmbox.png' %}" alt="Logo Filmbox" class="logo-img">
-        </div>
+    <div class="page-wrapper">
+
+        <img src="{% static 'img/logo_filmbox.png' %}" alt="Logo Filmbox" class="logo-img">
 
         <form class="login-card" method="POST" action="" id="loginForm">
             {% csrf_token %}
 
+            <h1 class="card-title">Iniciar sesión</h1>
+
             <div class="form-group">
                 <label for="email">Correo electrónico</label>
-                <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+                <input type="email" id="email" name="email" placeholder="tu@correo.com" required>
             </div>
 
             <div class="form-group">
                 <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="Contraseña" required>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
             </div>
 
-            <button type="submit" class="login-btn">ACCEDER</button>
-            
-            {% if error %} 
-                <p class="error">{{ error }}</p> 
+            <button type="submit" class="login-btn">
+                ACCEDER
+                <i class="bi bi-arrow-right" style="margin-left: 10px;"></i>
+            </button>
+
+            {% if error %}
+                <p class="error">{{ error }}</p>
             {% endif %}
 
-            <div class="forgot-password"> 
-                <a href="/usuarios/recuperar/">¿Has olvidado tu contraseña?</a> 
+            <div class="forgot-password">
+                <a href="/usuarios/recuperar/">¿Has olvidado tu contraseña?</a>
             </div>
-            
-            <div class="register-link"> 
-                <a href="{% url 'register' %}">
-                    ¿No tienes cuenta? <b>Regístrate</b>
-                </a>
+
+            <div class="register-link">
+                <a href="{% url 'register' %}">¿No tienes cuenta? <b>Regístrate</b></a>
             </div>
 
         </form>

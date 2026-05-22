@@ -174,8 +174,8 @@
     padding: 6px 12px;
     font-size: 13px;
     cursor: pointer;
+    text-decoration: none;
     transition: background 0.2s, border-color 0.2s, transform 0.15s;
-    white-space: nowrap;
   }
 
   .btn-delete:hover {
@@ -243,12 +243,9 @@
       </div>
 
       <div class="review-actions">
-        <form method="post" action="{% url 'eliminar_reseña' r.id %}">
-          {% csrf_token %}
-          <button type="submit" class="btn-delete">
-            <i class="bi bi-trash"></i> Eliminar
-          </button>
-        </form>
+        <a href="{% url 'eliminar_reseña' r.id %}" class="btn-delete">
+          <i class="bi bi-trash" style="margin-right: 5px;"></i> Eliminar reseña
+        </a>
       </div>
 
     </div>
@@ -263,4 +260,37 @@
   {% endif %}
 
 </main>
+
+<script>
+  document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const url = this.getAttribute('href');
+
+      Swal.fire({
+        title: "¿Estás segur@ de que quieres eliminar la reseña?",
+        text: "No podrás revertir esto",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#6E32D5",
+        cancelButtonColor: "#d33333",
+        cancelButtonText: "Cancelar",
+        confirmButtonText: "Eliminar reseña",
+        iconColor: "#6E32D5"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Reseña eliminada correctamente",
+            icon: "success",
+            iconColor: "#6E32D5",
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#6E32D5"
+          }).then(() => {
+            if (url) window.location.href = url;
+          });
+        }
+      });
+    });
+  });
+</script>
 {% endblock %}

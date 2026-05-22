@@ -18,13 +18,20 @@
 
     <div class="right-section">
 
+        <!-- BOTÓN HAMBURGUESA (solo móvil) -->
+        <button id="hamburger-btn" class="hamburger-btn" aria-label="Abrir menú">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
         <!-- FOTO DE PERFIL -->
         <div class="profile-container">
             <a href="{% url 'perfil' %}">
                 {% if request.user.is_authenticated %}
-                    <img src="{{ request.user.profile.profile_image_url }}" alt="Avatar" class="avatar-img">
+                <img src="{{ request.user.profile.profile_image_url }}" alt="Avatar" class="avatar-img">
                 {% else %}
-                    <img src="{% static 'usuarios/img/avatar.png' %}" alt="Avatar" class="avatar-img">
+                <img src="{% static 'usuarios/img/avatar.png' %}" alt="Avatar" class="avatar-img">
                 {% endif %}
             </a>
         </div>
@@ -37,39 +44,70 @@
         <!-- Contenedor del menú -->
         <div id="menu-user" class="menu-user">
             <div class="menu-item">
-                <i class="bi bi-person-circle" style="margin-right: 8px;"></i>
+                <i class="bi bi-person-circle"></i>
                 <a href="{% url 'perfil' %}">Mi perfil</a>
             </div>
             <div class="menu-item">
-                <i class="bi bi-pencil-square" style="margin-right: 10px;"></i>
+                <i class="bi bi-pencil-square"></i>
                 <a href="{% url 'edit_profile' %}">Editar perfil</a>
             </div>
             <a href="{% url 'logout' %}" class="menu-item logout-btn">
-    <i class="bi bi-box-arrow-right" style="margin-right: 10px;"></i>
-    Cerrar sesión
-</a>
-
+                <i class="bi bi-box-arrow-right" style="margin-right: 5px;"></i>
+                Cerrar sesión
+            </a>
         </div>
 
     </div>
 </header>
 
+<!-- DRAWER MÓVIL -->
+<div id="mobile-menu" class="mobile-menu">
+    <nav class="mobile-nav">
+        <a href="{% url 'home' %}">INICIO</a>
+        <a href="{% url 'catalogo' %}">PELÍCULAS</a>
+        <a href="{% url 'listas' %}">LISTAS</a>
+    </nav>
+</div>
+<div id="mobile-overlay" class="mobile-overlay"></div>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const btnMenuUser = document.getElementById("desplegable-menu-user-btn");
         const menuUser = document.getElementById("menu-user");
+        const hamburgerBtn = document.getElementById("hamburger-btn");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const mobileOverlay = document.getElementById("mobile-overlay");
 
+        // Menú desplegable de usuario
         btnMenuUser.addEventListener("click", (e) => {
-            e.stopPropagation(); // evita que el click burbujee al document
+            e.stopPropagation();
             const visible = menuUser.style.display === "flex";
             menuUser.style.display = visible ? "none" : "flex";
         });
 
-        // Cerrar el menú si se hace clic fuera
         document.addEventListener("click", (e) => {
             if (!menuUser.contains(e.target) && !btnMenuUser.contains(e.target)) {
                 menuUser.style.display = "none";
             }
         });
+
+        // Menú hamburguesa
+        function closeMobileMenu() {
+            mobileMenu.classList.remove("open");
+            mobileOverlay.classList.remove("open");
+            hamburgerBtn.classList.remove("active");
+        }
+
+        hamburgerBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const isOpen = mobileMenu.classList.contains("open");
+            isOpen ? closeMobileMenu() : (
+                mobileMenu.classList.add("open"),
+                mobileOverlay.classList.add("open"),
+                hamburgerBtn.classList.add("active")
+            );
+        });
+
+        mobileOverlay.addEventListener("click", closeMobileMenu);
     });
 </script>

@@ -503,6 +503,7 @@
     opacity: 0.3;
   }
 
+  /* RESPONSIVIDAD */
   @media (max-width:900px) {
     .columns {
       grid-template-columns: 1fr;
@@ -512,6 +513,50 @@
       grid-template-columns: 1fr;
     }
   }
+
+  @media (max-width: 640px) {
+    .main {
+      padding: 0 16px;
+      margin: 16px auto;
+    }
+
+    /* Columna izquierda centrada */
+    .left {
+      align-items: center;
+      text-align: center;
+    }
+
+    .profile-photo-icon {
+      margin-top: 20px;
+    }
+
+    .name {
+      font-size: 24px;
+      margin-bottom: -10px;
+    }
+
+    .username {
+      font-size: 14px;
+    }
+
+    .desc {
+      max-width: 100%;
+      text-align: center;
+    }
+
+    .follows {
+      justify-content: center;
+    }
+
+    /* Botones a ancho completo */
+    .add-btn,
+    .diary-btn,
+    .edit-btn {
+      width: 260px;
+      height: 50px;
+    }
+  }
+
 </style>
 {% endblock %}
 
@@ -716,6 +761,41 @@
   // Edit profile button placeholder
   document.getElementById('editProfileBtn').addEventListener('click', () => {
     alert('Editar perfil (implementar acción)');
+  });
+
+  // Modal de confirmación para eliminar lista
+  document.querySelectorAll('.btn-eliminar-lista').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const form = this.closest('form');
+
+      Swal.fire({
+        title: "¿Estás segur@ de que quieres eliminar la lista?",
+        text: "No podrás revertir esto",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#6E32D5",
+        cancelButtonColor: "#d33333",
+        cancelButtonText: "Cancelar",
+        confirmButtonText: "Eliminar lista",
+        iconColor: "#6E32D5"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Lista eliminada correctamente",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+            customClass: {
+              title: 'swal-title',
+              confirmButton: 'swal-confirm',
+              icon: 'swal-icon'
+            }
+          }).then(() => {
+            form.submit();
+          });
+        }
+      });
+    });
   });
 </script>
 

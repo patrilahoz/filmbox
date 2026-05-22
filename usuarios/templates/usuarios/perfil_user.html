@@ -109,7 +109,10 @@
     transition: color 0.2s;
   }
 
-  .follow-link:hover { color: #D9BDFE; text-decoration: none; }
+  .follow-link:hover {
+    color: #D9BDFE;
+    text-decoration: none;
+  }
 
   .follows {
     display: flex;
@@ -187,7 +190,6 @@
     background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
     color: white;
     box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-
     transform: translateY(-2px) scale(1.05);
   }
 
@@ -406,9 +408,9 @@
     color: #fff;
     border: none;
     padding: 6px 0;
-        border-radius: 8px;
-        font-family: 'Gantari';
-        font-size: 14px;
+    border-radius: 8px;
+    font-family: 'Gantari';
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
@@ -461,6 +463,7 @@
     opacity: 0.3;
   }
 
+    /* RESPONSIVIDAD */
   @media (max-width:900px) {
     .columns {
       grid-template-columns: 1fr;
@@ -470,6 +473,49 @@
       grid-template-columns: 1fr;
     }
   }
+
+  @media (max-width: 640px) {
+    .main {
+      padding: 0 16px;
+      margin: 16px auto;
+    }
+
+    /* Columna izquierda centrada */
+    .left {
+      align-items: center;
+      text-align: center;
+    }
+
+    .profile-photo-icon {
+      margin-top: 20px;
+    }
+
+    .name {
+      font-size: 24px;
+      margin-bottom: -10px;
+    }
+
+    .username {
+      font-size: 14px;
+    }
+
+    .desc {
+      max-width: 100%;
+      text-align: center;
+    }
+
+    .follows {
+      justify-content: center;
+    }
+
+    /* Botones a ancho completo */
+    .diary-btn,
+    .edit-btn {
+      width: 260px;
+      height: 50px;
+    }
+  }
+
 </style>
 {% endblock %}
 
@@ -535,7 +581,8 @@
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}<a href="{% url 'pelicula' fav.id %}" class="fav-link"></a>{% endif %}
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{
+              fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
 
@@ -543,7 +590,8 @@
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}<a href="{% url 'pelicula' fav.id %}" class="fav-link"></a>{% endif %}
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{
+              fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
 
@@ -551,7 +599,8 @@
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}<a href="{% url 'pelicula' fav.id %}" class="fav-link"></a>{% endif %}
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{
+              fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
 
@@ -559,7 +608,8 @@
           <div class="fav-card{% if not fav %} fav-card--empty{% endif %}">
             {% if fav %}<a href="{% url 'pelicula' fav.id %}" class="fav-link"></a>{% endif %}
             {% if fav %}{% if fav.poster %}<img src="{{ fav.poster.url }}" alt="{{ fav.titulo }}">
-            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{ fav.titulo }}</span>{% endif %}{% endif %}
+            {% else %}<span style="padding:10px; text-align:center; font-size:11px; color:rgba(255,255,255,0.75)">{{
+              fav.titulo }}</span>{% endif %}{% endif %}
           </div>
           {% endwith %}
         </div>
@@ -576,13 +626,13 @@
           <div class="lista-card">
             <div class="poster-strip">
               {% if d.preview %}
-                {% for item in d.preview %}
-                  {% if item.pelicula.poster %}
-                  <img src="{{ item.pelicula.poster.url }}" alt="{{ item.pelicula.titulo }}">
-                  {% else %}
-                  <div class="poster-placeholder"><i class="bi bi-film"></i></div>
-                  {% endif %}
-                {% endfor %}
+              {% for item in d.preview %}
+              {% if item.pelicula.poster %}
+              <img src="{{ item.pelicula.poster.url }}" alt="{{ item.pelicula.titulo }}">
+              {% else %}
+              <div class="poster-placeholder"><i class="bi bi-film"></i></div>
+              {% endif %}
+              {% endfor %}
               {% else %}
               <div class="poster-strip-empty"><i class="bi bi-collection-play"></i></div>
               {% endif %}
@@ -629,6 +679,41 @@
   // Edit profile button placeholder
   document.getElementById('editProfileBtn').addEventListener('click', () => {
     // alert('Editar perfil (implementar acción)');
+  });
+
+  // Modal de confirmación para eliminar lista
+  document.querySelectorAll('.btn-eliminar-lista').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const form = this.closest('form');
+
+      Swal.fire({
+        title: "¿Estás segur@ de que quieres eliminar la lista?",
+        text: "No podrás revertir esto",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#6E32D5",
+        cancelButtonColor: "#d33333",
+        cancelButtonText: "Cancelar",
+        confirmButtonText: "Eliminar lista",
+        iconColor: "#6E32D5"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Lista eliminada correctamente",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+            customClass: {
+              title: 'swal-title',
+              confirmButton: 'swal-confirm',
+              icon: 'swal-icon'
+            }
+          }).then(() => {
+            form.submit();
+          });
+        }
+      });
+    });
   });
 </script>
 

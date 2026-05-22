@@ -167,8 +167,118 @@
 
 
 
+    /* TARJETA ADMIN */
+    .admin-card-home {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        background: linear-gradient(100deg, #2e2e2e 0%, #262626 100%);
+        border: 1px solid #D9BDFE;
+        border-radius: 12px;
+        padding: 28px 40px;
+        max-width: 900px;
+        margin: 60px auto 0;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    }
 
+    .admin-card-home-text {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
 
+    .admin-card-home-text h3 {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        display: block;
+    }
+
+    .admin-title-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .admin-shield-icon {
+        color: #6E32D5;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .admin-card-home-text p {
+        font-family: 'Gantari', sans-serif;
+        font-size: 15px;
+        color:white;
+        margin: 0;
+    }
+
+    .admin-add-btn {
+        background: #6E32D5;
+        color: #fff;
+        height: 50px;
+        padding: 10px 28px;
+        border-radius: 8px;
+        border: 0;
+        font-family: 'Exo 2', sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .admin-add-btn:hover {
+        background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        transform: translateY(-2px) scale(1.05);
+        text-decoration: none;
+    }
+
+    @media (max-width: 1024px) {
+        .admin-card-home {
+            padding: 24px 28px;
+            margin: 40px auto 0;
+            max-width: 700px;
+        }
+        .admin-card-home-text h3 { font-size: 20px; }
+        .admin-add-btn { font-size: 17px; }
+    }
+
+    @media (max-width: 768px) {
+        .admin-card-home {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 22px 24px;
+            margin: 40px 20px 0;
+            max-width: 100%;
+        }
+        .admin-card-home-text h3 { font-size: 20px; }
+        .admin-add-btn { width: 100%; justify-content: center; font-size: 16px; }
+    }
+
+    @media (max-width: 480px) {
+        .admin-card-home {
+            padding: 18px 16px;
+            margin: 24px 12px 0;
+            gap: 14px;
+        }
+        .admin-card-home-text h3 { font-size: 15px; }
+        .admin-card-home-text p { font-size: 13px; }
+        .admin-add-btn { height: 44px; font-size: 14px; }
+    }
 
     /* TARJETA CATÁLOGO */
     .tarjeta-catalogo {
@@ -176,7 +286,6 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        /* background: linear-gradient(100deg, #D9BDFE 0%, #cca5ff 100%); */
         background: linear-gradient(100deg, #2e2e2e 0%, #262626 100%);
         padding: 40px 40px;
         border-radius: 12px;
@@ -401,7 +510,6 @@
             max-width: 300px;
         }
 
-
         .tarjeta-catalogo {
             padding: 30px 30px;
             max-width: 700px;
@@ -420,18 +528,39 @@
 
         .generos-grid {
             grid-template-columns: repeat(2, 1fr);
-            padding: 20px 60px;
+            padding: 20px 40px;
+            gap: 20px;
         }
 
         .genero-card {
-            font-size: 32px;
-            height: 130px;
+            font-size: 30px;
+            height: 120px;
+        }
+
+        h3 {
+            font-size: 56px;
+        }
+
+        /* Sliders: 4 ítems visibles */
+        .lo-ultimo-item {
+            flex: 0 0 calc(25% - 15px);
+        }
+
+        .slider-container {
+            padding: 15px 40px;
+        }
+
+        .actividad-seguidos {
+            margin: 40px 24px;
+        }
+
+        .actividad-card {
+            padding: 28px 28px;
         }
     }
 
 
     @media (max-width: 768px) {
-
 
         .destacada {
             padding: 80px 20px;
@@ -478,7 +607,7 @@
 
         .tarjeta-catalogo {
             padding: 30px 20px;
-            margin: 40px 30px;
+            margin: 40px 20px;
             max-width: 100%;
         }
 
@@ -494,30 +623,172 @@
             padding: 20px;
         }
 
-
         .generos-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
             padding: 20px 20px;
+            gap: 14px;
         }
 
         .genero-card {
-            font-size: 28px;
-            height: 120px;
+            font-size: 24px;
+            height: 100px;
         }
 
         h3 {
             padding: 12px 18px;
             margin: 18px auto;
             font-weight: 800;
-            font-size: 50px;
+            font-size: 46px;
             line-height: 1;
             display: inline-flex;
             align-items: center;
             text-align: center;
             justify-content: center;
-
         }
 
+        /* Sliders: 3 ítems visibles */
+        .lo-ultimo-item {
+            flex: 0 0 calc(33.33% - 15px);
+        }
+
+        .slider-container {
+            padding: 15px 36px;
+        }
+
+        .actividad-seguidos {
+            margin: 30px 16px;
+        }
+
+        .actividad-card {
+            padding: 20px 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+
+        /* Destacada */
+        .destacada {
+            padding: 50px 16px;
+        }
+
+        .destacada-title {
+            font-size: 30px;
+        }
+
+        .destacada-sinopsis {
+            font-size: 0.88rem;
+        }
+
+        .destacada-poster img {
+            max-width: 200px;
+        }
+
+        .destacada-btn {
+            font-size: 18px;
+            max-width: 220px;
+        }
+
+        /* Tarjeta catálogo */
+        .tarjeta-catalogo {
+            margin: 24px 12px;
+            padding: 22px 14px;
+        }
+
+        .tarjeta-catalogo-p {
+            font-size: 14px;
+        }
+
+        .catalogo-btn {
+            font-size: 18px;
+            height: 52px;
+        }
+
+        /* Sliders: 2 ítems visibles */
+        .lo-ultimo-item {
+            flex: 0 0 calc(50% - 15px);
+        }
+
+        .slider-container {
+            padding: 10px 28px;
+        }
+
+        .slider-btn {
+            font-size: 22px;
+            padding: 6px 8px;
+        }
+
+        /* Géneros */
+        .generos-populares {
+            margin: 30px 0;
+        }
+
+        .generos-grid {
+            grid-template-columns: 1fr;
+            padding: 16px;
+            gap: 12px;
+        }
+
+        .genero-card {
+            font-size: 26px;
+            height: 100px;
+        }
+
+        /* Títulos */
+        h3 {
+            font-size: 34px;
+        }
+
+        /* Actividad de seguidos */
+        .actividad-seguidos {
+            margin: 24px 12px;
+        }
+
+        .actividad-card {
+            padding: 16px 12px;
+        }
+
+        .actividad-item {
+            gap: 8px;
+            padding: 10px 12px;
+        }
+
+        .actividad-avatar {
+            width: 32px;
+            height: 32px;
+        }
+
+        .actividad-poster {
+            width: 34px;
+        }
+
+        .actividad-texto {
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 360px) {
+
+        .destacada-title {
+            font-size: 26px;
+        }
+
+        .destacada-poster img {
+            max-width: 170px;
+        }
+
+        h3 {
+            font-size: 28px;
+        }
+
+        .catalogo-btn {
+            font-size: 16px;
+            height: 46px;
+        }
+
+        .genero-card {
+            font-size: 22px;
+            height: 88px;
+        }
     }
 
     /* ── RESEÑAS RECIENTES ── */
@@ -746,17 +1017,51 @@
         margin-top: 24px;
     }
 
-    @media (max-width: 1024px) {
-        .resenas-grid { padding: 0 60px; }
+
+    @media (max-width: 1300px) {
+        .resenas-grid {
+            grid-template-columns: repeat(2, 1fr);
+            padding: 0 60px;
+            gap: 14px;
+        }
+        .resenas-recientes { margin: 60px 40px; }
+    }
+
+
+    @media (max-width: 1100px) {
+        .resenas-grid {
+            grid-template-columns: repeat(2, 1fr);
+            padding: 0 60px;
+            gap: 14px;
+        }
+        .resenas-recientes { margin: 40px 20px; }
     }
 
     @media (max-width: 900px) {
-        .resenas-grid { grid-template-columns: repeat(2, 1fr); padding: 0 20px; }
-        .resenas-recientes, .actividad-seguidos { margin: 40px 24px; }
+        .resenas-grid {
+            grid-template-columns: repeat(2, 1fr);
+            padding: 0 60px;
+            gap: 14px;
+        }
+        .resenas-recientes { margin: 40px 20px; }
     }
 
-    @media (max-width: 600px) {
-        .resenas-grid { grid-template-columns: 1fr; }
+    @media (max-width: 850px) {
+        .resenas-grid {
+            grid-template-columns: repeat(1, 1fr);
+            padding: 0 60px;
+            gap: 14px;
+        }
+        .resenas-recientes { margin: 40px 20px; }
+    }
+
+    @media (max-width: 768px) {
+        .resenas-grid { padding: 0 16px; gap: 12px; }
+        .resenas-recientes, .actividad-seguidos { margin: 40px 16px; }
+    }
+
+    @media (max-width: 680px) {
+        .resenas-grid { grid-template-columns: 1fr; padding: 0 16px; }
     }
 </style>
 {% endblock %}
@@ -781,6 +1086,24 @@
             </div>
         </div>
     </section>
+
+
+    <!-- TARJETA ADMIN: AÑADIR PELÍCULA -->
+    {% if request.user.is_staff %}
+    <div class="admin-card-home">
+        <div class="admin-card-home-text">
+            <div class="admin-title-row">
+                <i class="bi bi-shield-lock-fill admin-shield-icon"></i>
+                <h3>Panel de administrador</h3>
+            </div>
+            <p>Añade nuevas películas al catálogo desde aquí.</p>
+        </div>
+        <a href="{% url 'add_movie' %}" class="admin-add-btn">
+            <i class="bi bi-plus" style="font-size: 1.4rem;"></i>
+            AÑADIR PELÍCULA
+        </a>
+    </div>
+    {% endif %}
 
     <!-- TARJETA CATALOGO PELÍCULAS -->
     <div class="tarjeta-catalogo">
@@ -980,7 +1303,14 @@
     // SECCIÓN LO ÚLTIMO - FUNCIONALIDAD DE CARRUSEL
     document.addEventListener("DOMContentLoaded", () => {
 
-        function initSlider(sliderId, leftBtnId, rightBtnId, visibleItems = 6) {
+        function getVisibleItems() {
+            if (window.innerWidth <= 480) return 2;
+            if (window.innerWidth <= 768) return 3;
+            if (window.innerWidth <= 1024) return 4;
+            return 6;
+        }
+
+        function initSlider(sliderId, leftBtnId, rightBtnId) {
             const slider = document.getElementById(sliderId);
             const btnLeft = document.getElementById(leftBtnId);
             const btnRight = document.getElementById(rightBtnId);
@@ -989,10 +1319,10 @@
 
             const itemWidth = slider.querySelector(".lo-ultimo-item").offsetWidth + 15;
             const totalItems = slider.children.length;
-
             let currentPosition = 0;
 
             btnRight.addEventListener("click", () => {
+                const visibleItems = getVisibleItems();
                 if (currentPosition > -(itemWidth * (totalItems - visibleItems))) {
                     currentPosition -= itemWidth;
                     slider.style.transform = `translateX(${currentPosition}px)`;

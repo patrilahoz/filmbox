@@ -245,6 +245,7 @@
         {% else %}
         {% if u.id in ids_que_te_siguen %}<span class="te-sigue-badge">Te sigue</span>{% endif %}
         <a href="{% url 'ver_perfil' u.username %}" class="btn-ver-perfil">Ver perfil</a>
+        {% if request.user.rol != 'moderador' %}
         <form method="post" action="{% url 'seguir' u.username %}" style="margin:0">
           {% csrf_token %}
           <input type="hidden" name="next" value="{{ request.get_full_path }}">
@@ -254,6 +255,7 @@
           <button type="submit" class="btn-seguir">Seguir</button>
           {% endif %}
         </form>
+        {% endif %}
         {% endif %}
       </div>
     </div>
@@ -278,8 +280,8 @@
         {% if u == request.user %}
         <a href="{% url 'perfil' %}" class="btn-ver-perfil">Ver perfil</a>
         {% else %}
-        {% if u.id in ids_que_te_siguen %}<span class="te-sigue-badge">Te sigue</span>{% endif %}
         <a href="{% url 'ver_perfil' u.username %}" class="btn-ver-perfil">Ver perfil</a>
+        {% if request.user.rol != 'moderador' %}
         <form method="post" action="{% url 'seguir' u.username %}" style="margin:0">
           {% csrf_token %}
           <input type="hidden" name="next" value="{{ request.get_full_path }}">
@@ -289,6 +291,7 @@
           <button type="submit" class="btn-seguir">Seguir</button>
           {% endif %}
         </form>
+        {% endif %}
         {% endif %}
       </div>
     </div>
