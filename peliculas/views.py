@@ -77,8 +77,8 @@ def add_movie(request):
         duracion = request.POST.get("duracion_min")
         reparto = request.POST.get("reparto_info")
         synopsis = request.POST.get("sinopsis")
-        genres = request.POST.getlist("generos")  # si usas selector múltiple
-        poster_file = request.FILES.get("poster")  # ← IMPORTANTE
+        genres = request.POST.getlist("generos")
+        poster_file = request.FILES.get("poster")
 
         # Crear película
         pelicula = Pelicula.objects.create(
@@ -88,7 +88,7 @@ def add_movie(request):
             duracion_min=duracion,
             sinopsis=synopsis,
             reparto_info=reparto,
-            poster=poster_file  # ← se guarda automáticamente en MEDIA_ROOT
+            poster=poster_file
         )
 
         # Procesar géneros (si usas un selector múltiple real)

@@ -1,0 +1,160 @@
+[
+{
+    "model": "usuarios.usuario",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$bl0jOcUixSAbd2uExR7mdi$8QvpYZqynhhbFCwhpFvXdSR5ylZxXQCk37mrD8BtiEQ=",
+        "last_login": "2026-05-20T18:45:07.598Z",
+        "is_superuser": true,
+        "username": "filmbox_superuser",
+        "first_name": "",
+        "last_name": "",
+        "email": "superuser@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-12-09T18:53:48.486Z",
+        "rol": "usuario",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "usuarios.usuario",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$iCzCoKNhkKSBSr8Q6grFcm$M516wPMaU+Qt92clAIscjdEM9LHO/hA3aN1doqQIUyE=",
+        "last_login": "2026-05-21T23:02:05.668Z",
+        "is_superuser": false,
+        "username": "prueba_moderador",
+        "first_name": "Prueba",
+        "last_name": "Moderador",
+        "email": "pruebamoderador@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-12-21T18:43:09Z",
+        "rol": "moderador",
+        "groups": [],
+        "user_permissions": [
+            81
+        ]
+    }
+},
+{
+    "model": "usuarios.usuario",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$4G3igZkjENxMQOsMzQHvHf$bZ83RuamUqVzK5pmdsHpMYnDsX94pWPG8wV/TAWqe8I=",
+        "last_login": "2026-05-24T17:10:30.170Z",
+        "is_superuser": false,
+        "username": "prueba1",
+        "first_name": "",
+        "last_name": "",
+        "email": "prueba1@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-01-21T12:34:14.435Z",
+        "rol": "usuario",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "usuarios.usuario",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$RdJVj0JN7YC97nkEiEuSTP$/45VnebTF7nYgVsE5P0czUT2gzoitGKJTENWHvON0Xc=",
+        "last_login": "2026-05-22T18:07:15.927Z",
+        "is_superuser": false,
+        "username": "pruebaadmin",
+        "first_name": "Admin de Filmbox",
+        "last_name": "",
+        "email": "pruebaadmin@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-03-24T18:37:10Z",
+        "rol": "administrador",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "usuarios.usuario",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$unBYrIs796WAVxiIOXf50m$mf+B+tFIJ5JhYHHsC2PrijqjMg7MZylEik7XF/Ykznw=",
+        "last_login": "2026-05-22T18:13:02.432Z",
+        "is_superuser": false,
+        "username": "cinemalover",
+        "first_name": "",
+        "last_name": "",
+        "email": "cinemalover@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-05-22T17:34:36.483Z",
+        "rol": "usuario",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "usuarios.profile",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "name": null,
+        "description": null,
+        "profile_image": "",
+        "fav1": null,
+        "fav2": null,
+        "fav3": null,
+        "fav4": null
+    }
+},
+{
+    "model": "usuarios.profile",
+    "pk": 2,
+    "fields": {
+        "user": 2,
+        "name": "Moderador",
+        "description": "Soy el moderador y me encargo de mantener el orden :)",
+        "profile_image": "profile_images/icon_aura_verde.jpg",
+        "fav1": null,
+        "fav2": null,
+        "fav3": null,
+        "fav4": null
+    }
+},
+{
+    "model": "usuarios.profile",
+    "pk": 3,
+    "fields": {
+        "user": 3,
+        "name": "prueba1",
+        "description": "Soy prueba1 y soy un usuario estándar.",
+        "profile_image": "profile_images/icon_aura_rosa-2.jpg",
+        "fav1": 49,
+        "fav2": 9,
+        "fav3": 20,
+        "fav4": null
+    }
+},
+{
+    "model": "usuarios.profile",
+    "pk": 4,
+    "fields": {
+        "user": 4,
+        "name": "Admin",
+        "description": "Soy el usuario administrador.",
+        "profile_image": "profile_images/icon_aura_azul.jpg",
+        "fav1": 4,
+        "fav2": 17,
+        "fav3": 54,
+        "fav4": 25
+    }
+},
+{
+    "model": "usuarios.profile",
+    "pk": 5,
+    "fields": {
+        "user": 5,
+        "name": 

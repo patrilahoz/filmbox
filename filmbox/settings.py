@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 import dj_database_url
-import pymysql
-pymysql.install_as_MySQLdb()
 
 from pathlib import Path
 
@@ -94,16 +92,12 @@ WSGI_APPLICATION = 'filmbox.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'filmbox',
-        'USER': 'filmbox_user',
-        'PASSWORD': 'Root123!Filmbox',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'filmbox_sql',
+        'USER': 'filmbox_sql_user',
+        'PASSWORD': 'Kn928PH6gcTJyTcPKamaXmIbYWhsq2mq',
+        'HOST': 'dpg-d89jiu4m0tmc739akdr0-a.frankfurt-postgres.render.com',
+        'PORT': '5432',
     }
 }
 
