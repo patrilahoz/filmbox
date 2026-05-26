@@ -190,17 +190,11 @@
 
         .login-btn:active { transform: translateY(0); }
 
-        .forgot-password {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .register-link { 
+        .register-link {
             text-align: center;
             margin-top: 12px;
         }
 
-        .forgot-password a,
         .register-link a {
             color: var(--muted);
             text-decoration: none;
@@ -208,7 +202,6 @@
             transition: color 0.2s;
         }
 
-        .forgot-password a:hover,
         .register-link a:hover { color: var(--accent-light); }
 
         .register-link a b { color: var(--accent-light); }
@@ -326,10 +319,6 @@
             {% if error %}
                 <p class="error">{{ error }}</p>
             {% endif %}
-
-            <div class="forgot-password">
-                <a href="/usuarios/recuperar/">¿Has olvidado tu contraseña?</a>
-            </div>
 
             <div class="register-link">
                 <a href="{% url 'register' %}">¿No tienes cuenta? <b>Regístrate</b></a>
