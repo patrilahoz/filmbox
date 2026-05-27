@@ -50,9 +50,11 @@
             let snapTimer = null;
 
             container.addEventListener("wheel", (e) => {
-                // Solo gestionar scroll horizontal; dejar pasar el vertical al navegador
-                if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+                // deltaX === 0 → scroll puramente vertical, dejar pasar al navegador
+                if (e.deltaX === 0) return;
 
+                // Llamar preventDefault inmediatamente para que el navegador
+                // no tome el gesto como navegación o scroll de página
                 e.preventDefault();
 
                 // Mover el slider en tiempo real siguiendo el gesto

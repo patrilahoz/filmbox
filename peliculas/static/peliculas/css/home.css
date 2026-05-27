@@ -657,43 +657,69 @@
         }
     }
 
+    /* ── MÓVIL: iPhone XR (414px) / 12 Pro (390px) / 14 Pro Max (430px) ── */
     @media (max-width: 480px) {
+
+        /* Evitar scroll horizontal por cualquier desbordamiento */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Títulos de sección: display block para que no desborden el viewport */
+        h3 {
+            font-size: 26px;
+            display: block;
+            width: 100%;
+            padding: 8px 16px;
+            box-sizing: border-box;
+        }
 
         /* Destacada */
         .destacada {
-            padding: 50px 16px;
+            padding: 36px 16px;
         }
 
         .destacada-title {
-            font-size: 30px;
+            font-size: 26px;
         }
 
         .destacada-sinopsis {
-            font-size: 0.88rem;
+            font-size: 0.85rem;
+            max-width: 100%;
         }
 
         .destacada-poster img {
-            max-width: 200px;
+            max-width: 160px;
         }
 
         .destacada-btn {
-            font-size: 18px;
-            max-width: 220px;
+            font-size: 15px;
+            width: 100%;
+            max-width: 100%;
+            padding: 10px 16px;
         }
 
         /* Tarjeta catálogo */
         .tarjeta-catalogo {
-            margin: 24px 12px;
-            padding: 22px 14px;
+            margin: 20px 12px;
+            padding: 20px 14px;
         }
 
         .tarjeta-catalogo-p {
             font-size: 14px;
+            padding: 0;
         }
 
         .catalogo-btn {
-            font-size: 18px;
-            height: 52px;
+            width: 100%;
+            font-size: 16px;
+            height: 50px;
+        }
+
+        /* Secciones de sliders */
+        .lo-ultimo,
+        .tendencias {
+            margin: 24px 0;
         }
 
         /* Sliders: 2 ítems visibles */
@@ -706,43 +732,38 @@
         }
 
         .slider-btn {
-            font-size: 22px;
+            font-size: 20px;
             padding: 6px 8px;
         }
 
-        /* Géneros */
+        /* Géneros: 2 columnas aprovechan mejor el ancho */
         .generos-populares {
-            margin: 30px 0;
+            margin: 24px 0;
         }
 
         .generos-grid {
-            grid-template-columns: 1fr;
-            padding: 16px;
-            gap: 12px;
+            grid-template-columns: repeat(2, 1fr);
+            padding: 0 16px;
+            gap: 10px;
         }
 
         .genero-card {
-            font-size: 26px;
-            height: 100px;
-        }
-
-        /* Títulos */
-        h3 {
-            font-size: 34px;
+            font-size: 20px;
+            height: 80px;
         }
 
         /* Actividad de seguidos */
         .actividad-seguidos {
-            margin: 24px 12px;
+            margin: 20px 12px;
         }
 
         .actividad-card {
-            padding: 16px 12px;
+            padding: 14px 12px;
         }
 
         .actividad-item {
             gap: 8px;
-            padding: 10px 12px;
+            padding: 10px 10px;
         }
 
         .actividad-avatar {
@@ -759,28 +780,34 @@
         }
     }
 
+    /* ── Pantallas muy pequeñas (<360px) ── */
     @media (max-width: 360px) {
 
+        h3 {
+            font-size: 22px;
+        }
+
         .destacada-title {
-            font-size: 26px;
+            font-size: 22px;
         }
 
         .destacada-poster img {
-            max-width: 170px;
-        }
-
-        h3 {
-            font-size: 28px;
+            max-width: 140px;
         }
 
         .catalogo-btn {
-            font-size: 16px;
+            font-size: 14px;
             height: 46px;
+        }
+
+        /* Géneros a 1 columna en pantallas muy estrechas */
+        .generos-grid {
+            grid-template-columns: 1fr;
         }
 
         .genero-card {
             font-size: 22px;
-            height: 88px;
+            height: 80px;
         }
     }
 
@@ -788,6 +815,7 @@
     .resenas-recientes {
         margin: 50px;
         text-align: center;
+        overflow: hidden;
     }
 
     .resenas-grid {
@@ -797,6 +825,8 @@
         margin-top: 24px;
         padding: 0 130px;
         text-align: left;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .resena-card {
@@ -806,6 +836,8 @@
         padding: 14px;
         display: flex;
         gap: 12px;
+        height: 100%;
+        min-width: 0;
         transition: border-color 0.2s, transform 0.2s;
     }
 
@@ -855,7 +887,6 @@
         color: rgba(255,255,255,0.6);
         line-height: 1.5;
         margin: 0;
-        flex: 1;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         overflow: hidden;
@@ -1011,55 +1042,33 @@
     }
 
 
-    @media (max-width: 1300px) {
-        .resenas-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 0 60px;
-            gap: 14px;
-        }
+    /* ── Reseñas: 3 columnas fijas hasta 1400px, luego auto-fit reduce solas ── */
+
+    @media (max-width: 1400px) {
+        .resenas-grid { padding: 0 60px; gap: 14px; }
         .resenas-recientes { margin: 60px 40px; }
     }
 
-
     @media (max-width: 1100px) {
         .resenas-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 0 60px;
+            grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+            padding: 0 30px;
             gap: 14px;
         }
         .resenas-recientes { margin: 40px 20px; }
     }
 
     @media (max-width: 900px) {
-        .resenas-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 0 60px;
-            gap: 14px;
-        }
-        .resenas-recientes { margin: 40px 20px; }
-    }
-
-    @media (max-width: 850px) {
-        .resenas-grid {
-            grid-template-columns: repeat(1, 1fr);
-            padding: 0 60px;
-            gap: 14px;
-        }
-        .resenas-recientes { margin: 40px 20px; }
+        .resenas-grid { padding: 0 16px; gap: 12px; }
+        .resenas-recientes { margin: 36px 16px; }
     }
 
     @media (max-width: 768px) {
         .resenas-grid { padding: 0 16px; gap: 12px; }
-        .resenas-recientes, .actividad-seguidos { margin: 40px 16px; }
+        .resenas-recientes, .actividad-seguidos { margin: 32px 16px; }
     }
 
-    @media (max-width: 680px) {
-        .resenas-grid { grid-template-columns: 1fr; padding: 0 16px; }
-    }
-
-    /* ── RESEÑAS EN MÓVIL (iPhone XR/12 Pro/14 Pro Max) ──
-       Este bloque va al final para sobreescribir correctamente
-       el @media (max-width: 768px) de arriba. */
+    /* ── RESEÑAS EN MÓVIL (iPhone XR/12 Pro/14 Pro Max) ── */
     @media (max-width: 480px) {
         .resenas-recientes {
             margin: 20px 0;
@@ -1085,8 +1094,6 @@
             height: 22px;
         }
 
-        /* Permite que título y usuario ocupen líneas separadas
-           cuando no caben en la misma fila */
         .resena-top {
             flex-wrap: wrap;
             gap: 3px;
@@ -1113,7 +1120,6 @@
             font-size: 10px;
         }
 
-        /* Sin elevación al pulsar en táctil */
         .resena-card:hover {
             transform: none;
         }
