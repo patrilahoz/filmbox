@@ -1056,3 +1056,65 @@
     @media (max-width: 680px) {
         .resenas-grid { grid-template-columns: 1fr; padding: 0 16px; }
     }
+
+    /* ── RESEÑAS EN MÓVIL (iPhone XR/12 Pro/14 Pro Max) ──
+       Este bloque va al final para sobreescribir correctamente
+       el @media (max-width: 768px) de arriba. */
+    @media (max-width: 480px) {
+        .resenas-recientes {
+            margin: 20px 0;
+        }
+
+        .resenas-grid {
+            grid-template-columns: 1fr;
+            padding: 0 16px;
+            gap: 8px;
+        }
+
+        .resena-card {
+            padding: 10px;
+            gap: 8px;
+        }
+
+        .resena-poster {
+            width: 46px;
+        }
+
+        .resena-avatar {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Permite que título y usuario ocupen líneas separadas
+           cuando no caben en la misma fila */
+        .resena-top {
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+
+        .resena-pelicula-nombre {
+            font-size: 13px;
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: unset;
+        }
+
+        .resena-username {
+            font-size: 11px;
+        }
+
+        .resena-texto {
+            font-size: 11px;
+        }
+
+        .resena-stars i {
+            font-size: 10px;
+        }
+
+        /* Sin elevación al pulsar en táctil */
+        .resena-card:hover {
+            transform: none;
+        }
+    }

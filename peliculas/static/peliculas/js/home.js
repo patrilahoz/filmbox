@@ -16,9 +16,20 @@
 
             if (!slider) return;
 
+            const container = slider.closest(".slider-container");
             const itemWidth = slider.querySelector(".lo-ultimo-item").offsetWidth + 15;
             const totalItems = slider.children.length;
             let currentPosition = 0;
+
+            function getMaxScroll() {
+                return -(itemWidth * (totalItems - getVisibleItems()));
+            }
+
+            function moveTo(pos) {
+                currentPosition = Math.max(getMaxScroll(), Math.min(0, pos));
+                slider.style.transition = "transform 0.4s ease";
+                slider.style.transform = `translateX(${currentPosition}px)`;
+            }
 
             btnRight.addEventListener("click", () => {
                 const visibleItems = getVisibleItems();
@@ -34,6 +45,29 @@
                     slider.style.transform = `translateX(${currentPosition}px)`;
                 }
             });
+
+            // ── Deslizamiento con panel táctil (trackpad) ──
+            let snapTimer = null;
+
+            container.addEventListener("wheel", (e) => {
+                // Solo gestionar scroll horizontal; dejar pasar el vertical al navegador
+                if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+
+                e.preventDefault();
+
+                // Mover el slider en tiempo real siguiendo el gesto
+                const newPos = Math.max(getMaxScroll(), Math.min(0, currentPosition - e.deltaX));
+                currentPosition = newPos;
+                slider.style.transition = "none";
+                slider.style.transform = `translateX(${currentPosition}px)`;
+
+                // Snap al ítem más cercano cuando el gesto se detiene
+                clearTimeout(snapTimer);
+                snapTimer = setTimeout(() => {
+                    const snapIndex = Math.round(-currentPosition / itemWidth);
+                    moveTo(-snapIndex * itemWidth);
+                }, 150);
+            }, { passive: false });
         }
 
         // Inicializar LO ÚLTIMO
