@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block title %}Perfil de {{ request.user.username }}{% endblock %}
 {% block extra_css %}
@@ -528,7 +529,7 @@
       <!-- FOTO DE PERFIL -->
       <label class="avatar-wrap" for="avatarInput" title="Añadir foto de perfil">
         <div class="profile-photo-icon" id="profilePhotoPreview" aria-hidden>
-          <img src="{{ request.user.profile.profile_image_url }}" class="profile-photo-img">
+          <img src="{% if request.user.profile.profile_image %}{{ request.user.profile.profile_image.url }}{% else %}{% static 'img/pfp-por-defecto.png' %}{% endif %}" class="profile-photo-img">
         </div>
       </label>
       <input id="profilePhotoInput" class="profile-photo-input" type="file" accept="image/*">

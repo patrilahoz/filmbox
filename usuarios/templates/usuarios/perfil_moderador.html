@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block title %}Perfil de {{ request.user.username }}{% endblock %}
 
@@ -261,7 +262,7 @@
     <aside class="left">
 
       <div class="profile-photo-wrap">
-        <img src="{{ request.user.profile.profile_image_url }}" class="profile-photo-img" alt="Foto de perfil">
+        <img src="{% if request.user.profile.profile_image %}{{ request.user.profile.profile_image.url }}{% else %}{% static 'img/pfp-por-defecto.png' %}{% endif %}" class="profile-photo-img" alt="Foto de perfil">
       </div>
 
       <div class="name">{{ request.user.profile.name }}</div>
