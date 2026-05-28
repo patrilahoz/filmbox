@@ -115,17 +115,19 @@
 
 
   .admin-card {
-    background: #D9BDFE;
-    color: #7b3eb5;
-    width: 150px;
-    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(110, 50, 213, 0.12);
+    border: 1px solid rgba(217, 189, 254, 0.35);
+    color: #D9BDFE;
     border-radius: 8px;
     font-family: 'Exo 2', sans-serif;
     font-weight: 700;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    padding: 6px 14px;
+    width: fit-content;
   }
 
   .follow-link {
@@ -378,7 +380,7 @@
       </div>
 
       {% if perfil_usuario.is_staff %}
-      <div class="admin-card">ADMINISTRADOR</div>
+      <div class="admin-card"><i class="bi bi-shield-lock-fill"></i> ADMINISTRADOR</div>
       {% endif %}
 
       <div class="follows">
