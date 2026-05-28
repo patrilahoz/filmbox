@@ -369,7 +369,7 @@ def like_reseña(request, reseña_id):
 # VISTA CATÁLOGO
 @login_required
 def catalogo(request):
-    peliculas = Pelicula.objects.all().order_by('-id')
+    peliculas = Pelicula.objects.all().order_by('titulo')
 
     # Buscador por título
     q = request.GET.get("q")
