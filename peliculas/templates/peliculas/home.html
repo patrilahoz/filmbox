@@ -196,6 +196,7 @@
 
 
     <!-- SECCIÓN ACTIVIDAD DE SEGUIDOS -->
+    {% if request.user.rol != 'moderador' %}
     <section class="actividad-seguidos">
         <h3>TUS SEGUIDOS</h3>
         <div class="actividad-card">
@@ -226,6 +227,7 @@
             {% endif %}
         </div>
     </section>
+    {% endif %}
 </main>
 
 <script src="{% static 'peliculas/js/home.js' %}"></script>

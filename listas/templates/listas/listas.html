@@ -536,8 +536,11 @@
                 <div class="modal-body">
                     <div class="field-group">
                         <label class="field-label">Nombre *</label>
-                        <input type="text" name="nombre_lista" class="field-input"
+                        <input type="text" id="inputNombreLista" name="nombre_lista" class="field-input"
                                placeholder="Ej: Mis favoritas de los 90" required maxlength="100" autofocus>
+                        <small id="errorNombreLista" class="text-danger mt-1" style="display:none;">
+                            Ya tienes una lista con ese nombre.
+                        </small>
                     </div>
                     <div class="field-group">
                         <label class="field-label">Descripción (opcional)</label>
@@ -555,7 +558,50 @@
 </div>
 {% endif %}
 
+<script type="application/json" id="nombres-listas">
+[{% for d in mis_listas %}"{{ d.lista.nombre_lista|escapejs }}"{% if not forloop.last %},{% endif %}{% endfor %}]
+</script>
+
 <script>
+(function () {
+    var input  = document.getElementById('inputNombreLista');
+    var error  = document.getElementById('errorNombreLista');
+    var modal  = document.getElementById('modalCrearLista');
+    if (!input || !error || !modal) return;
+
+    var btnCrear = modal.querySelector('.btn-crear');
+    var nombres = JSON.parse(document.getElementById('nombres-listas').textContent);
+
+    function esDuplicado(val) {
+        return nombres.some(function (n) { return n.toLowerCase() === val.toLowerCase(); });
+    }
+
+    function mostrarError(show) {
+        error.style.display = show ? 'block' : 'none';
+        input.style.borderColor = show ? '#f87171' : '';
+        btnCrear.disabled = show;
+        btnCrear.style.opacity = show ? '0.45' : '';
+        btnCrear.style.cursor = show ? 'not-allowed' : '';
+    }
+
+    input.addEventListener('input', function () {
+        mostrarError(this.value.trim() !== '' && esDuplicado(this.value.trim()));
+    });
+
+    input.closest('form').addEventListener('submit', function (e) {
+        if (esDuplicado(input.value.trim())) {
+            e.preventDefault();
+            mostrarError(true);
+            input.focus();
+        }
+    });
+
+    modal.addEventListener('hidden.bs.modal', function () {
+        mostrarError(false);
+        input.value = '';
+    });
+}());
+
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
         btn.addEventListener('click', function () {
             const form = this.closest('form');
@@ -575,6 +621,7 @@
                     Swal.fire({
                         title: "Lista eliminada correctamente",
                         icon: "success",
+                        iconColor: "#6E32D5",
                         confirmButtonText: "Aceptar",
                         customClass: {
                             title: 'swal-title',
