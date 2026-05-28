@@ -284,7 +284,11 @@
             icon: "success",
             iconColor: "#6E32D5",
             confirmButtonText: "Aceptar",
-            confirmButtonColor: "#6E32D5"
+            customClass: {
+              title: 'swal-title',
+              confirmButton: 'swal-confirm',
+              icon: 'swal-icon'
+            }
           }).then(() => {
             if (url) window.location.href = url;
           });
