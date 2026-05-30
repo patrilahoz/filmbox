@@ -76,18 +76,19 @@
   }
 
   .mod-card {
-    background: #bdfee0;
-    color: #1a7a4a;
-    width: 150px;
-    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(134, 239, 172, 0.35);
+    color: #86EFAC;
     border-radius: 8px;
     font-family: 'Exo 2', sans-serif;
     font-weight: 700;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    padding: 6px 14px;
+    width: fit-content;
   }
 
   .desc {
@@ -271,7 +272,7 @@
         <p>@{{ request.user.username }}</p>
       </div>
 
-      <div class="mod-card">MODERADOR</div>
+      <div class="mod-card"><i class="bi bi-shield-fill"></i> MODERADOR</div>
 
       <div class="desc">{{ request.user.profile.description }}</div>
 
