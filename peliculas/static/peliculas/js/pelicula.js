@@ -64,6 +64,29 @@
         reviewForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
+            const puntuacion = document.getElementById('ratingInput').value;
+            const resenaTexto = reviewForm.querySelector('textarea[name="reseña"]').value.trim();
+
+            if (!puntuacion && !resenaTexto) {
+                Swal.fire({
+                    title: "Debes puntuar o reseñar la película para poder guardar",
+                    icon: "warning",
+                    iconColor: "#6E32D5",                    
+                    confirmButtonText: "Aceptar",
+                    showClass: {
+                        popup: `animate__animated animate__fadeInUp animate__faster`
+                    },
+                    hideClass: {
+                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                    },
+                    customClass: {
+                        title: 'swal-title',
+                        confirmButton: 'swal-confirm'
+                    }
+                });
+                return;
+            }
+
             Swal.fire({
                 title: "Película puntuada y reseñada correctamente",
                 icon: "success",
