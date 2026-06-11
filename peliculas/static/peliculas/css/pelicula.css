@@ -444,7 +444,6 @@
         color: #fff;
     }
 
-    /* Empty state */
     .lm-empty {
         padding: 44px 20px;
         text-align: center;
@@ -657,7 +656,7 @@
         flex-grow: 1;
     }
 
-    /* Footer: likes izquierda, fecha derecha */
+    /* Footer */
     .review-card-footer {
         display: flex;
         justify-content: space-between;

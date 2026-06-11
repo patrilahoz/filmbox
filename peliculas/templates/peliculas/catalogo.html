@@ -658,7 +658,7 @@
     let globalMinYear = 1900;
     let globalMaxYear = new Date().getFullYear();
 
-    // --- YEAR SLIDER ---
+    // SLIDER DE AÑOS
     function initYearSlider() {
         const years = Array.from(catalogoItems)
             .map(item => parseInt(item.dataset.year))
@@ -705,7 +705,7 @@
         updateYearUI();
     });
 
-    // --- GÉNERO ---
+    // GÉNERO
     function getSelectedGenreIds() {
         return filterCheckboxes
             .filter(cb => cb.checked)
@@ -717,7 +717,7 @@
         return selectedGenres.some(s => itemGenres.includes(s));
     }
 
-    // --- FILTRADO COMBINADO ---
+    // FILTRADO COMBINADO
     function filterMovies() {
         const searchTerm = searchInput.value.trim().toLowerCase();
         const selectedGenres = getSelectedGenreIds();
@@ -737,7 +737,7 @@
         });
     }
 
-    // --- EVENTOS ---
+    // EVENTOS
     searchInput.addEventListener('input', filterMovies);
 
     filterBtn.addEventListener("click", (e) => {

@@ -41,7 +41,6 @@
         text-transform: uppercase;
     }
 
-    /* Main card */
     .card-wrap {
         padding: 28px 48px;
     }
@@ -76,7 +75,6 @@
         align-items: flex-start;
     }
 
-    /* Left: image dropzone */
     .thumb-wrap {
         width: 100%;
         aspect-ratio: 2 / 3;
@@ -174,7 +172,6 @@
         display: none;
     }
 
-    /* Right: form */
     .form {
         width: 100%;
         display: flex;
@@ -397,8 +394,6 @@
     }
 
 
-
-
     /* BOTÓN AÑADIR PELÍCULA*/
     .add-btn {
         background: #6E32D5;
@@ -432,7 +427,6 @@
         display: none;
     }
 
-
     .plus {
         width: 28px;
         height: 28px;
@@ -444,23 +438,18 @@
         font-weight: 700;
     }
 
-
-    /* Cambiar fuente del título */
     .swal-title {
         font-family: 'Gantari', sans-serif !important;
         font-size: 1.6rem;
     }
 
-    /* Cambiar fuente y estilo del botón */
     .swal-confirm {
         font-family: 'Gantari', sans-serif !important;
         background-color: #6E32D5 !important;
-        /* morado */
         color: white !important;
         padding: 10px 20px !important;
     }
 
-    /* Cambiar color del icono */
     .swal-icon .swal2-success-ring {
         border-color: #6E32D5 !important;
     }
@@ -469,7 +458,6 @@
     .swal-icon .swal2-success-line-long {
         background-color: #6E32D5 !important;
     }
-
 
 
     /** Pantallas más pequeñas */
@@ -563,7 +551,7 @@
                     <input type="hidden" id="existingPosterUrl" value="{% if pelicula and pelicula.poster %}{{ pelicula.poster.url }}{% endif %}">
 
                     <div class="form-content">
-                        <!-- POSTER (left column) -->
+                        <!-- POSTER (columna izquierda) -->
                         <div>
                             <div class="thumb-wrap" id="thumbWrap">
                                 <div class="thumb-inner" id="thumbInner">
@@ -584,7 +572,7 @@
                             <div class="error-msg" id="error-poster"></div>
                         </div>
 
-                        <!-- FORM FIELDS (right column) -->
+                        <!-- FORMULARIO (columna derecha) -->
                         <div class="row">
 
                             <!-- TÍTULO -->
@@ -699,12 +687,9 @@
 </main>
 
 
-
-
 <script>
-    // ============================
+
     // DESPLEGABLE DE GÉNEROS
-    // ============================
     document.addEventListener("DOMContentLoaded", () => {
         const btn = document.getElementById("genreSelectBtn");
         const label = document.getElementById("genreSelectLabel");
@@ -747,9 +732,8 @@
         }
     });
 
-    // ============================
+
     // PREVISUALIZACIÓN DEL PÓSTER
-    // ============================
     const posterInput = document.getElementById('posterInput');
     const thumbInner = document.getElementById('thumbInner');
     const removeBtn = document.getElementById('removeBtn');
@@ -821,11 +805,11 @@
 
         let valid = true;
 
-        // limpiar errores previos
+        // Limpiar errores previos
         document.querySelectorAll(".error-msg").forEach(el => el.textContent = "");
         document.querySelectorAll(".input-error").forEach(el => el.classList.remove("input-error"));
 
-        // ===== VALIDAR POSTER =====
+        // VALIDAR POSTER
         const poster = document.getElementById("posterInput");
         const posterSelected = poster.files && poster.files.length > 0;
         const initialPosterExists = document.getElementById("initialPosterExists").value === '1';
@@ -836,7 +820,7 @@
             document.getElementById("error-poster").textContent = "Debes subir un póster.";
         }
 
-        // ===== VALIDAR TÍTULO =====
+        // VALIDAR TÍTULO
         const titulo = document.getElementById("titulo");
         if (titulo.value.trim() === "") {
             valid = false;
@@ -844,7 +828,7 @@
             document.getElementById("error-titulo").textContent = "Debes añadir un título.";
         }
 
-        // ===== VALIDAR AÑO =====
+        // VALIDAR AÑO
         const año = document.getElementById("año");
         const añoNum = parseInt(año.value);
         const currentYear = new Date().getFullYear();
@@ -855,7 +839,7 @@
             document.getElementById("error-año").textContent = "Debes añadir un año válido.";
         }
 
-        // ===== VALIDAR DIRECTOR =====
+        // VALIDAR DIRECTOR
         const director = document.getElementById("director");
         if (director.value.trim() === "") {
             valid = false;
@@ -863,7 +847,7 @@
             document.getElementById("error-director").textContent = "Debes añadir un director.";
         }
 
-        // ===== VALIDAR DURACIÓN =====
+        // VALIDAR DURACIÓN
         const duracion = document.getElementById("duracion_min");
         if (!duracion.value || parseInt(duracion.value) <= 0) {
             valid = false;
@@ -871,7 +855,7 @@
             document.getElementById("error-duracion").textContent = "Debes añadir una duración válida.";
         }
 
-        // ===== VALIDAR REPARTO =====
+        // VALIDAR REPARTO
         const reparto = document.getElementById("reparto_info");
         if (reparto.value.trim() === "") {
             valid = false;
@@ -879,14 +863,14 @@
             document.getElementById("error-reparto").textContent = "Debes añadir el reparto.";
         }
 
-        // ===== VALIDAR GÉNEROS =====
+        // VALIDAR GÉNEROS
         const generosSeleccionados = document.querySelectorAll(".check-generos:checked");
         if (generosSeleccionados.length === 0) {
             valid = false;
             document.getElementById("error-generos").textContent = "Debes seleccionar al menos un género.";
         }
 
-        // ===== VALIDAR SINOPSIS =====
+        // VALIDAR SINOPSIS
         const sinopsis = document.getElementById("sinopsis");
         if (sinopsis.value.trim() === "") {
             valid = false;
@@ -894,15 +878,15 @@
             document.getElementById("error-sinopsis").textContent = "Debes añadir una sinopsis.";
         }
 
-        // ===== SI HAY ERRORES → BLOQUEAR ENVÍO =====
+        // SI HAY ERRORES --> BLOQUEAR ENVÍO
         if (!valid) {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
             return;
         }
 
-        // ===== SI TODO ES CORRECTO → MOSTRAR MODAL Y ENVIAR =====
-        e.preventDefault(); // detenemos envío temporalmente
+        // SI TODO ES CORRECTO --> MOSTRAR MODAL Y ENVIAR 
+        e.preventDefault();
 
         Swal.fire({
             title: "Película guardada correctamente",
@@ -914,10 +898,8 @@
                 icon: 'swal-icon'
             }
         }).then(() => {
-            // ahora sí enviamos el formulario
             document.getElementById("addMovieForm").submit();
         });
-
     });
 
 </script>

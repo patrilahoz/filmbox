@@ -41,7 +41,6 @@
         text-transform: uppercase;
     }
 
-    /* Main card */
     .card-wrap {
         padding: 28px 48px;
         overflow: hidden;
@@ -211,7 +210,7 @@
         gap: 14px;
     }
 
-    /* Contenedor para input + error debajo */
+    /* Contenedor para input y error debajo */
     .field-wrapper {
         display: flex;
         flex-direction: column;
@@ -313,7 +312,7 @@
         transform: translateY(-2px) scale(1.05);
     }
 
-    /* Favoritas section */
+    /* Sección de favoritas */
     .favorites-section {
         margin-top: 24px;
     }
@@ -388,13 +387,11 @@
         font-size: 13px
     }
 
-    /* Cambiar fuente del título */
     .swal-title {
         font-family: 'Gantari', sans-serif !important;
         font-size: 1.6rem;
     }
 
-    /* Cambiar fuente y estilo del botón */
     .swal-confirm {
         font-family: 'Gantari', sans-serif !important;
         background-color: #6E32D5 !important;
@@ -402,7 +399,6 @@
         padding: 10px 20px !important;
     }
 
-    /* Cambiar color del icono */
     .swal-icon .swal2-success-ring {
         border-color: #6E32D5 !important;
     }
@@ -944,9 +940,8 @@
 {% endif %}
 
 <script>
-    // ============================
+
     // PREVISUALIZACIÓN DE FOTO DE PERFIL
-    // ============================
     const profileImageInput = document.getElementById('profileImageInput');
     const thumbInner        = document.getElementById('thumbInner');
     const removeBtn         = document.getElementById('removeBtn');
@@ -1010,9 +1005,8 @@
         }
     });
 
-    // ============================
+
     // PELÍCULAS FAVORITAS
-    // ============================
     if (document.getElementById('fav-init-data')) (function () {
         var d = document.getElementById('fav-init-data').dataset;
         var initialFavs = {
@@ -1117,7 +1111,7 @@
             });
         });
 
-        // Botones de quitar favorita: también limpia los slots siguientes para mantener el orden
+        // Botones de quitar favorita
         document.querySelectorAll('.fav-remove-btn').forEach(function (btn) {
             btn.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -1153,18 +1147,17 @@
         });
     })();
 
-    // ============================
+
     // VALIDACIÓN DEL FORMULARIO
-    // ============================
     document.getElementById("editProfileForm").addEventListener("submit", function (e) {
 
         let valid = true;
 
-        // limpiar errores previos
+        // Limpiar errores previos
         document.querySelectorAll(".error-msg").forEach(el => el.textContent = "");
         document.querySelectorAll(".input-error").forEach(el => el.classList.remove("input-error"));
 
-        // ===== VALIDAR NOMBRE =====
+        // VALIDAR NOMBRE
         const nombre = document.getElementById("nombre");
         if (nombre.value.trim() === "") {
             valid = false;
@@ -1172,7 +1165,7 @@
             document.getElementById("error-nombre").textContent = "Tienes que añadir un nombre.";
         }
 
-        // ===== VALIDAR DESCRIPCIÓN =====
+        // VALIDAR DESCRIPCIÓN
         const descripcion = document.getElementById("descripcion");
         if (descripcion.value.trim() === "") {
             valid = false;
@@ -1180,15 +1173,15 @@
             document.getElementById("error-descripcion").textContent = "Tienes que añadir una descripción.";
         }
 
-        // ===== SI HAY ERRORES → BLOQUEAR ENVÍO =====
+        // SI HAY ERRORES → BLOQUEAR ENVÍO
         if (!valid) {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
             return;
         }
 
-        // ===== SI TODO ES CORRECTO → MOSTRAR MODAL Y ENVIAR =====
-        e.preventDefault(); // detenemos envío temporalmente
+        // SI TODO ES CORRECTO → MOSTRAR MODAL Y ENVIAR 
+        e.preventDefault();
 
         Swal.fire({
             title: "Perfil guardado correctamente",
@@ -1200,7 +1193,6 @@
                 icon: 'swal-icon'
             }
         }).then(() => {
-            // ahora sí enviamos el formulario
             document.getElementById("editProfileForm").submit();
         });
 

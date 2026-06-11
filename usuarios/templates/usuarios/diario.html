@@ -45,7 +45,6 @@
         margin-bottom: 20px;
     }
 
-    /* Main container */
     .container {
         padding: 28px 48px;
     }
@@ -54,7 +53,7 @@
         background: linear-gradient(100deg, #2e2e2e 0%, #262626 100%);
         border-radius: 20px;
         border: transparent;
-        padding: 40px;
+        padding: 24px 30px;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -70,17 +69,16 @@
         margin-top: 0;
     }
 
-    /* Tabla header */
     .diary-header {
         display: grid;
-        grid-template-columns: 60px 1fr 150px 80px 80px 150px;
-        gap: 30px;
+        grid-template-columns: 45px 1fr 140px 65px 65px 130px;
+        gap: 20px;
         align-items: center;
-        padding: 20px 20px 15px 20px;
-        margin-bottom: 10px;
+        padding: 10px 20px 10px 20px;
+        margin-bottom: 6px;
         font-weight: 700;
         text-transform: uppercase;
-        font-size: 13px;
+        font-size: 12px;
         letter-spacing: 0.5px;
         border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     }
@@ -93,7 +91,7 @@
         color: white;
         text-align: center;
         font-family: 'Exo 2';
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .diary-header span:first-child {
@@ -107,16 +105,16 @@
     /* Entrada de diario */
     .diary-entry {
         display: grid;
-        grid-template-columns: 60px 1fr 150px 80px 80px 150px;
-        gap: 30px;
+        grid-template-columns: 45px 1fr 140px 65px 65px 130px;
+        gap: 20px;
         align-items: center;
-        padding: 15px 20px;
-        margin-bottom: 10px;
+        padding: 8px 20px;
+        margin-bottom: 4px;
     }
 
     .diary-poster {
-        width: 60px;
-        height: 90px;
+        width: 45px;
+        height: 67px;
         flex-shrink: 0;
         background-color: #1e1e1e;
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -133,7 +131,7 @@
     }
 
     .diary-title-text {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 600;
         color: var(--white);
         margin: 0;
@@ -143,12 +141,12 @@
     /* Estrellas */
     .diary-stars {
         display: flex;
-        gap: 4px;
+        gap: 3px;
         justify-content: center;
     }
 
     .diary-star {
-        font-size: 1.2rem;
+        font-size: 1rem;
         color: #6E32D5;
     }
 
@@ -159,8 +157,8 @@
     }
 
     .diary-icon-link {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -169,7 +167,7 @@
         color: var(--white);
         text-decoration: none;
         transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-        font-size: 18px;
+        font-size: 14px;
         cursor: pointer;
     }
 
@@ -188,9 +186,9 @@
     .diary-divider {
         border: none;
         background-color: currentColor;
-        height: 0.15rem;
+        height: 0.1rem;
         margin: 0;
-        margin-bottom: 10px;
+        margin-bottom: 4px;
         opacity: 0.2;
     }
 
@@ -202,25 +200,25 @@
         padding: 60px 20px;
     }
 
-    /* Responsive */
+    /* Responsividad */
     @media (max-width: 1200px) {
         .diary-header,
         .diary-entry {
-            grid-template-columns: 50px 1fr 120px 70px 70px 120px;
-            gap: 20px;
+            grid-template-columns: 40px 1fr 110px 55px 55px 110px;
+            gap: 14px;
         }
 
         .diary-poster {
-            width: 50px;
-            height: 75px;
+            width: 40px;
+            height: 60px;
         }
 
         .diary-title-text {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .diary-star {
-            font-size: 1rem;
+            font-size: 0.8rem;
         }
     }
 
@@ -280,7 +278,6 @@
         <h1 class="diary-title">DIARIO</h1>
         <div class="panel">
 
-
             <!-- Header -->
             <div class="diary-header">
                 <div class="header-spacer"></div>
@@ -318,13 +315,13 @@
                     <!-- Icono Ver reseña -->
                     <div class="diary-icon-cell">
                         <a href="{% url 'pelicula' r.pelicula.id %}#my-review" class="diary-icon-link" title="Ver reseña">
-                            <i class="bi bi-justify-left" style="color: white; font-size: 1.5rem;"></i>
+                            <i class="bi bi-justify-left" style="color: white; font-size: 1.1rem;"></i>
                         </a>
                     </div>
 
                     <!-- Icono Editar -->
                     <div class="diary-icon-cell">
-                        <a href="{% url 'editar_reseña' r.id %}" class="diary-icon-link" style="color: white; font-size: 1.5rem;" title="Editar reseña">
+                        <a href="{% url 'editar_reseña' r.id %}" class="diary-icon-link" style="color: white; font-size: 1.1rem;" title="Editar reseña">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                     </div>

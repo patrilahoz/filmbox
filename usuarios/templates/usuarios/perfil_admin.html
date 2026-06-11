@@ -27,7 +27,6 @@
     color: var(--white)
   }
 
-  /* Main layout */
   .main {
     max-width: 1200px;
     margin: 28px auto;
@@ -224,26 +223,20 @@
     cursor: pointer;
     text-align: center;
     justify-content: center;
-
     transition: transform 0.6s ease, background 0.3s ease, box-shadow 0.3s ease;
-
   }
 
   .edit-btn:hover {
     background: linear-gradient(100deg, #6E32D5 0%, #6C00FA 100%);
     color: white;
     box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-
     transform: translateY(-2px) scale(1.05);
   }
-
 
   .edit-btn .hover-icon {
     display: none;
   }
 
-
-  /* Right column */
   .right {
     display: flex;
     flex-direction: column;
@@ -261,7 +254,6 @@
     letter-spacing: 2px;
   }
 
-  /* Favorites layout */
   .favorites {
     display: flex;
     gap: 28px;
@@ -447,9 +439,9 @@
     color: #fff;
     border: none;
     padding: 6px 0;
-        border-radius: 8px;
-        font-family: 'Gantari';
-        font-size: 14px;
+    border-radius: 8px;
+    font-family: 'Gantari';
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
@@ -519,7 +511,6 @@
       margin: 16px auto;
     }
 
-    /* Columna izquierda centrada */
     .left {
       align-items: center;
       text-align: center;
@@ -547,7 +538,6 @@
       justify-content: center;
     }
 
-    /* Botones a ancho completo */
     .add-btn,
     .diary-btn,
     .edit-btn {
@@ -722,7 +712,8 @@
 </main>
 
 <script>
-  // Avatar upload & preview
+
+  // AVATAR / FOTO DE PERFIL
   const avatarInput = document.getElementById('avatarInput');
   const avatarPreview = document.getElementById('avatarPreview');
 
@@ -738,7 +729,7 @@
     avatarPreview.appendChild(img);
   });
 
-  // Favorites upload handlers
+  // FAVORITAS
   for (let i = 1; i <= 4; i++) {
     const input = document.getElementById('fav' + i);
     const card = input.closest('.fav-card');
@@ -751,13 +742,14 @@
       const url = URL.createObjectURL(f);
       img.src = url; img.style.display = 'block'; placeholder.style.display = 'none';
     });
-    // remove button
+
+    // Botón de eliminar imagen
     card.querySelector('[data-remove]')?.addEventListener('click', () => {
       input.value = ''; img.src = ''; img.style.display = 'none'; placeholder.style.display = 'block';
     });
   }
 
-  // Edit profile button placeholder
+  // Editar perfil
   document.getElementById('editProfileBtn').addEventListener('click', () => {
     alert('Editar perfil (implementar acción)');
   });

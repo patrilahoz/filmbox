@@ -113,26 +113,32 @@
         <div class="generos-grid">
 
             <a href="{% url 'catalogo' %}?genero=Fantasía" class="genero-card fantasia">
+                <i class="bi bi-stars"></i>
                 <span>Fantasía</span>
             </a>
 
             <a href="{% url 'catalogo' %}?genero=Comedia" class="genero-card comedia">
+                <i class="bi bi-emoji-laughing-fill"></i>
                 <span>Comedia</span>
             </a>
 
             <a href="{% url 'catalogo' %}?genero=Romance" class="genero-card romance">
+                <i class="bi bi-heart-fill"></i>
                 <span>Romance</span>
             </a>
 
             <a href="{% url 'catalogo' %}?genero=Drama" class="genero-card drama">
+                <i class="bi bi-film"></i>
                 <span>Drama</span>
             </a>
 
             <a href="{% url 'catalogo' %}?genero=Suspense" class="genero-card suspense">
+                <i class="bi bi-eye"></i>
                 <span>Suspense</span>
             </a>
 
             <a href="{% url 'catalogo' %}?genero=Aventura" class="genero-card aventura">
+                <i class="bi bi-compass"></i>
                 <span>Aventura</span>
             </a>
 
@@ -207,10 +213,10 @@
                     <img src="{{ r.usuario.profile.profile_image_url }}" alt="{{ r.usuario.username }}" class="actividad-avatar">
                     <div class="actividad-info">
                         <p class="actividad-texto">
-                            <a href="{% url 'ver_perfil' r.usuario.username %}" class="actividad-user-link">@{{ r.usuario.username }}</a>
-                            puntuó
+                            <a href="{% url 'ver_perfil' r.usuario.username %}" class="actividad-user-link">@{{ r.usuario.username }} </a>
+                            puntuó 
                             {% if r.puntuacion %}{% for i in "12345" %}{% if forloop.counter <= r.puntuacion %}<i class="bi bi-star-fill actividad-stars"></i>{% else %}<i class="bi bi-star actividad-stars"></i>{% endif %}{% endfor %}{% endif %}
-                            <a href="{% url 'pelicula' r.pelicula.id %}" class="actividad-pelicula-link">{{ r.pelicula.titulo }}</a>
+                            <a href="{% url 'pelicula' r.pelicula.id %}" class="actividad-pelicula-link"> {{ r.pelicula.titulo }}</a>
                         </p>
                         <span class="actividad-fecha">{{ r.fecha|timesince }}</span>
                     </div>

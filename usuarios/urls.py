@@ -24,7 +24,3 @@ urlpatterns = [
     path('check-email/', views.check_email, name='check_email'),
 
 ]
-
-
-
-# path("perfil/moderador/", views.perfil_moderador, name="perfil_moderador"),

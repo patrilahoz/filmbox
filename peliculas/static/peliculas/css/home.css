@@ -414,72 +414,79 @@
 
     .genero-card {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 8px;
         width: 100%;
         height: 140px;
-        border-radius: 10px;
+        border-radius: 12px;
         font-family: 'Exo 2';
         font-weight: 700;
-        font-size: 40px;
+        font-size: 24px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
         color: white;
         text-decoration: none;
-        transition: transform 0.2s ease, opacity 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        background: #1e1e1e;
+        border: 1px solid rgba(255,255,255,0.07);
+        transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+
+    }
+
+    .genero-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        opacity: 0.45;
+        transition: opacity 0.25s ease;
+    }
+
+    .genero-card i {
+        font-size: 26px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .genero-card span {
+        position: relative;
+        z-index: 1;
     }
 
     .genero-card:hover {
-        transform: scale(1.05);
-        opacity: 0.9;
+        transform: translateY(-3px) scale(1.02);
+    }
+
+    .genero-card:hover::before {
+        opacity: 0.7;
     }
 
     /* Colores por género */
-    .fantasia {
-        background: #ef233c;
-    }
+    .fantasia::before { background: #ef233c; }
+    .fantasia i { color: #ff6b7a; }
+    .fantasia:hover { box-shadow: 0 10px 32px rgba(239,35,60,0.45); }
 
-    .fantasia:hover {
-        background: linear-gradient(100deg, #ef233c 0%, #780000 100%)
-    }
+    .comedia::before { background: #ffb400; }
+    .comedia i { color: #ffd466; }
+    .comedia:hover { box-shadow: 0 10px 32px rgba(255,180,0,0.45); }
 
-    .comedia {
-        background: #ffb400;
-    }
+    .romance::before { background: #FF6EB0; }
+    .romance i { color: #ffaacc; }
+    .romance:hover { box-shadow: 0 10px 32px rgba(255,110,176,0.45); }
 
-    .comedia:hover {
-        background: linear-gradient(100deg, #ffb400 0%, #ffa500 100%)
-    }
+    .drama::before { background: #4d9de0; }
+    .drama i { color: #8ec4f0; }
+    .drama:hover { box-shadow: 0 10px 32px rgba(77,157,224,0.45); }
 
-    .romance {
-        background: #FF6EB0
-    }
+    .suspense::before { background: #FF761F; }
+    .suspense i { color: #ffaa70; }
+    .suspense:hover { box-shadow: 0 10px 32px rgba(255,118,31,0.45); }
 
-    .romance:hover {
-        background: linear-gradient(100deg, #FF6EB0 0%, #FF3897 100%);
-    }
-
-    .drama {
-        background: #0B478F;
-    }
-
-    .drama:hover {
-        background: linear-gradient(100deg, #0B478F 0%, #002854 100%)
-    }
-
-    .suspense {
-        background: #FF761F;
-    }
-
-    .suspense:hover {
-        background: linear-gradient(100deg, #FF761F 0%, #BF4B00 100%)
-    }
-
-    .aventura {
-        background: #3cb371;
-    }
-
-    .aventura:hover {
-        background: linear-gradient(100deg, #3cb371 0%, #289459 100%)
-    }
+    .aventura::before { background: #3cb371; }
+    .aventura i { color: #7dd9a8; }
+    .aventura:hover { box-shadow: 0 10px 32px rgba(60,179,113,0.45); }
 
 
     /* RESPONSIVIDAD PARA PANTALLAS MÁS PEQUEÑAS */
@@ -526,15 +533,16 @@
         }
 
         .genero-card {
-            font-size: 30px;
+            font-size: 18px;
             height: 120px;
+            gap: 6px;
         }
+        .genero-card i { font-size: 22px; }
 
         h3 {
             font-size: 56px;
         }
 
-        /* Sliders: 4 ítems visibles */
         .lo-ultimo-item {
             flex: 0 0 calc(25% - 15px);
         }
@@ -623,9 +631,11 @@
         }
 
         .genero-card {
-            font-size: 24px;
+            font-size: 16px;
             height: 100px;
+            gap: 5px;
         }
+        .genero-card i { font-size: 20px; }
 
         h3 {
             padding: 12px 18px;
@@ -660,12 +670,10 @@
     /* ── MÓVIL: iPhone XR (414px) / 12 Pro (390px) / 14 Pro Max (430px) ── */
     @media (max-width: 480px) {
 
-        /* Evitar scroll horizontal por cualquier desbordamiento */
         body {
             overflow-x: hidden;
         }
 
-        /* Títulos de sección: display block para que no desborden el viewport */
         h3 {
             font-size: 26px;
             display: block;
@@ -674,7 +682,6 @@
             box-sizing: border-box;
         }
 
-        /* Destacada */
         .destacada {
             padding: 36px 16px;
         }
@@ -699,7 +706,6 @@
             padding: 10px 16px;
         }
 
-        /* Tarjeta catálogo */
         .tarjeta-catalogo {
             margin: 20px 12px;
             padding: 20px 14px;
@@ -716,13 +722,11 @@
             height: 50px;
         }
 
-        /* Secciones de sliders */
         .lo-ultimo,
         .tendencias {
             margin: 24px 0;
         }
 
-        /* Sliders: 2 ítems visibles */
         .lo-ultimo-item {
             flex: 0 0 calc(50% - 15px);
         }
@@ -736,7 +740,6 @@
             padding: 6px 8px;
         }
 
-        /* Géneros: 2 columnas aprovechan mejor el ancho */
         .generos-populares {
             margin: 24px 0;
         }
@@ -748,11 +751,12 @@
         }
 
         .genero-card {
-            font-size: 20px;
+            font-size: 14px;
             height: 80px;
+            gap: 4px;
         }
+        .genero-card i { font-size: 18px; }
 
-        /* Actividad de seguidos */
         .actividad-seguidos {
             margin: 20px 12px;
         }
@@ -800,18 +804,19 @@
             height: 46px;
         }
 
-        /* Géneros a 1 columna en pantallas muy estrechas */
         .generos-grid {
             grid-template-columns: 1fr;
         }
 
         .genero-card {
-            font-size: 22px;
+            font-size: 14px;
             height: 80px;
+            gap: 4px;
         }
+        .genero-card i { font-size: 16px; }
     }
 
-    /* ── RESEÑAS RECIENTES ── */
+    /* RESEÑAS RECIENTES */
     .resenas-recientes {
         margin: 50px;
         text-align: center;
@@ -929,7 +934,7 @@
         margin-top: 24px;
     }
 
-    /* ── MEJOR VALORADAS ── */
+    /* MEJOR VALORADAS */
     .mejor-item { position: relative; }
 
     .rating-badge {
@@ -947,7 +952,7 @@
         white-space: nowrap;
     }
 
-    /* ── ACTIVIDAD DE SEGUIDOS ── */
+    /* ACTIVIDAD DE SEGUIDOS */
     .actividad-seguidos {
         margin: 50px 60px;
         text-align: center;
@@ -1041,9 +1046,7 @@
         margin-top: 24px;
     }
 
-
-    /* ── Reseñas: 3 columnas fijas hasta 1400px, luego auto-fit reduce solas ── */
-
+    
     @media (max-width: 1400px) {
         .resenas-grid { padding: 0 60px; gap: 14px; }
         .resenas-recientes { margin: 60px 40px; }
@@ -1068,7 +1071,7 @@
         .resenas-recientes, .actividad-seguidos { margin: 32px 16px; }
     }
 
-    /* ── RESEÑAS EN MÓVIL (iPhone XR/12 Pro/14 Pro Max) ── */
+    /* RESEÑAS EN MÓVIL (iPhone XR/12 Pro/14 Pro Max) */
     @media (max-width: 480px) {
         .resenas-recientes {
             margin: 20px 0;
